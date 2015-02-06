@@ -2,7 +2,7 @@
 #include "ActionTest.h"
 
 //static ObjectAllocator ActionAllocator{ sizeof(Action), OAConfig() };
-
+//Test
 
 
 ActionTest::ActionTest(IEntity * Parent) : IComponent(Component_Type::CT_ACTIONTEST, Parent)
