@@ -25,7 +25,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #define DYNAMIC_HANDCOUNT 40
 #define RESERVED_HANDS 5
 #define LAUNCH_DELAY .15f
-#define PARTICLE_EM_COUNT 2
+#define PARTICLE_EM_COUNT 3
 
 //Forward Declarations
 class DynamicHand;

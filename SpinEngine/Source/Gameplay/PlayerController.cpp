@@ -297,7 +297,7 @@ void PlayerController::PressJump()
   if (myJumpState == JS_Grounded && playerBody->velocity.y < 0.0f && *jetpackEnabled && fuel > 0)
   {
     fuel -= 1;
-    playerBody->velocity.y += *thrust;
+    playerBody->velocity.y = *thrust;
     //playerBody->velocity.y = *thrust; @alternate between these two options, see which feels better
     return;
   }
@@ -410,15 +410,24 @@ void PlayerController::OnCollision(GameObject otherObject)
     return false;
   }
 
-  //Get current aim direction
-  void PlayerController::ControllerFireLaser()
+  //Fires a laser in the aimed direction (theta is in radians)
+  void PlayerController::ControllerFireLaser(float &theta)
   {
-    //Create and launch in our chosen direction.
+    if (laserTimer < *laserFiringSpeed)
+      return;
+    laserTimer = 0.0f; //Reset the timer
+    
+    //Get the laser. (If too many lasers are in the air, do nothing.)
+    LaserBeam *toLaunch;
+    if (!GetLaser(&toLaunch))
+     return;
 
-    //if (parent->GetTransform()->GetScale())
-    //if (parent->GetTransform()->GetScale().x > 0)
+    Vector3D launchPosition = parent->GetTransform()->GetPosition();
+    launchPosition.y += 0.8f; //Magic number, make the laser spawn in their head
 
-    //Theta is in radians
+    Vector2D vel(MathF::ApproxCos(theta) * *laserSpeed, MathF::ApproxSin(theta) * *laserSpeed);
+    
+    toLaunch->Launch(launchPosition, theta, vel);
   }
 
   void PlayerController::KBFireLaser(bool isFacingRight)

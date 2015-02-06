@@ -84,7 +84,7 @@ public:
   void KillPlayer();
 
   void KBFireLaser(bool isFacingRight);
-  void ControllerFireLaser();
+  void ControllerFireLaser(float &theta);
   void ReturnLaser(LaserBeam *);
 
   bool Active;

@@ -5,19 +5,18 @@
 
 ZilchDefineType(Action, SpinningZilch)
 {
-	type->HandleManager = type->HandleManager = ZilchManagerId(Zilch::PointerManager);
-	ZilchBindStaticMethodOverload(Sequence, ActionSequence*, Zilch::Any);
-	//ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Zilch::Any startVal, float endVal, float time, int ease);
+	
+	//ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Zilch::Property startVal, float endVal, float time, int ease);
 }
 
 ZilchDefineType(ActionGroup, SpinningZilch)
 {
-	type->HandleManager = type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
 }
 
 ZilchDefineType(ActionProperty, SpinningZilch)
 {
-	type->HandleManager = type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
 }
 
 //###############################################################################################//
@@ -438,26 +437,6 @@ ActionSequence* Action::Sequence(ActionSequence** seq)
 	return *seq;
 }
 
-ActionSequence* Action::Sequence(Zilch::Any seq)
-{
-	std::cout << seq.StoredType->ToString().c_str() << std::endl;
-	byte* prop = nullptr;
-	//seq.CopyStoredValueTo    
-	//Zilch::Property i = static_cast<Zilch::Property>(*prop);
-	//ActionSequence* sequence = reinterpret_cast<ActionSequence*> (i->*(i->Get)());
-	//std::cout << (prop == nullptr) << std::endl;
-	//seq.CopyStoredValueTo(&i)
-	/*if (*seq == nullptr)
-	{
-		*seq = new ActionSequence();
-	}
-	else
-	{
-		(*seq)->Clear();
-	}*/
-	return nullptr;
-}
-
 Action::~Action()
 {
 	delete Curve;
@@ -465,11 +444,6 @@ Action::~Action()
 	CurrentVal = nullptr;
 }
 
-void Action::Property(ActionSequence* seq, Zilch::Any startVal, float endVal, float time, int ease)
-{
-	std::cout << startVal.StoredType->ToString().c_str() << std::endl;
-	//seq->AddProperty(new ActionProperty(startVal, endVal, time, ease));
-}
 
 void Action::Property(ActionSequence* seq, float* startVal, float endVal, float time, Ease::Eases ease)
 {
@@ -512,7 +486,6 @@ void Action::Property(ActionGroup* grp, Vector4D* startVal, Vector4D endVal, flo
 {
 	grp->AddProperty(new ActionProperty(startVal, &endVal, time, ease));
 }
-
 
 ActionGroup* Action::Group(ActionSequence* seq)
 {

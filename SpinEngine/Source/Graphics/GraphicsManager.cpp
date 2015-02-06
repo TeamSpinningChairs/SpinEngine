@@ -583,7 +583,7 @@ void GraphicsManager::Render()
   {
     for (unsigned i = 0; i < particleEmitterColl.size(); ++i)
     {
-      if (particleEmitterColl[i]->GetActive() && particleEmitterColl[i]->GetOwner()->IsObjectVisible())
+      if (particleEmitterColl[i]->GetActive()) //&& particleEmitterColl[i]->GetOwner()->IsObjectVisible())
       {
         particleEmitterColl[i]->Render(m_pDevice3D);
       }

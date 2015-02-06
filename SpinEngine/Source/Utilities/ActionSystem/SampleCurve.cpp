@@ -4,7 +4,7 @@
 
 ZilchDefineType(SampleCurve, SpinningZilch)
 {
-	type->HandleManager = type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
 }
 
 SampleCurve::SampleCurve(Ease::Eases ease)

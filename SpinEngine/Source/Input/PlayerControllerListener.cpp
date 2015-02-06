@@ -83,7 +83,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
             if (this->playerController->WalkTimer > 0.4 && this->playerController->getJumpTimer() < BIT_MORE_THAN_ONE_FRAME)
             {
                 //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->StopEvent("player_footsteps");
-                ((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
+                //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
                 this->playerController->WalkTimer = 0.0f;
             }
         }
@@ -110,7 +110,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
             if (this->playerController->WalkTimer > 0.4 && this->playerController->getJumpTimer() < BIT_MORE_THAN_ONE_FRAME)
             {
                 //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->StopEvent("player_footsteps");
-                ((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
+                //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
                 this->playerController->WalkTimer = 0.0f;
             }
         }
@@ -173,7 +173,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
     {
           //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->SetVolume(1.0f, "player_jump");
           //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->StopEvent("player_jump");
-          ((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_jump", false);
+          //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_jump", false);
 
           if (this->playerController->getJumpState() == JumpStates::JS_Grounded)
           {
@@ -213,31 +213,26 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
 	case BUTTONS_Y:
     break;
 
-	case BUTTONS_RIGHT_SHOULDER:
-	{
-		if (GivenInput->KeyPressed == true)
-		{
-   //   GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "SCBody.png", this->PlayerTransform->GetPosition() + Vector3D(2 * PlayerTransform->GetScale().x, 0, 0), d3dColors::White, true);
+  case BUTTONS_RIGHT_SHOULDER:
+  {
+    if (GivenInput->KeyPressed == true)
+    {
 
-   //   newObject->GetTransform()->GetScale().x *= 5;
-   //   newObject->GetTransform()->GetScale().y *= 4.5;
+      if (abs(GivenInput->rightStick.first) > 0.1f || abs(GivenInput->rightStick.second) > 0.1f)
+      {
+        float theta = atan2f(GivenInput->rightStick.second, GivenInput->rightStick.first); //Mathf.Atan2(hackVector.y, hackVector.x);
+        // theta = MathF::RadToDegree(theta);
 
-			////add a rigid body
-			//AABB *box = new AABB(newObject);
-			//box->SetHalfSize(1.0f, 1.0f);
-			//newObject->AddGameComponent(CT_BoxCollider, box);
-   //   
-   //   WallController * walltest = new WallController(newObject, 0);
-   //   newObject->AddGameComponent(CT_WALL_CONTROLLER, walltest);
-   //   walltest->Initialize();
-   //   walltest->WallActive = true;
-			//WallControllerListener * wallcomp = new WallControllerListener(newObject, 0);
-			//wallcomp->Initialize();
-			//GlobalSystem->RegisterListener(MESSAGE_INPUT, wallcomp);
-		}
-
-		break;
-	}
+        playerController->ControllerFireLaser(theta);
+      }
+      else
+      {
+        //Right stick not pressed, launch in direction we're currently facing
+        playerController->KBFireLaser(PlayerTransform->GetScale().x > 0);
+      }
+    }
+    break;
+  }
 
   case BUTTONS_LEFT_SHOULDER:
       //this->ParentObject->GetTransform()->GetRotation().z += 2 * GivenInput->time;
@@ -296,7 +291,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
         if(this->playerController->WalkTimer > 0.4 && this->playerController->getJumpTimer() < BIT_MORE_THAN_ONE_FRAME)
         {
           //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->StopEvent("player_footsteps");
-          ((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
+          //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
           this->playerController->WalkTimer = 0.0f;
         }
       }
@@ -339,7 +334,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
         if (this->playerController->WalkTimer > 0.4 && this->playerController->getJumpTimer() < BIT_MORE_THAN_ONE_FRAME)
         {
           //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->StopEvent("player_footsteps");
-          ((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
+          //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->Play("CB/player_footsteps", false);
           this->playerController->WalkTimer = 0.0f;
         }
       }

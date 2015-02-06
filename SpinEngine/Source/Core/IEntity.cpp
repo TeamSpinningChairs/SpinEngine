@@ -27,6 +27,7 @@ ZilchDefineType(IEntity, SpinningZilch)
 	ZilchBindFieldGetSet(Transform);
 	ZilchBindMethod(Destroy);
 	ZilchBindFieldGetSetAs(IsVisible, "Visible");
+	ZilchBindFieldGetSet(Actions);
 }
 
 ZilchDefineType(IComponent, SpinningZilch)

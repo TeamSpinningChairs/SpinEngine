@@ -182,7 +182,7 @@ void PlayerKeyboardListener::OnMessageRecieved(Message * SentMessage)
     case 'T':
         if (GivenInput->KeyStatus == KEY_TRIGGERED)
         {
-            
+          /*
             IEntity *splashscreenObj;
             SpriteRenderer* splashRend;
 
@@ -194,6 +194,7 @@ void PlayerKeyboardListener::OnMessageRecieved(Message * SentMessage)
             GlobalFactory->AddGameObject(splashscreenObj);
             //splashscreenObj->GetTransform()->GetScale().x *= 1024;
             //splashRend->GetCurrentSprite()->PauseAt('A');
+            */
             
         }
         break;

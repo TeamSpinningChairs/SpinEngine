@@ -3,7 +3,7 @@
 
 ZilchDefineType(ActionSequence, SpinningZilch)
 {
-	type->HandleManager = type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
 }
 
 ActionSequence::ActionSequence(void)

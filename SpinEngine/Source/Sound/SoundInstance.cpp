@@ -63,7 +63,7 @@ void Sound::PlayOnce(SoundInstance *instance)
     instance->eventInstance->setPitch(instance->pitch_);
     instance->eventInstance->setVolume(instance->volume_);
 
-    instance->active = true;
+    //instance->active = true;
 
     ErrorCheck(instance->eventInstance->start());
     //ErrorCheck(instance->eventInstance->release());

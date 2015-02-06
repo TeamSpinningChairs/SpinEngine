@@ -30,9 +30,11 @@ typedef ParticleEmitVector::iterator PartEmitVecIter;
 class ParticleEmitter : public IComponent
 {
 public:
-  ParticleEmitter(GameObject Owner, emitter_types type = ET_NORMAL, blend_types b_type = BT_ADD,
+  ParticleEmitter(GameObject owner, emitter_types type = ET_NORMAL, blend_types b_type = BT_ADD,
     unsigned int particle_count = MAX_PARTICLE_COUNT, std::string t_name = NULL,
     D3DXCOLOR color = d3dColors::White, D3DXCOLOR end_color = d3dColors::White);
+
+  ParticleEmitter(GameObject owner, ParticleEmitter &rhs);
 
   ~ParticleEmitter();
 

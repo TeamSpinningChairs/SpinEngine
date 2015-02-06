@@ -60,8 +60,6 @@ class Action
 		//then the exisisting sequence is cleared.
 		static ActionSequence* Sequence(ActionSequence** seq);
 
-		static ActionSequence* Sequence(Zilch::Any seq);
-
 		static void Property(ActionSequence* seq, float* startVal, float endVal, float time, Ease::Eases ease);
 		static void Property(ActionSequence* seq, int* startVal, int endVal, float time, Ease::Eases ease);
 		static void Property(ActionSequence* seq, Vector2D* startVal, Vector2D endVal, float time, Ease::Eases ease);
@@ -75,11 +73,11 @@ class Action
 		static void Property(ActionGroup* grp, Vector4D* startVal, Vector4D endVal, float time, Ease::Eases ease);
 
 		//ZILCH VERSIONS
-		static void Property(ActionSequence* seq, Zilch::Any startVal, float endVal, float time, int ease);
-		//static void Property(ActionSequence* seq, Zilch::Any startVal, int endVal, float time, int ease);
-		//static void Property(ActionSequence* seq, Zilch::Any startVal, Vector2D endVal, float time, int ease);
-		//static void Property(ActionSequence* seq, Zilch::Any startVal, Vector3D endVal, float time, int ease);
-		//static void Property(ActionSequence* seq, Zilch::Any startVal, Vector4D endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Zilch::Property startVal, float endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Zilch::Property startVal, int endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector2D endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector3D endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector4D endVal, float time, int ease);
 
 		static void Delay(ActionSequence* seq, float delay);
 		//static void Call(ActionSequence* seq, void (*func)(void));

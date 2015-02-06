@@ -1015,6 +1015,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       newObject->AddGameComponent(CT_KILLPLAYER, IMUSTTASTEBLOOD);
     }
 
+
     //Currently, if we add a SoundEmitter to an object specifically, it's so we can
     //check one of various possible settings (currently just "StartingMusic" for what
     //to play on Initialization). Miiiight expand or revamp this later.

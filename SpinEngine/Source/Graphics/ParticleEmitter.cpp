@@ -6,9 +6,9 @@
 IDirect3DIndexBuffer9* ParticleEmitter::i_buffer = NULL;
 IDirect3DVertexBuffer9* ParticleEmitter::v_buffer = NULL;
 
-ParticleEmitter::ParticleEmitter(GameObject Owner, emitter_types type, blend_types b_type,
+ParticleEmitter::ParticleEmitter(GameObject owner, emitter_types type, blend_types b_type,
   unsigned int particle_count, std::string t_name, D3DXCOLOR color, D3DXCOLOR  end_color) :
-  IComponent(CT_ParticleEmitter, Owner), particle_count(particle_count), my_color(color), my_color_end(end_color),
+  IComponent(CT_ParticleEmitter, owner), particle_count(particle_count), my_color(color), my_color_end(end_color),
   texture(NULL), scale(0.50f), end_scale(0.50f), gravity(0.0f), PE_lifespan(PE_LOOPING), current_PE_lifespan(0)
   , angle_1(0.0f), angle_2(360.0f), speed_1(1.0), speed_2(0), acceleration_1(-1.0f), acceleration_2(5.0f),
   x_diff_from_owner(0.0f), y_diff_from_owner(0.0f), blend_colors(true), use_blending_operation(true), emit_type(type), blend_type(b_type), kill_pe(false),
@@ -29,7 +29,7 @@ ParticleEmitter::ParticleEmitter(GameObject Owner, emitter_types type, blend_typ
 {
 
   device = GlobalFactory->GetDevice();
-  if (!Owner)
+  if (!owner)
   {
     //I disabled this, since ObjectData keeps several of these without itself being a GameObject
     //MessageBox(NULL, "ERROR: Particle Emitter does not have an Game Object assigned!", "Particle Emitter Error", NULL);
@@ -41,6 +41,13 @@ ParticleEmitter::ParticleEmitter(GameObject Owner, emitter_types type, blend_typ
   }
 
   texture_name = t_name;
+}
+
+
+ParticleEmitter::ParticleEmitter(GameObject owner, ParticleEmitter &rhs) : ParticleEmitter(owner, rhs.emit_type,rhs.blend_type,rhs.particle_count,rhs.texture_name,rhs.my_color,rhs.my_color_end)
+{
+  *this = rhs;
+  Owner = owner; //I think I'm way too thorough about this. There was a problem somewhere along the way and I fixed it in three places where only one was really required.
 }
 
 ParticleEmitter::~ParticleEmitter()

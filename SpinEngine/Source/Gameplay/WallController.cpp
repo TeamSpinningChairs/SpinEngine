@@ -114,8 +114,8 @@ void WallController::Update(float dt)
   //PrisonPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition();
   if (BodyPart != NULL && PrisonPart != NULL)
   {
-    BodyPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(2,0,0);
-    PrisonPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(2, 0, 0);
+    BodyPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(2,0,8);
+    PrisonPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(2, 0, 8);
   }
 
   //movevalue *= -1;

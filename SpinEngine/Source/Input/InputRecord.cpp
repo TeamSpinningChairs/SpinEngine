@@ -45,7 +45,8 @@ void InputRecord::InitializeRecording(std::string levelname)
   char filename[80];
   std::tm *t = std::gmtime(&now);
   //strftime(filename, 10, "%F", t);
-  sprintf(filename, "%s-%d:%02d.json", levelname, (t->tm_hour + PST) % 24, t->tm_min);
+  //sprintf(filename, "%s-%d:%02d.json", levelname, (t->tm_hour + PST) % 24, t->tm_min);
+  sprintf(filename, (levelname + "Playback.json").c_str());
 
   if (!saver_.LoadArchive(filename))
   {

@@ -24,6 +24,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "WallListener.h"
 #include "DestroyOnWall.h"
 #include <random>
+#include "ParticleEmitter.h"
 
 /*************************************************************************/
 /*!
@@ -88,8 +89,8 @@ WallComp::~WallComp()
   // delete all allocated memory
   delete Wall_Listener;
 
-  /*UNCOMMENT IF YOU'VE REENABLED PARTICLE EMITTERS
-  for (int i = 0; i < PARTICLE_EM_COUNT; i++)
+  //UNCOMMENT IF YOU'VE REENABLED PARTICLE EMITTERS
+  /*for (int i = 0; i < PARTICLE_EM_COUNT; i++)
   {
     WallParticleEmitters[i]->~ParticleEmitter();
     MemoryManager::Free_Component(CT_ParticleEmitter, WallParticleEmitters[i]);
@@ -108,7 +109,7 @@ bool WallComp::Initialize()
 {
 
   //Create all of the shifting roiling particle things
-  particleSwarm.Initialize(&parent->GetTransform()->GetPosition());
+  //particleSwarm.Initialize(&parent->GetTransform()->GetPosition());
 
 
 
@@ -192,11 +193,10 @@ bool WallComp::Initialize()
 
   Player = ENGINE->m_Factory->FindObjectByName("MainPlayer");
 
-  return true; //I disabled particle emitters for the shifting-wall-thing
   //
   // NEW PART OF THE INIT PROCESS, SETTING THE PARTICLE EMITTERS
   //
-
+  return true;
   //CREATE THE PARTICLE EMITTERS
   ParticleEmitter* _mem;
   //Constant difference variables
@@ -209,22 +209,8 @@ bool WallComp::Initialize()
   {
     _mem = reinterpret_cast<ParticleEmitter*>(
       MemoryManager::Allocate_Component(CT_ParticleEmitter));
-    WallParticleEmitters[i] = new (_mem) ParticleEmitter(WallImage, 
-      emitter_types::ET_SQUARE, blend_types::BT_ADD, 0, /*"Assets\\Textures\\Claw-Open.png"*/"", d3dColors::Black, d3dColors::Black);
-
-    WallParticleEmitters[i]->blend_colors = false;
-    WallParticleEmitters[i]->angle_1 = 75;
-    WallParticleEmitters[i]->angle_2 = 285;
-
-    WallParticleEmitters[i]->speed_1 = -2.0f;
-    WallParticleEmitters[i]->speed_2 = -4.0f;
-
-    WallParticleEmitters[i]->acceleration_1 = -15;
-    WallParticleEmitters[i]->acceleration_2 = -25;
+    WallParticleEmitters[i] = new (_mem) ParticleEmitter(Owner,GlobalFactory->GetParticleEmitter("Sandstorm"));
     
-    WallParticleEmitters[i]->scale = 0.3f;
-    WallParticleEmitters[i]->end_scale = 0.6f;
-    WallParticleEmitters[i]->particle_lifetime = 1.0f;
 
 
     //Set the x difference of the emitters
@@ -257,7 +243,7 @@ bool WallComp::Initialize()
   }
   // END PARTICLE EMITTER INITIALIZATION
 
-  WallParticleEmitters[0]->particle_count = 0;
+  //WallParticleEmitters[0]->particle_count = 0;
 
 	return true;
 }
@@ -275,21 +261,10 @@ void WallComp::Update(float dt)
         return;
     }
 
-    /*UNCOMMENT IF/WHEN YOU REENABLE THE PARTICLE EMITTERS
-    if (WallDelay > 0)
-    {
-        ParticleCreateTimer += dt;
-
-        WallDelay -= dt;
-        
-        if (WallDelay <= 0)
-        {
-            WallDelay = 0.0f;
-            WallParticleEmitters[0]->particle_count = 500;
-        }
-
-        return;
-    }*/
+  //  for (size_t i = 0; i < PARTICLE_EM_COUNT; i++)
+  //  {
+   //   WallParticleEmitters[i]->Update(dt);
+    //}
 
 	LaunchTimer += dt;
 

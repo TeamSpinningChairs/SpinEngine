@@ -68,8 +68,8 @@ void WallTriggerComp::OnCollision(GameObject Player)
 
         //ENGINE->m_Sound->StopSound("music_explore");
         //ENGINE->m_Sound->PlayEvent("music_escape");
-        ENGINE->m_Sound->StopAll();
-        ENGINE->m_Sound->PlayEvent("CB/music_escape", &instance, true);
+        //ENGINE->m_Sound->StopAll();
+        //ENGINE->m_Sound->PlayEvent("CB/music_escape", &instance, true);
 
         triggered = true;
 

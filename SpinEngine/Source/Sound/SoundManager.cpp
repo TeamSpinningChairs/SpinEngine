@@ -46,7 +46,7 @@ void SoundManager::Shutdown()
   UnloadAllSoundsBank();
 
   lowlevelsound_System->close();
-  soundSystem->release();
+  //soundSystem->release();
 }
 
 void SoundManager::ErrorCheck(FMOD_RESULT result)

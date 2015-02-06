@@ -31,6 +31,8 @@ public:
   Vector2D() : x(0), y(0) {}
 
   Vector2D(const float x, const float y) : x(x), y(y) {}
+  Vector2D(Zilch::Real2 vec)
+	  : x(vec.x), y(vec.y) {}
 
   void Set(float newX, float newY)
   {
@@ -272,6 +274,8 @@ public:
 
   Vector3D(const float x, const float y, const float z)
     : x(x), y(y), z(z) {}
+  Vector3D(Zilch::Real3 vec)
+	  : x(vec.x), y(vec.y), z(vec.z) {}
 
   void Set(float newX, float newY, float newZ)
   {
@@ -561,6 +565,9 @@ private:
 
 public:
   Vector4D() : x(0), y(0), z(0), w(0) {}
+
+  Vector4D(Zilch::Real4 vec)
+	  : x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
 
   Vector4D(const float x, const float y, const float z, const float w)
     : x(x), y(y), z(z), w(w) {}
