@@ -1,0 +1,27 @@
+{
+
+	"TWEAK BAR SETTINGS": 1.111111
+	"Tweak Bar Enabled": true
+	"Showing Tweak Bar": false
+
+	"PHYSICS SETTINGS": 1.111111
+	"Gravity": -39.980003
+
+	"PLAYER MOVEMENT SETTINGS": 1.111111
+	"Player Run Speed": 9.249994
+	"Player Jump Velocity": 10.000000
+	"Double Jump Enabled": false
+	"Variable Jump Height Enabled": true
+	"Variable Jump Time": 0.200000
+	"Variable Jump Power": 1.200000
+	"Time To Jump After Leaving Ground": 0.200000
+	"Max Downwards Velocity": 40.000000
+
+	"BACKGROUND SETTINGS": 1.111111
+	"Foreground Speed": 1.000000
+	"Midground Speed": 0.200000
+	"Background Speed": 0.130000
+
+	"WALL SETTINGS": 1.111111
+	"Wall Movement Speed": 6.000000
+}

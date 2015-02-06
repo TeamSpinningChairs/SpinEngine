@@ -1,0 +1,32 @@
+{
+	"current_PE_lifespan": 0
+	"PE_lifespan": 0.333
+	"scale": 0.935
+	"end_scale": 2
+	"start_delay": -4.31602e+008
+	"particle_lifetime": 1
+	"lifetime_invariant": 0.2
+	"angle_1": 98.61
+	"angle_2": 360
+	"speed_1": 1
+	"speed_2": 0
+	"acceleration_1": -1
+	"acceleration_2": 5
+	"spin": 2.08
+	"spin_variance": 0
+	"gravity": 0
+	"my_color": 436207615
+	"my_color_end": 16777215
+	"blend_colors": 1
+	"particle_count": 20
+	"x_diff_from_owner": 0
+	"y_diff_from_owner": 0
+	"emit_type": 1
+	"blend_type": 1
+	"source_factor": 5
+	"blend_type": 1
+	"width": 1
+	"height": 1
+	"radius": 1
+	"texture_name": "DustParticle.png"
+}

@@ -1,0 +1,52 @@
+{ "height":4,
+ "layers":[
+        {
+         "data":[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+         "height":5,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":40,
+         "name":"Objects",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":100,
+         "x":0,
+         "y":0
+        }],
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "renderorder":"right-up",
+ "tileheight":512,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"..\/Textures\/Tiled_Spritesheet.png",
+         "imageheight":1024,
+         "imagewidth":3072,
+         "margin":0,
+         "name":"Tileset",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":512,
+         "tilewidth":512
+        }],
+ "tilewidth":512,
+ "version":1,
+ "width":4
+}

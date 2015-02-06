@@ -1,0 +1,9 @@
+{
+  "statename": "idle"
+  "texturepath": "Assets\Textures\Desert_Tiles.png"
+  "texturename": "Desert_Tiles.png"
+  "start_i": 0
+  "end_i": 12
+  "totalframes": 13
+  "timeperframe": 999999.0
+}

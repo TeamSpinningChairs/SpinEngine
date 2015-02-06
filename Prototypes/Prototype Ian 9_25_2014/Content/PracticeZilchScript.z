@@ -1,0 +1,246 @@
+//enum declaration must occur before the body of the class
+enum ControllerButtons {Start, Select, Up, Down, Left, Right, A, B} // no semicolon
+
+class PracticeZilchScript : ZilchComponent
+{
+    //This declares a dependency for a component called "Transform". This means that any object attached with this component must also have a transform component
+    [Dependency]
+    var Transform : Transform = null;
+    
+    //This declares a property called "RandomVector" which is a vector composed of 3 reals(floats)
+    [Property]
+    var RandomVector : Real3 = Real3(0.0, 1.0, 0.0);
+    
+    function Initialize(init : CogInitializer)
+    {
+        //The following are keywords used in Zilch (never name a variable an already used keyword):
+        //
+        // as, base, break, class, constructor, continue, debug, delegate, delete
+        // destructor do else enum false flags for foreach function get if in loop
+        // new null ref return sends set struct throw true typeid value var while
+        // this local scope
+        
+        //The below words are unused, but still reserved (dont use them ever)
+        //
+        // abstract alias alignof assert auto case catch checked const default 
+        // dynamic explicit export extern finally fixed friend global goto 
+        // immutable implicit import yield include inline interface internal is 
+        // typeof lock module mutable namespace operator out override package params 
+        // partial positional private protected public readonly register require 
+        // where sealed signed sizeof stackalloc static switch timeout try typedef 
+        // typename unchecked unsafe unsigned using virtual volatile
+        
+        //Zilch variable types include:
+        //
+        // Integer Integer2 Integer3 Integer4 Boolean Boolean2 Boolean3 Boolean4 
+        // DoubleInteger Real DoubleReal Void Real2 Real3 Real4 Math Quaternion 
+        // String Exception Events Null Error OverloadedMethods
+        
+        //There are no global variables in Zilch. Everything must be stored in an object in the Level
+        
+        // To name a variable, declare it using the var keyword, followed by an identifier name
+        //this establishes a variable named "greeting" as a string, with the contents "Hello"
+        var greeting: String = "Hello";
+        
+        // when working with classes, references, or other or anything located on the heap with a constructor, use the "new" keyword
+        //
+        // The following line established a variable called heapObject, which is a new instance of CustomClassName
+        //var heapObject: CustomClassName = new CustomClassName();
+        // The following line established a variable called heapSTructInstance, a new instance of CustomStruct which is a reference to CustomStruct
+        //var heapStructInstance: ref CustomStruct = new CustomStruct();
+        
+        //Scopes determine the lifetime of a variable
+        if(true)
+        {
+            //This variable will not be able to be referenced when this if statement ends
+            var b = 0;
+        }
+        
+        for (var a = 3; a > 0; --a)
+        {
+            //a as a variable can be referenced within scope of the for loop because it was in the for loop's initialization
+            //a however, CANNOT be overwritten from inside the for loop, only accessed
+            Console.WriteLine(a);
+        }   //a ceases to exist after the for loop ends, as does any other variables created inside the for loop
+        
+        //you can use the "scope" keyword to make scopes without using for or if statements (or others)
+        scope
+        {
+            //things in this scope can access (but not change) variables from the outer scope
+            //variables in this scope cease to exist when the scope closes
+            
+        }
+        
+        //"if" statements alter the flow of code, code written within scope of an if statement will only run if the statement in the if statement equates to true
+        var randomBooleanFlag: Boolean = true;
+        if (randomBooleanFlag == true)
+        {
+            Console.WriteLine("randomBooleanFlag is true!");
+        }
+        //"else" statements must be written after an if statement and only run if the previous if statment was false
+        else
+        {
+            Console.WriteLine("randombBooleanFlag is false!");
+        }
+        //if statements us rational operators to evaulate statements. Here is a list of usable rational operators in zilch:
+        //
+        //left to right associative (higher precedence)
+        // < "Less than"
+        // <= "less than or equal to"
+        // > " Greater than"
+        // >= "Greater than or equal to
+        //
+        //left ro right (lower precedence)
+        //== "equal to"
+        // !- "Not equal to"
+        
+        //"for" loops can be written and used in the same way as "while", "do while", and "loop" statements
+        //
+        /*
+        //For Loop
+        var sum = 0;
+        for (var i = 0; i < 3; ++i)
+        {
+          sum += i;
+        }
+        //
+        //While loop
+        var sum = 0;
+        var i = 0;
+        while (i < 3)
+        {
+            sum += i;
+            ++i;
+        }
+        //Do While loop
+        var sum = 0;
+        var i = 0;
+        do
+        {
+            sum += i;
+            ++i;
+        } while(i < 3)
+        //loop Loop
+        var i = 0;
+        var sum = 0;
+        loop
+        {
+            sum += i;
+            ++i;
+            if (i >= 3)
+            {
+                break; // This keyword keeps the loop (or any kind of loop) from being infinite
+            }
+        }
+        */
+        //Arrays are used to store a lot of variables in the same place, and can be declared like this:
+        //This announced an array of integers without any variables in it
+        var myArray = new Array[Integer]();
+        //This adds three variables to the array myArray
+        myArray.Add(0);
+        myArray.Add(1);
+        myArray.Add(2);
+        
+        //You can use two different methods to operate on objects inside the array:
+        //
+        /*
+        //For Method
+        var sum = 0;
+        for (var i = 0; i < myArray.Count; ++i)
+        {
+            sum += myArray.Get(i);
+        }// sum = 3
+        //
+        //foreach method
+        var sum = 0;
+        foreach (var item in myArray)
+        {
+            sum += item;
+        }// sum = 3
+        */
+        //During loops, keyword "break" will end the loop for good (even from an inner scope)
+        //During loops, keyword "continue" will skip the rest of the code inside the loop, but start the loop from the beginning again
+        //During loops, keyword "return" will end the FUNCTION for good (even from an inner scope)
+        
+        /*
+        //ENUMS CANNOT BE DECLARED INSIDE CLASSES OR STRUCTS
+        //ENUMS cannot share a name with another enum ([Start, Start, Start])
+        //Everything in the ENUM line must be capitalized
+        enum ControllerButtons {Start, Select, Up=0, Down, Left, Right, A=0, B=1} // no semicolon
+        */
+        Console.WriteLine("ControllerButtons.Start  = `ControllerButtons.Start  as Integer`  " );
+        Console.WriteLine("ControllerButtons.Select = `ControllerButtons.Select as Integer`  " );
+        Console.WriteLine("ControllerButtons.Up     = `ControllerButtons.Up     as Integer`  " );
+        Console.WriteLine("ControllerButtons.Down   = `ControllerButtons.Down   as Integer`  " );
+        Console.WriteLine("ControllerButtons.Left   = `ControllerButtons.Left   as Integer`  " );
+        Console.WriteLine("ControllerButtons.Right  = `ControllerButtons.Right  as Integer`  " );
+        Console.WriteLine("ControllerButtons.A      = `ControllerButtons.A      as Integer`  " );
+        Console.WriteLine("ControllerButtons.B      = `ControllerButtons.B      as Integer`  " );
+        
+        
+        //this sends a call to a function called StaticTest in a class called StaticTestFunction, which does not have to be attached to an object in the level
+        Console.WriteLine(StaticTestFunction.StaticTest());
+        
+        
+        
+        
+        /*
+        ACTIONS
+        On each object is a root ActionSet object; it stores all the actions operating on the object. 
+        Every action belongs to an ActionSet. This ensures that when that object is destroyed all the 
+        associated actions will be destroyed.
+        
+        There are two kinds of actions:
+        an "ActionSequence" will block and run eac haction in order until all are completed
+        an "ActionGroup" will run each action individually and block until all actions are completed
+        
+        ActionSets can be nested so you can have a ActionSequence that contains sub ActionGroups, 
+        ActionSequences, or other actions. Once an ActionSet has been populated you can cancel its 
+        actions or check to see if they have completed.
+        
+        
+        */
+        
+        
+        
+        
+        /*
+        //Listening for Custom Scripts
+
+            //Sent by OWNER
+        Zero.Connect(this.Owner, "MyCustomEvent", this.OnMyCustomEvent);
+            //Sent by SPACE
+        Zero.Connect(this.Space, "MyCustomEvent", this.OnMyCustomEvent);
+            //Sent by GAME
+        Zero.Connect(this.GameSession, "MyCustomEvent", this.OnMyCustomEvent);
+        
+        //find more at: http://zero.digipen.edu/Concepts/Events.html
+        */
+        
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+    }
+    
+    //Functions, function headers, and function functionality
+    // Note:
+    // -function keyword is used
+    // -function name is capitalized
+    // -function name is followed by ()
+    // -when present parameters go in between ()
+    //  -parameters must be lowercase
+    //  -parameters must have their type specified
+    // -when a return type is present a colon ':' follows the ')' & the returned type follows the ':'
+    /*
+    function MyFunctionName(param1: MyParamType1, param2: MyParamType2) : MyReturnType
+    {// Body of the function in wrapped in {}
+        // Do function duties in here.
+        
+        // Use return keyword to pass back return value specified.
+        return new MyReturnType(param1 + param2);
+    }
+    */
+    
+}

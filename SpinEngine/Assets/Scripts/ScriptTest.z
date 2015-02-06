@@ -1,0 +1,56 @@
+class ZilchTest : ZilchComponent
+{
+	var Butts:Integer = 8;
+	constructor():base()
+	{
+		Console.WriteLine("I AM THE ZILCH CONSTRUCTOR!");
+	}
+	
+	function Initialize()
+	{
+		Console.WriteLine("INITIALIZED");
+		Console.WriteLine(this.Butts);
+		var seq = Action.Sequence(@this.Owner.Actions);
+		//Console.WriteLine(this.Owner.ZilchFriend.Pancakes);
+		//Action.Sequence(this.Owner.Actions, @Butts, 19, 6, 1);
+	}
+	
+	function Update(dt:Real)
+	{
+		//this.Owner.Transform.Translation.X += 2;
+		//Console.WriteLine(dt);
+		if(ZInterface.InputManager.IsKeyDown(Keys.D))
+		{
+			this.Owner.Transform.Translation.X += 2 * dt;
+			//Console.WriteLine(transform);
+			//transform.Translation.X += 2 * dt;
+			//Console.WriteLine("LEFT");
+			this.Owner.Visible = !this.Owner.Visible;
+		}
+	}
+	
+	function Destroyed()
+	{
+		Console.WriteLine("I AM DEAD!");
+	}
+}
+
+class ZilchFriend : ZilchComponent
+{
+	var Pancakes:String = "POONCOOKS!!";
+	constructor():base()
+	{
+	}
+	
+	function Initialize()
+	{
+	}
+	
+	function Update(dt:Real)
+	{
+	}
+	
+	function Destroyed()
+	{
+	}
+}

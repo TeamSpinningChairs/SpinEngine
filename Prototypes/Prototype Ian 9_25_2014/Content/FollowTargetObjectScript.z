@@ -1,0 +1,98 @@
+//This class's purpose is to be attached to an object to allow it to "ghost follow" or, "ghost Parent" another object. 
+class FollowTargetObjectScript : ZilchComponent
+{
+    [Property]
+    var ObjectToFollow : CogPath = null;
+    
+    [Property]
+    var FollowXOfTarget : Boolean = false;
+    [Property]
+    var FollowYOfTarget : Boolean = false;
+    [Property]
+    var FollowZOfTarget : Boolean = false;
+    
+    var OriginalDistanceBetween : Real3 = Real3(0.0, 0.0, 0.0);
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        if(this.ObjectToFollow.Cog != null)
+        {
+            this.OriginalDistanceBetween = Real3(this.Owner.Transform.WorldTranslation.X - this.ObjectToFollow.Cog.Transform.WorldTranslation.X, this.Owner.Transform.WorldTranslation.Y - this.ObjectToFollow.Cog.Transform.WorldTranslation.Y, this.Owner.Transform.WorldTranslation.Z - this.ObjectToFollow.Cog.Transform.WorldTranslation.Z);
+            //Console.WriteLine(this.ObjectToFollow.Cog.Transform.WorldTranslation.X);
+            //Console.WriteLine(this.Owner.Transform.WorldTranslation.X);
+            // I want my current transform to equal my target object's currenttransform minus my existing position, depening on boolean properties I set in the worldview
+            if(this.FollowXOfTarget == true)
+            {
+                this.UpdateXTransform();
+            }
+            if(this.FollowYOfTarget == true)
+            {
+                this.UpdateYTransform();
+            }
+            if(this.FollowZOfTarget == true)
+            {
+                this.UpdateZTransform();
+            }
+        }
+    }
+
+    function RecalculateOriginalDistanceBetween()
+    {
+        /*
+        Real3(this.Owner.Transform.WorldTranslation.X - this.ObjectToFollow.Cog.Transform.WorldTranslation.X, 
+        this.Owner.Transform.WorldTranslation.Y - this.ObjectToFollow.Cog.Transform.WorldTranslation.Y, 
+        this.Owner.Transform.WorldTranslation.Z - this.ObjectToFollow.Cog.Transform.WorldTranslation.Z);
+        */
+        //
+        //Console.WriteLine(this.Owner.Transform.Translation)
+        var newX : Real = this.Owner.Transform.WorldTranslation.X - this.ObjectToFollow.Cog.Transform.WorldTranslation.X;
+        var newY : Real = this.Owner.Transform.WorldTranslation.Y - this.ObjectToFollow.Cog.Transform.WorldTranslation.Y;
+        var newZ : Real = this.Owner.Transform.WorldTranslation.Z - this.ObjectToFollow.Cog.Transform.WorldTranslation.Z;
+        this.OriginalDistanceBetween = Real3(newX, newY, newZ);
+        
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //Console.WriteLine(this.Owner.Transform.Translation);
+        if(this.ObjectToFollow.Cog != null)
+        {
+            //Console.WriteLine(this.ObjectToFollow.Cog.Transform.WorldTranslation.X);
+            //Console.WriteLine(this.Owner.Transform.WorldTranslation.X);
+            // I want my current transform to equal my target object's currenttransform minus my existing position, depening on boolean properties I set in the worldview
+            if(this.FollowXOfTarget == true)
+            {
+                this.UpdateXTransform();
+            }
+            if(this.FollowYOfTarget == true)
+            {
+                this.UpdateYTransform();
+            }
+            if(this.FollowZOfTarget == true)
+            {
+                this.UpdateZTransform();
+            }
+        }
+    }
+
+    function UpdateXTransform()
+    {
+        //Console.WriteLine(this.Owner.Transform.Translation.X);
+        this.Owner.Transform.WorldTranslation = Real3(this.ObjectToFollow.Cog.Transform.WorldTranslation.X + this.OriginalDistanceBetween.X, 0, 0);
+        //Console.WriteLine(this.Owner.Transform.Translation.X);
+    }
+    function UpdateYTransform()
+    {
+        this.Owner.Transform.WorldTranslation.Y = this.ObjectToFollow.Cog.Transform.WorldTranslation.Y;// - this.OriginalPosition.Y;
+    }
+    function UpdateZTransform()
+    {
+        this.Owner.Transform.WorldTranslation.Z = this.ObjectToFollow.Cog.Transform.WorldTranslation.Z;// - this.OriginalPosition.Z;
+    }
+
+    function SwitchObjectToFollow(newTarget : Cog)
+    {
+        this.ObjectToFollow.Cog = newTarget;
+    }
+}

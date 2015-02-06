@@ -1,0 +1,76 @@
+class WallTrapController : ZilchComponent
+{
+    var ShouldBeGrowing:Boolean = Boolean(false);
+    
+    [Property]
+    var GrowthSpeed:Real = Real(0.0);
+    [Property]
+    var MaxGrowthLimit : Real = (0.0);
+    
+    function Initialize(init : CogInitializer)
+    {
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.ShouldBeGrowing == true)
+        {
+            //Console.WriteLine("should be growing!");
+            this.Owner.Transform.Scale += Real3(0, this.GrowthSpeed, 0);
+            if(this.Owner.Transform.Scale.Y >= this.MaxGrowthLimit)
+            {
+                this.ShouldBeGrowing = false;
+            }
+            
+        }
+        else if(this.ShouldBeGrowing == false)
+        {
+            //Console.WriteLine(this.Owner.Transform.Scale);
+            this.Owner.Transform.Scale -= Real3(0, this.GrowthSpeed, 0);
+            if(this.Owner.Transform.Scale.Y <= 0.1)
+            {
+                //Console.WriteLine("wall trap destroyed");
+                this.Owner.Destroy();
+            }
+        }
+    }
+    
+    function AttackEnemy(event : TargetMeEvent)
+    {
+
+        
+        var positionOfTarget = event.PositionOfTarget;
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+        //Console.WriteLine("oops");
+        //this.Owner.Transform.Scale = Real3(1, 10, 1);
+        this.ShouldBeGrowing = true;
+    }
+    
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        var otherObject = event.OtherObject;
+        if(otherObject.TargetableByWall != null)
+        {
+            //Console.WriteLine("oops");
+            otherObject.TargetableByWall.ParentToNewObject(this.Owner);
+            this.ShouldBeGrowing = false;
+            //I need to send the origin of this object to the 
+            
+            /*
+            when they hit something, they and the new child object are pulled back to the wall 
+            when the new child object hits the wall, delete it. 
+            */
+        }
+    }
+    
+    function ParentToWall(myNewParent : Cog)
+    {
+        this.Owner.AttachToRelative(myNewParent);
+        //Console.WriteLine(this.Owner.FindRoot());
+    }
+    
+}

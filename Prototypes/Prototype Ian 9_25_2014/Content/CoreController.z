@@ -1,0 +1,141 @@
+class CoreController : ZilchComponent
+{
+    var IsPickedUp : Boolean = false;
+    var HasBeenPassedThisFrame : Boolean = false;
+    
+    [Property]
+    var LaunchSpeed : Real = 0.0;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        this.HasBeenPassedThisFrame =false; 
+        
+        Zero.Disconnect(this.Space, Events.LogicUpdate, this);
+
+    }
+
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        var otherObject = event.OtherObject;
+        if(otherObject.Name == "SphereInfluence" && this.IsPickedUp == false)
+        {
+            //Console.WriteLine(otherObject.FindRoot());
+            //Console.WriteLine(this.IsPickedUp);
+            
+            var myNewParent = otherObject.FindRoot();
+            
+            //attach to the player who picked up this object
+            this.Owner.AttachTo(myNewParent);
+            //alter the sweptcontroller properties of the new parent object
+            myNewParent.SweptController.MaxMoveSpeed += myNewParent.SweptController.MaxMoveSpeed / 2;
+            myNewParent.SweptController.GroundAcceleration += myNewParent.SweptController.GroundAcceleration;
+            
+            //set the dynamics state to static
+            this.Owner.RigidBody.DynamicState = Integer(1);
+            //set the transform to slightly above the player and slightly in front
+            this.Owner.Transform.Translation = Real3(0, 0.5, 0);
+            //set the object to ghost so that it does not affect the jump physics of it's carrier
+            this.Owner.SphereCollider.Ghost = true;
+            //set boolean flag ispickedup to true
+            this.IsPickedUp = true;
+            
+            Console.WriteLine("Corecontroller telling wall to move!");
+            var wall = this.Owner.Space.FindObjectByName("Wall");
+            var wallmonster = this.Owner.Space.FindObjectByName("WallMonster");
+            if(wall.TranslateOverTimeScript.CanMove == false)
+            {
+                var camera = this.Space.FindObjectByName("Camera");
+                //it turns red, then jumps back after the wall turns red
+                var seq = Action.Sequence(this.Owner.Actions);
+                Action.Property(seq, @wallmonster.Sprite.Color, Real4(1,0,0,1), 2.0, Ease.Linear);
+                //Action.Call(seq, this.SendCameraToWall); 
+                //Action.Delay(seq, 1);
+                Action.Property(seq, @wall.Sprite.Color, Real4(1,0,0,1), 0.5, Ease.Linear);
+                Action.Property(seq, @wallmonster.HandController.CanFire, Boolean(true), 0.1, Ease.Linear);
+                Action.Property(seq, @wall.TranslateOverTimeScript.CanMove, Boolean(true), 0.1, Ease.Linear);
+                //wallmonster.Sprite.Color = Real4(1,0,0,1);
+                //wallmonster.HandController.DramaticEffect();
+                
+            }
+            //myNewParent.PlayerLogicController.HasTheCore = true;
+        }
+        if(otherObject.Name == "WallTrap")
+        {
+            //this.Owner.RigidBody.DynamicState = 1;//1 is static
+        }
+        if(otherObject.Name == "Door")
+        {
+            otherObject.TranslateOverTimeScript.MoveAlongYAxis = true;
+            otherObject.InteractsWithPlayer.TriggerActionOnTouch = true;
+        }
+    }
+
+    function SendCameraToWall()
+    {
+        var wallmonster = this.Owner.Space.FindObjectByName("WallMonster");
+        var camera = this.Space.FindObjectByName("Camera");
+        wallmonster.FollowTargetObjectScript.SwitchObjectToFollow(camera);
+        
+    }
+////////////////////////////////////////////////////////////////////////
+    function AttachToNewParent(event : CollisionEvent)
+    {
+        if(this.HasBeenPassedThisFrame == false)
+        {
+            Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+            
+            this.HasBeenPassedThisFrame = true;
+            var myNewParent = event.OtherObject.FindRoot();
+            var myOldParent = this.Owner.FindRoot();
+            
+            //alter the sweptcontroller properties of the new parent object
+            myNewParent.SweptController.MaxMoveSpeed += myNewParent.SweptController.MaxMoveSpeed / 2;
+            myNewParent.SweptController.GroundAcceleration += myNewParent.SweptController.GroundAcceleration;
+            //return the properties of the old parent object to their original state
+            myOldParent.SweptController.MaxMoveSpeed -= myOldParent.SweptController.MaxMoveSpeed / 3;
+            myOldParent.SweptController.GroundAcceleration -= myOldParent.SweptController.GroundAcceleration / 2;
+            
+            //detach from current parent, attach to new parent
+            this.Owner.Detach();
+            this.Owner.AttachTo(myNewParent);
+        }
+    }
+
+    function LaunchingCore(launchVector : Real3)
+    {
+        Console.WriteLine("Launching the Core, disconnecting from parent");
+        Console.WriteLine(launchVector);
+        
+        var myOldParent = this.Owner.FindRoot();
+        if(myOldParent != null)
+        {
+            //return the properties of the old parent object to their original state
+            myOldParent.SweptController.MaxMoveSpeed -= myOldParent.SweptController.MaxMoveSpeed / 3;
+            myOldParent.SweptController.GroundAcceleration -= myOldParent.SweptController.GroundAcceleration / 2;
+        }
+        this.Owner.DetachRelative();
+        this.Owner.RigidBody.DynamicState = Integer(0);
+        this.Owner.SphereCollider.Ghost = false;
+        
+        Zero.Connect(this.Owner, Events.CollisionEnded, this.OnCollisionEnded);
+        this.Owner.RigidBody.Velocity = launchVector * this.LaunchSpeed;
+    }
+
+    function OnCollisionEnded(event : CollisionEvent)
+    {
+        
+        var otherObject = event.OtherObject;
+        //Console.WriteLine("leaving contact with otherObject.");
+        if(otherObject.Name == ("SphereInfluence"))
+        {
+            Console.WriteLine("left presence of player");
+            this.IsPickedUp = false;
+            Zero.Disconnect(this.Owner, Events.CollisionEnded, this);
+        }
+    }
+}

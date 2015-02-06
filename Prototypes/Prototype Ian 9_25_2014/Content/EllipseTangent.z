@@ -1,0 +1,192 @@
+class EllipseTangent : ZilchComponent
+{
+    
+    [Property]
+    var CenterOfEllipse : Real2 = Real2(0.0, 0.0);
+
+    [Property]
+    var SemiMajorAxis : Real = Real(0.0);
+    
+    [Property]
+    var SemiMinorAxis : Real = Real(0.0);
+    
+    [Property]
+    var AngleAlpha : Real = Real(0.0);
+    
+    [Property]
+    var RotateSpeed : Real = Real(0.0);
+    
+    [Property]
+    var RotationDirection:Real3 = Real3();
+    //var QuatThing : Quaternion = Quaternion(0.0, 0.0, 0.0, 0.0);
+    
+    
+    //Declare a changeable property "GamePadIndex". This can be altered in the properties window at any time
+    [Property]
+    var GamePadIndex : Integer = 0;
+    //Declare a variable "GameController" which references a plugged in GamePad device that GamePadIndex will refer to
+    var GameController : Gamepad = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        //Console.WriteLine(this.QuatThing);
+        //Declare the GameController to use the Gamepad located at index[GamePadIndex]. This ensures the player uses only the controller they are holding
+        this.GameController = Zero.Gamepads.GetGamePad(this.GamePadIndex);
+        
+        this.AlterPosition();
+        
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+        
+        
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.GameController.IsButtonHeld(Buttons.A))
+        {
+            //Console.WriteLine("pressed a");
+            this.AngleAlpha += Math.ToRadians(this.RotateSpeed);
+            //Console.WriteLine(this.AngleAlpha);
+            this.AlterPosition();
+        }
+        
+        if(this.GameController.IsButtonHeld(Buttons.B))
+        {
+            //Console.WriteLine("pressed a");
+            this.AngleAlpha -= Math.ToRadians(this.RotateSpeed);
+            //Console.WriteLine(this.AngleAlpha);
+            this.AlterPosition();
+        }
+        
+        if(this.GameController.LeftStick.Y != 0 && this.GameController.LeftStick.X != 0)
+        {
+            
+            if(Math.ToDegrees(this.AngleAlpha) > 180)
+            {
+                //Console.WriteLine(Math.ToDegrees(this.AngleAlpha));
+                this.AngleAlpha -= Math.ToRadians(360);
+                //Console.WriteLine(Math.ToDegrees(this.AngleAlpha));
+            }
+            
+            if(Math.ToDegrees(this.AngleAlpha) < -180)
+            {
+                //Console.WriteLine(Math.ToDegrees(this.AngleAlpha));
+                this.AngleAlpha += Math.ToRadians(360);
+                //Console.WriteLine(Math.ToDegrees(this.AngleAlpha));
+            }
+            
+            var theAnswer = Real(Math.ToDegrees(Math.ATan((this.GameController.LeftStick.Y)/(this.GameController.LeftStick.X))));
+            
+            if(this.GameController.LeftStick.X < 0)
+            {
+                if(this.GameController.LeftStick.Y < 0)
+                {
+                    Console.WriteLine(Math.ToDegrees(Math.ATan((this.GameController.LeftStick.Y)/(this.GameController.LeftStick.X))));
+                    theAnswer = Real(-90 - (90 - (Math.ToDegrees(Math.ATan((this.GameController.LeftStick.Y)/(this.GameController.LeftStick.X))))));
+                    Console.WriteLine("I want this number: ");
+                    Console.WriteLine(theAnswer);
+                }
+                if(this.GameController.LeftStick.Y > 0)
+                {
+                    Console.WriteLine(Math.ToDegrees(Math.ATan((this.GameController.LeftStick.Y)/(this.GameController.LeftStick.X))));
+                    theAnswer = Real(90 + (90 + (Math.ToDegrees(Math.ATan((this.GameController.LeftStick.Y)/(this.GameController.LeftStick.X))))));
+                }
+            }
+            Console.WriteLine("I want this number: ");
+            Console.WriteLine(theAnswer);
+            Console.WriteLine("to match this number: ");
+            Console.WriteLine(Math.ToDegrees(this.AngleAlpha));
+            
+            /*
+            //I want angleAlpha to trend towards theAnswer
+            
+            if(this.AngleAlpha > theAnswer)
+            {
+                this.AngleAlpha -= Math.ToRadians(this.RotateSpeed);
+            }
+            else if(this.AngleAlpha < theAnswer)
+            {
+                this.AngleAlpha += Math.ToRadians(this.RotateSpeed);
+            }
+            */
+            
+            //Create a sequence
+            var rotateToPositionSeq = Action.Sequence(this.Owner.Actions as ActionSet);
+            
+            //change the property named anglealpha attached to this object's ellipseTangent component to y=10, ans stretch it out for the duration of 5.0 seconds
+            Action.Property(rotateToPositionSeq, @this.Owner.EllipseTangent.AngleAlpha, Real(Math.ToRadians(theAnswer)), 10.0, Ease.QuadOut);
+            
+            if(this.GameController.LeftStick == Real2(0.0, 0.0))
+            {
+                rotateToPositionSeq.Cancel();
+            }
+            //I want the sequence to lerp the anglealpha to theAnswer
+            //I want the sequence to cancel if controller x,y is 0,0
+            
+            //this.AngleAlpha -= Math.ToRadians(this.RotateSpeed);
+            //Console.WriteLine(this.AngleAlpha);
+            this.AlterPosition();
+        }
+        
+        /*
+        if(this.GameController.LeftStick.X > 0)
+        {
+            if(this.GameController.LeftStick.Y > 0)
+            {
+                //quadrant up right
+            }
+            if(this.GameController.LeftStick.Y < 0)
+            {
+                //quadrant down right
+            }
+        }
+        if(this.GameController.LeftStick.X < 0)
+        {
+            if(this.GameController.LeftStick.Y > 0)
+            {
+                //quadrant Up left
+            }
+            if(this.GameController.LeftStick.Y < 0)
+            {
+                //quadrant down left
+            }
+        }
+        */
+        
+        /*
+        Console.WriteLine("Angle of ascent is: ");
+        Console.WriteLine(Math.ToDegrees(this.AngleAlpha));
+        
+        Console.WriteLine("left stick   is: ");
+        Console.WriteLine(this.GameController.LeftStick);
+        */
+        
+        //I can import either the left stick current real2, or the left stick delta
+        
+        
+    }
+    
+    function AlterPosition()
+    {
+
+        
+        //Console.WriteLine(Math.ToDegrees(this.AngleAlpha));
+        //Console.WriteLine("halp");
+        this.Owner.Transform.Translation = Real3(
+        (this.CenterOfEllipse.X + (this.SemiMajorAxis * Math.Cos(this.AngleAlpha))),
+        (this.CenterOfEllipse.Y + (this.SemiMinorAxis * Math.Sin(this.AngleAlpha))),
+        0.0);
+        //Console.WriteLine(this.Owner.Transform.Translation);
+        
+        //this.Owner.Transform.Rotation.Z = this.AngleAlpha;
+        //this.Owner.Transform.Rotation += Real3(0.0, 0.0, 1.0);
+        //Console.WriteLine(this.Owner.Transform.Rotation.Z);
+        
+        //Console.WriteLine(this.Owner.Transform.Translation);
+        this.Owner.Transform.SetEulerAnglesXYZ(0, 0, this.AngleAlpha);
+        //this.Owner.Transform.
+        
+
+    }
+}

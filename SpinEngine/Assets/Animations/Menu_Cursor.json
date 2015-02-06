@@ -1,0 +1,9 @@
+{
+  "statename": "cursor"
+  "texturepath": "Assets\Textures\Claw-Open.png"
+  "texturename": "Claw-Open.png"
+  "start_i": 0
+  "end_i": 0
+  "totalframes": 1
+  "timeperframe": 1.0
+}

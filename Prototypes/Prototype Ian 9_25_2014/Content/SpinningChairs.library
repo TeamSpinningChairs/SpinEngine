@@ -1,0 +1,7 @@
+ContentLibrary = 
+{
+	string Name = "SpinningChairs",
+	uint64 LibraryId = 544022c07a884b19,
+	string SourceControlType = "",
+	bool ReadOnly = false,
+},

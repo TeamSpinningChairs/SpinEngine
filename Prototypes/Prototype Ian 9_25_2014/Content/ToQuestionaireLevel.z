@@ -1,0 +1,16 @@
+class ToQuestionaireLevel : ZilchComponent
+{
+    [Property]
+    var LevelToLoad : Level = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+    }
+
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        Console.WriteLine("blip");
+        this.Space.LoadLevel(this.LevelToLoad);
+    }
+}

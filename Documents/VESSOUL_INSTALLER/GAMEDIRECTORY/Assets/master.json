@@ -1,0 +1,121 @@
+{
+  #The order of these sprites must match the sprites' order on the Tiled editor's spritesheet.
+  #This is because Tiled assigns objects their ID (representing their sprite) based on their order in the spritesheet.
+  #I.E. 0 is empty, 1 is the first sprite, 2 is the second, etc...
+  #So if you change the order here, shift the sprites appropriately in the Tiled spritesheet to stay consistent.
+  #(To add a new sprite, create a .json file for it, append its path to this list, and then append its sprite to the spritesheet.)
+    "sprites": {
+        #################################################
+        ######################TILES######################
+        #################################################
+        {
+          "path": "Assets\Animations\Tile_Wall.json"
+        }
+        {
+          "path": "Assets\Animations\Tile_Ceiling.json"
+        }
+        {
+          "path": "Assets\Animations\Tile_Ground.json"
+        }
+        {
+          "path": "Assets\Animations\Tile_Door_Bottom.json"
+        }
+        {
+          "path": "Assets\Animations\Tile_Door_Top.json"
+        }
+        {
+          "path": "Assets\Animations\Tile_Destructible.json"
+        }
+        {
+          "path": "Assets\Animations\Player_Run.json"
+        }
+        {
+          "path": "Assets\Animations\Player_Idle.json"
+        }
+        {
+          "path": "Assets\Animations\Tile_Platform.json"
+        }
+        {
+          "path": "Assets\Animations\Menu14.json"
+        }
+        {
+          "path": "Assets\Animations\Menu15.json"
+        }
+        #################################################
+        #################OTHER SPRITES###################
+        #################################################
+        {
+          "path": "Assets\Animations\Link.json"
+        }
+        {
+          "path": "Assets\Animations\Claw-Closed.json"
+        }
+        {
+          "path": "Assets\Animations\Claw-Open.json"
+        }
+        {
+          "path": "Assets\Animations\Segment.json"
+        }
+        {
+          "path": "Assets\Animations\Menu_Level1.json"
+        }
+        {
+          "path": "Assets\Animations\Menu_Level2.json"
+        }
+        {
+          "path": "Assets\Animations\Menu_Quit.json"
+        }
+        {
+          "path": "Assets\Animations\Menu_Resume.json"
+        }
+        {
+          "path": "Assets\Animations\Menu_HowTo.json"
+        }
+        {
+          "path": "Assets\Animations\HowToPlay.json"
+        }
+        {
+          "path": "Assets\Animations\DigipenLogo.json"
+        }
+		{
+          "path": "Assets\Animations\Menu_Yes.json"
+        }
+		{
+          "path": "Assets\Animations\Menu_No.json"
+        }
+		{
+          "path": "Assets\Animations\Menu_Prompt.json"
+        }
+    }
+  #########################################################
+  "levels": {
+    {
+      "name": "Level_1"
+      "path": "Assets\Levels\Level_1.json"
+    }
+    {
+      "name": "Level_2"
+      "path": "Assets\Levels\Level_2.json"
+    }
+    {
+      "name": "Level_2_test"
+      "path": "Assets\Levels\Level_2_test.json"
+    }
+    {
+      "name": "Level_Menu"
+      "path": "Assets\Levels\Level_Menu.json"
+    }
+  }
+  #########################################################
+  "backgrounds": {
+    "fore": {
+      "path": "Assets\Textures\BG_Cave_0_Fore.png"
+    }
+    "middle": {
+      "path": "Assets\Textures\BG_Cave_1_Middle.png"
+    }
+    "back": {
+      "path": "Assets\Textures\BG_Cave_2_Back.png"
+    }
+  }
+}

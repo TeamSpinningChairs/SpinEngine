@@ -1,0 +1,27 @@
+/*
+in order to use this script, use this code in the object sending the event
+
+        //Create a ScriptEvent
+        var myInteractionEvent = new InteractionEvent();
+        
+        //Attach Data
+        myInteractionEvent.InfoToSend = "data";
+        myInteractionEvent.NumberToSend = 5;
+        
+        //Sent by SPACE
+        this.Space.DispatchEvent("InteractionEvent", myInteractionEvent); 
+        
+then add a listener in the script that needs to hear the message
+*/
+
+//Sending a custom script
+// Define a custom script event that INHERITS FROM EVENT
+class CameraNewTargetEvent : Event
+{
+    // Remember that member variable names MUST be capitalized in Zilch
+    var InfoToSend : String = "";
+    //var PositionOfTarget : Real3 = Real3(0.0, 0.0, 0.0);
+    constructor() : base()
+    {
+    }
+}   

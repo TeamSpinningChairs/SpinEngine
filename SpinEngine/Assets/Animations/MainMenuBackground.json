@@ -1,0 +1,9 @@
+{
+	"statename": "mainmenubg"
+  "texturepath": "Assets\Textures\MainMenuBackground.png"
+  "texturename": "MainMenuBackground.png"
+  "start_i": 0
+  "end_i": 0
+  "totalframes": 1
+  "timeperframe": 1.0
+}

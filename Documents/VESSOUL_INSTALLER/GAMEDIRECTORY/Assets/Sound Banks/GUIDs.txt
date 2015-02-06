@@ -1,0 +1,21 @@
+{6e13e6f9-6200-4793-a2e7-0e7c7491d44e} event:/environment_ambience_01
+{73fba097-0253-408d-823f-61b6148752b4} event:/environment_largedoor
+{5f79cd7b-512f-46a9-96be-c8add2e79758} event:/environment_smalldoor
+{6af2946f-8e57-4aa5-9ab0-d42dfee2ef46} event:/missile_explosion
+{a2902e9c-242d-49f3-bc89-c4932301a9dd} event:/missile_launch
+{82530115-b217-43f6-b8e0-1432320150af} event:/music_escape
+{7f0c375e-69d5-448d-8b6a-88627b723366} event:/music_explore
+{4c31f0ca-9764-48ab-80b4-d952e135ffe2} event:/music_theme
+{ea02e421-683d-4d25-9c7e-d32ee86cc934} event:/platform_moving
+{5483f7ea-5205-4811-9358-30f3b78ad1a3} event:/player_death
+{36ae23ca-523f-434f-904f-38986bc1967d} event:/player_footsteps
+{36738fd7-cf69-43d8-8e22-f2593dfb8697} event:/wall_attack
+{eac344e3-131f-42d2-b72e-8f1ed5c5e7c9} event:/wall_startup
+{e4859a03-102f-49ab-8bf6-99c97e3be278} event:/environment_alarm
+{d69c11ed-7ee4-48e5-84b7-97d4f6e1a8cc} event:/environment_door_crash
+{19c66c27-d196-426e-ab5e-3bc73d6b4524} event:/music_wall_encounter
+{3972bc41-11a1-4df7-886e-9fc817b249d2} bus:/
+{f9a32112-212c-459b-8caa-931221e33478} bus:/Reverb
+{15e9bbbe-9a32-4b73-b527-d2b393fecdfe} bank:/Ambience
+{3815aebd-7ae8-413e-87e7-bdc9a5785f46} bank:/Music
+{6ffa748e-1732-40c7-a300-1209929feeaf} bank:/Master Bank

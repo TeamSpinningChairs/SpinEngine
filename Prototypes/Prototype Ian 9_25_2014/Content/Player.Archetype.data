@@ -1,0 +1,186 @@
+Cog = 
+{
+	LinkId = 
+	{
+		uint Id = 1,
+	},
+	Named = 
+	{
+		string Name = "Player",
+	},
+	Archetyped = 
+	{
+		string Name = "549ed44a2327c5ca:Player",
+	},
+	Transform = 
+	{
+		Vec3 Translation = [27.1, 1.4, 0],
+		Vec3 Scale = [1, 1, 1],
+		Quat Rotation = [0, 0, 0, 1],
+	},
+	Sprite = 
+	{
+		string SpriteSource = "5275aa4d802dd6dc:Square",
+		bool FlipX = false,
+		bool FlipY = false,
+		Vec4 Color = [0, 0.0700002, 1, 1],
+		bool Visible = false,
+		bool OnTop = false,
+		bool AnimationActive = true,
+		float AnimationSpeed = 1,
+		uint StartFrame = 0,
+		BlendMode BlendMode = Alpha,
+		SpriteGeometryMode GeometryMode = ZPlane,
+		string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+	},
+	RigidBody = 
+	{
+		bool Static = false,
+		bool Asleep = false,
+		bool Kinematic = true,
+		bool RotationLocked = false,
+		bool Mode2D = true,
+		bool AllowSleep = false,
+		bool Inherit2DMode = true,
+		Vec3 Velocity = [0, 0, 0],
+		Vec3 AngularVelocity = [0, 0, 0],
+	},
+	BoxCollider = 
+	{
+		bool Ghost = false,
+		bool SendsMessages = true,
+		bool Seamless = true,
+		string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+		string SerializedGroupName = "549fa84e2a6328a9:Player",
+		Vec3 Offset = [0, 0.5, 0],
+		Vec3 Size = [0.5, 1, 0.5],
+	},
+	SweptController = 
+	{
+		Vec3 WorldUp = [0, 1, 0],
+		bool LockZAxis = true,
+		bool ForwardEvents = false,
+		float Gravity = 50,
+		float JumpSpeed = 17,
+		float JumpCancelFactor = 0.5,
+		float MaxMoveSpeed = 10,
+		float MaxFallSpeed = 50,
+		float GroundAcceleration = 50,
+		float AirAcceleration = 50,
+		float GroundDeceleration = 100,
+		float AirDeceleration = 100,
+		float MaxGroundSlope = 45,
+		float MaxCeilingSlope = 45,
+		float GroundSnapDistance = 0.1,
+		Vec3 ControllerVelocity = [0, 0, 0],
+		bool Grounded = false,
+		bool Jumping = false,
+		float GroundTraction = 0,
+		float AirTraction = 0,
+	},
+	PlayerLogicController = 
+	{
+		float MovementSpeed = 1,
+		float LaunchSpeed = 1,
+		int GamePadIndex = 0,
+	},
+	TargetableByWall = 
+	{
+		float TimeUntilSendsEvent = 5,
+	},
+	CanBeTargetedByCamera = 
+	{
+	},
+	Hierarchy = 
+	{
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 2,
+			},
+			Named = 
+			{
+				string Name = "SphereInfluence",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [0, 0, 0],
+				Vec3 Scale = [1.17071, 1.17071, 1.06429],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				string SpriteSource = "5275aa4d802dd6dc:Square",
+				bool FlipX = false,
+				bool FlipY = false,
+				Vec4 Color = [1, 0, 0.000599861, 0.25],
+				bool Visible = false,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1,
+				uint StartFrame = 0,
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+			},
+			RigidBody = 
+			{
+				bool Static = true,
+				bool Asleep = false,
+				bool Kinematic = false,
+				bool RotationLocked = false,
+				bool Mode2D = true,
+				bool AllowSleep = false,
+				bool Inherit2DMode = true,
+				Vec3 Velocity = [0, 0, 0],
+				Vec3 AngularVelocity = [0, 0, 0],
+			},
+			BoxCollider = 
+			{
+				bool Ghost = true,
+				bool SendsMessages = true,
+				bool Seamless = true,
+				string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+				string SerializedGroupName = "4e740859314e5515:DefaultGroup",
+				Vec3 Offset = [0, 0.5, 0],
+				Vec3 Size = [0.5, 1, 0.5],
+			},
+			Hierarchy = 
+			{
+			},
+		},
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 3,
+			},
+			Named = 
+			{
+				string Name = "CharacterSprite",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [0, 0.9, 4],
+				Vec3 Scale = [0.75, 0.75, 2],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				string SpriteSource = "54adc11de6adf5bd:Spritesheet_Running",
+				bool FlipX = true,
+				bool FlipY = false,
+				Vec4 Color = [1, 1, 1, 1],
+				bool Visible = true,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1.5,
+				uint StartFrame = 0,
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+			},
+		},
+	},
+},

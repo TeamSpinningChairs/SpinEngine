@@ -1,0 +1,149 @@
+class TranslateOverTimeScript : ZilchComponent
+{
+    [Property]
+    var SpeedOfMovement : Real = Real(0.0);
+    
+    [Property]
+    var MoveAlongXAxis : Boolean = false;
+    [Property]
+    var MoveAlongYAxis : Boolean = false;
+    [Property]
+    var MoveAlongZAxis : Boolean = false;
+    [Property]
+    var CanMove : Boolean = false;
+    
+    [Property]
+    var CanPace : Boolean = false;
+    [Property]
+    var ReturnToOrigin : Boolean = false;
+    [Property]
+    var PaceLength : Real3 = Real3(0.0, 0.0, 0.0);
+    [Property]
+    var PaceOffset : Real3 = Real3(0.0, 0.0, 0.0);
+    var OriginalPosition : Real3 = Real3(0.0,0.0,0.0);
+    
+    [Property]
+    var ReturnToStart : Boolean = false;
+    var SwappedDirections : Boolean = false;
+
+//////////////////////////////////////////////////////////////////////////////////////
+    function Initialize(init : CogInitializer)
+    {
+        this.OriginalPosition = this.Owner.Transform.WorldTranslation;
+        
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        this.PaceOffset = Real3(this.Owner.Transform.WorldTranslation.X + this.PaceOffset.X, this.Owner.Transform.WorldTranslation.Y + this.PaceOffset.Y, this.Owner.Transform.WorldTranslation.Z + this.PaceOffset.Z);
+    }
+//////////////////////////////////////////////////////////////////////////////////////
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.CanMove == true)
+        {
+            
+            
+            if(this.MoveAlongXAxis == true)
+            {
+                this.Owner.Transform.WorldTranslation += Real3(this.SpeedOfMovement, 0, 0);
+                if(this.CanPace == true)
+                {
+                    this.Pace();
+                }
+            }
+            
+            if(this.MoveAlongYAxis == true)
+            {
+                this.Owner.Transform.WorldTranslation += Real3(0, this.SpeedOfMovement, 0);
+                if(this.CanPace == true )
+                {
+                    this.Pace();
+                }
+            }
+            /*
+            if(this.MoveAlongZAxis == true)
+            {
+                this.Owner.Transform.WorldTranslation += Real3(0, 0, this.SpeedOfMovement);
+                if(this.CanPace == true && this.PaceOffset.Z + this.PaceLength < this.Owner.Transform.WorldTranslation.Z || this.PaceOffset - this.PaceLength > this.Owner.Transform.WorldTranslation.Z)
+                {
+                    this.SpeedOfMovement -= (this.SpeedOfMovement * 2);
+                }
+            }
+            */
+        }
+    }
+///////////////////////////////////////////////////////////////////
+    function Pace()
+    {
+        var maxMoveDistance:Real3 = this.PaceOffset + this.PaceLength;
+        var minMoveDistance:Real3 = this.PaceOffset - this.PaceLength;
+        //Console.WriteLine(maxMoveDistance.X);
+        if(maxMoveDistance.X < this.Owner.Transform.WorldTranslation.X || minMoveDistance.X > this.Owner.Transform.WorldTranslation.X)
+        {
+            if(this.SwappedDirections == true)
+            {
+                this.CanMove = false;
+                
+            }
+            //Console.WriteLine("should stop moving!");
+            this.SpeedOfMovement -= this.SpeedOfMovement * 2;
+            if(this.ReturnToStart == true)
+            {
+                this.SwappedDirections = true;
+            }
+        }
+        if(maxMoveDistance.Y < this.Owner.Transform.WorldTranslation.Y || minMoveDistance.Y > this.Owner.Transform.WorldTranslation.Y)
+        {
+            if(this.SwappedDirections == true)
+            {
+                this.CanMove = false;
+                
+            }
+            //Console.WriteLine("should stop moving!");
+            this.SpeedOfMovement -= this.SpeedOfMovement * 2;
+            if(this.ReturnToStart == true)
+            {
+                this.SwappedDirections = true;
+            }
+        }
+        if(maxMoveDistance.Z < this.Owner.Transform.WorldTranslation.Z || minMoveDistance.Z > this.Owner.Transform.WorldTranslation.Z)
+        {
+            if(this.SwappedDirections == true)
+            {
+                this.CanMove = false;
+                
+            }
+            //Console.WriteLine("should stop moving!");
+            this.SpeedOfMovement -= this.SpeedOfMovement * 2;
+            if(this.ReturnToStart == true)
+            {
+                this.SwappedDirections = true;
+            }
+        }
+    }
+
+    function Interact()
+    {
+        Console.WriteLine("interact!");
+        
+        //this.CanPace = !this.CanPace;
+        this.CanMove = !this.CanMove;
+        Console.WriteLine("TranslateOverTimeScript Not Optimized!");
+        
+        if(this.ReturnToOrigin == true && this.CanMove == false)
+        {
+            var seq = Action.Sequence(this.Owner.Actions);
+            Action.Property(seq, @this.Owner.Transform.WorldTranslation, this.OriginalPosition, 1.0, Ease.Linear);
+            
+            //this.Owner.Transform.WorldTranslation = Math.Lerp(this.Owner.Transform.WorldTranslation, this.OriginalPosition, 2);
+        }
+        
+        
+    }
+    function StopMoving()
+    {
+        if(this.CanPace == false)
+        {
+            this.CanMove = false;
+        }
+        
+    }
+}

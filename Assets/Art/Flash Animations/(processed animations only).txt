@@ -1,0 +1,4 @@
+Meaning, this folder should only contain .fla files that are ready to export animation data to XML.
+
+(I'm keeping track of these to give back to Bernie later if/when he wants to animate more,
+and in case any of the exports go wrong and I don't notice for awhile.)

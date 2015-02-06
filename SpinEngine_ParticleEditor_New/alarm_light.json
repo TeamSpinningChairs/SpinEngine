@@ -1,0 +1,32 @@
+{
+	"current_PE_lifespan": 0
+	"PE_lifespan": 0
+	"scale": 12
+	"end_scale": 3.255
+	"start_delay": -4.31602e+008
+	"particle_lifetime": 0.7
+	"lifetime_invariant": 0
+	"angle_1": 90
+	"angle_2": 90
+	"speed_1": 1
+	"speed_2": 0
+	"acceleration_1": 0
+	"acceleration_2": 0
+	"spin": 0
+	"spin_variance": 0
+	"gravity": 0
+	"my_color": 2080332799
+	"my_color_end": 255
+	"blend_colors": 1
+	"particle_count": 1
+	"x_diff_from_owner": 0
+	"y_diff_from_owner": 0
+	"emit_type": 0
+	"blend_type": 1
+	"source_factor": 5
+	"blend_type": 1
+	"width": 1
+	"height": 1
+	"radius": 3
+	"texture_name": "fire.png"
+}

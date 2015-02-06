@@ -1,0 +1,90 @@
+//I need the timer to be passed by this object, not from the wall
+
+class TargetableByWall : ZilchComponent
+{
+    var CanSendEvent : Boolean = true;
+    
+    [Property]
+    var TimeUntilSendsEvent : Real = (5.0);
+    var Timer : Real = (0.0);
+    var HasBeenDetected : Boolean = false;
+    
+    function Initialize(init : CogInitializer)
+    {
+        //add a listener that will destroy this object if it collides with the wall
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+        
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        //Add a listener for a customevent
+        
+        
+        this.Timer = this.TimeUntilSendsEvent;
+    }
+    
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //this counteracts the parent's scale when the object is paired to wall trap controller
+        //this.Owner.Transform.Scale += Real3(0, 0.1, 0);
+        //Console.WriteLine(this.Timer);
+        this.Timer -= event.Dt;
+        
+        if(this.Timer <= 0)
+        {
+            Console.WriteLine("Resetting Signal! from targetable by wall");
+            this.Timer = this.TimeUntilSendsEvent;
+            this.CanSendEvent = true;
+            Zero.Disconnect(this.Space, Events.LogicUpdate, this);
+        }
+    }
+    
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        var otherObject = event.OtherObject;
+        if(otherObject.Name == "WallMonster" || otherObject.Name == "Wall")
+        {
+            //this.Owner.DetachRelative();
+            this.Owner.Destroy();
+            //Console.WriteLine(this.Owner);
+        }
+        if(otherObject.Name == "WallDetection" && this.HasBeenDetected == false)
+        {
+            Zero.Connect(this.Space, "WallEvent", this.OnWallEvent);
+            this.HasBeenDetected = true;
+            Console.WriteLine("Wall Detecting blocks!");
+        }
+    }
+    
+//this function is no longer needed
+    function ParentToNewObject(myNewParent : Cog)
+    {
+        this.Owner.AttachToRelative(myNewParent);
+    }
+
+//Function OnWallEvent occurs when HandController sends a Wall Event. 
+//Whenever this object recieves a Wall Event, if the wall is close enough, return a TargetMe Event to the wall
+    function OnWallEvent(event : WallEvent)
+    {
+        //Console.WriteLine("recieving a wall close event!");
+        //this is the distance formula calculating the distance between this object and the wall 
+        var distanceFromWall = Math.Sqrt((this.Owner.Transform.WorldTranslation.X - event.NumberToSend.X)^2 + 
+        (this.Owner.Transform.WorldTranslation.Y - event.NumberToSend.Y)^2);
+        //if the wall is close to the object this script is attached to, then do this code
+        if(distanceFromWall < event.TriggerDistance && this.CanSendEvent == true)
+        {
+            
+            Console.WriteLine("sending an event! from OnWallEvent");
+            this.CanSendEvent = false;
+            //Create a ScriptEvent
+            var myTargetMeEvent = new TargetMeEvent();
+            //Attach Data
+            myTargetMeEvent.InfoToSend = "WallTargetMe";
+            myTargetMeEvent.PositionOfTarget = this.Owner.Transform.WorldTranslation;
+            myTargetMeEvent.ObjectSendingEvent = this.Owner;
+            //Sent by SPACE
+            this.Space.DispatchEvent("TargetMeEvent", myTargetMeEvent); 
+            
+            Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+            
+        }
+    }//END OF FUNCTION OnWallEvent
+}

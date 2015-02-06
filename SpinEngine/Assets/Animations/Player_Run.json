@@ -1,0 +1,9 @@
+{
+  "statename": "running"
+  "texturepath": "Assets\Textures\Spritesheet_Running.png"
+  "texturename": "Spritesheet_Running.png"
+  "start_i": 0
+  "end_i": 9
+  "totalframes": 10
+  "timeperframe": 0.125
+}

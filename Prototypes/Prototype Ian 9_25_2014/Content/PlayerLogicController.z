@@ -1,0 +1,259 @@
+class PlayerLogicController : ZilchComponent
+{
+    //Declare a dependency on SweptController (there must be a SweptController component attached to the Owner Object)
+    [Dependency]
+    var SweptController : SweptController = null;
+    
+    [Property]
+    var MovementSpeed : Real = 0.0;
+    [Property]
+    var LaunchSpeed : Real = 0.0;
+    //Declare a changeable property "GamePadIndex". This can be altered in the properties window at any time
+    [Property]
+    var GamePadIndex : Integer = 0;
+    
+    //Declare a variable "GameController" which references a plugged in GamePad device that GamePadIndex will refer to
+    var GameController : Gamepad = null;
+    //declare a boolean that allows a player to move or not
+    var CanMove : Boolean = true;
+        
+    function Initialize(init : CogInitializer)
+    {
+        //Declare the GameController to use the Gamepad located at index[GamePadIndex]. This ensures the player uses only the controller they are holding
+        this.GameController = Zero.Gamepads.GetGamePad(this.GamePadIndex);
+        //connect to collision start event
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+        //Connect to OnLogicUpdate function
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+///////////////////////////////////////////////////////////////////
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //Send a function call to move the player
+        this.MovePlayer(event);
+    }
+//////////////////////////////////////////////////////////////////
+    function MovePlayer(event : UpdateEvent)
+    {
+        if( this.CanMove == true)
+        {
+            //If the controller is plugged in, use these controls
+            if(this.GameController.IsActive)
+            {
+                //Use the controller movement instead of keyboard
+                this.ControllerMovement(event);
+            }
+            //If the controller is not plugged in, use keyboard controls
+            else
+            {
+                //Send a function call to keyboard movement
+                this.KeyboardMovement(event);
+            }
+        }
+    }
+//////////////////////////////////////////////////////////////////
+    function ControllerMovement(event : UpdateEvent)
+    {
+        //Console.WriteLine(this.Owner.SweptController.MaxMoveSpeed);
+        
+        //Declare a variable to send to SweptController
+        var currentMovement = Real3(this.GameController.LeftStick.X, this.GameController.LeftStick.Y, 0);
+        var child = this.Owner.FindChildByName("CharacterSprite");
+        if(currentMovement.X > 0)
+        {
+            child.Sprite.FlipX = false;
+        }
+        else if(currentMovement.X < 0)
+        {
+            child.Sprite.FlipX = true;
+        }
+        //send the event to swept controller
+        this.Owner.SweptController.Update(currentMovement, event.Dt);
+        
+        //If other keys are pressed, send those to swept controller
+        if(this.GameController.IsButtonPressed(Buttons.A))
+        {
+            this.Owner.SweptController.Jump();
+        }
+        if(this.GameController.IsButtonReleased(Buttons.A))
+        {
+            if(this.Owner.SweptController.Jumping)
+            {
+                this.Owner.SweptController.JumpCancel();
+            }
+        }
+        /*
+        if(this.GameController.IsButtonPressed(Buttons.Start))
+        {
+            this.Space.ReloadLevel();
+        }
+        */
+        //if the player presses the right trigger
+        if(this.GameController.IsButtonPressed(Buttons.RightShoulder))
+        {
+            //test throwing with parenting
+            var theCore = this.Owner.FindChildByName("Core");
+            //test throwing without parenting
+            //var theCore = this.Space.FindObjectByName("Core");
+            //and the player is in possession of the core
+            if(theCore != null)
+            {
+                
+                var rightStickVector = Real3(this.GameController.RightStick.X, this.GameController.RightStick.Y, 0);
+                this.LaunchCore(theCore, rightStickVector);
+            }
+        }
+        
+        //if the player presses the b button, send a call to function InteractionEvent
+        if(this.GameController.IsButtonPressed(Buttons.B) || this.GameController.IsButtonPressed(Buttons.X))
+        {
+            this.InteractionEvent();
+        }
+    }
+///////////////////////////////////////////////////////////////
+    function InteractionEvent()
+    {
+        //Console.WriteLine("player logic controller is sending an event to space!");
+        
+        //Create a ScriptEvent
+        var myInteractionEvent = new InteractionEvent();
+        
+        //Attach Data
+        myInteractionEvent.InfoToSend = "data";
+        myInteractionEvent.NumberToSend = 5;
+        
+        //Sent by SPACE
+        this.Space.DispatchEvent("InteractionEvent", myInteractionEvent); 
+    }
+/////////////////////////////////////////////////////////////////////
+    function KeyboardMovement(event : UpdateEvent)
+    {
+        /*
+        var launchVector = Real3(0, 0, 0);
+        if(Zero.Keyboard.KeyIsDown(Keys.W))
+        {
+            launchVector += Real3(0.0, this.LaunchSpeed, 0.0);
+            //Console.WriteLine("w");
+        }
+        
+        if(Zero.Keyboard.KeyIsDown(Keys.A))
+        {
+            launchVector -= Real3(this.LaunchSpeed, 0.0, 0.0);
+            //Console.WriteLine("a");
+        }
+        
+        if(Zero.Keyboard.KeyIsDown(Keys.D))
+        {
+            launchVector += Real3(this.LaunchSpeed, 0.0, 0.0);
+            //Console.WriteLine("d");
+        }
+        
+        if(Zero.Keyboard.KeyIsDown(Keys.S))
+        {
+            launchVector -= Real3(0.0, this.LaunchSpeed, 0.0);
+            //Console.WriteLine("s");
+        }
+        launchVector = Math.Normalize(launchVector)*this.LaunchSpeed;
+        
+        if(Zero.Keyboard.KeyIsDown(Keys.Space))
+        {
+            
+            var theCore = this.Owner.FindChildByName("Core");
+            if(theCore != null)
+            {
+                
+                this.LaunchCore(theCore, launchVector);
+            }
+        }
+        */
+        /*
+        if(Zero.Keyboard.KeyIsPressed(Keys.R))
+        {
+            this.Space.ReloadLevel();
+        }
+        */
+        //var currentMovement = Real3(this.GameController.LeftStick.X, this.GameController.LeftStick.Y, 0);
+        //this.Owner.SweptController.Update(currentMovement, event.Dt);
+        
+        //Declare a variable to send to SweptController
+        var currentMovement = Real3(0.0, 0.0, 0.0);
+        
+        if(Zero.Keyboard.KeyIsDown(Keys.Right) || Zero.Keyboard.KeyIsDown(Keys.D))
+        {
+            currentMovement += Real3(this.MovementSpeed, 0.0, 0.0);
+        }
+        if(Zero.Keyboard.KeyIsDown(Keys.Left) || Zero.Keyboard.KeyIsDown(Keys.A))
+        {
+            currentMovement -= Real3(this.MovementSpeed, 0.0, 0.0);
+        }
+        /*
+        if(Zero.Keyboard.KeyIsDown(Keys.Up))
+        {
+            currentMovement += Real3(0.0, this.MovementSpeed, 0.0);
+        }
+        */
+        if(Zero.Keyboard.KeyIsDown(Keys.Down) || Zero.Keyboard.KeyIsDown(Keys.S))
+        {
+            currentMovement -= Real3(0.0, this.MovementSpeed, 0.0);
+        }
+        var child = this.Owner.FindChildByName("CharacterSprite");
+        if(currentMovement.X > 0)
+        {
+            child.Sprite.FlipX = false;
+        }
+        else if(currentMovement.X < 0)
+        {
+            child.Sprite.FlipX = true;
+        }
+        //send the movement updates to swept controller
+        this.Owner.SweptController.Update(currentMovement, event.Dt);
+        
+        //if other keys are pressed, import them
+        if(Zero.Keyboard.KeyIsPressed(Keys.Up) || Zero.Keyboard.KeyIsPressed(Keys.W))
+        {
+            this.Owner.SweptController.Jump();
+        }
+        if(Zero.Keyboard.KeyIsDown(Keys.Up) == false && Zero.Keyboard.KeyIsDown(Keys.W) == false)
+        {
+            if(this.Owner.SweptController.Jumping)
+            {
+                this.Owner.SweptController.JumpCancel();
+            }
+        }
+        //if the player presses the space key, send a call to interaction event
+        if(Zero.Keyboard.KeyIsPressed(Keys.E) || Zero.Keyboard.KeyIsPressed(Keys.Enter) || Zero.Keyboard.KeyIsPressed(Keys.Space))
+        {
+            this.InteractionEvent();
+        }
+    }
+////////////////////////////////////////////////////////////
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        var otherObject = event.OtherObject;
+        //Console.WriteLine(otherObject.Name);
+        //var othersParent = otherObject.FindRoot();
+        if(otherObject.Name == "SphereInfluence")
+        {
+            //if this object is carrying the core, 
+            var theCore = this.Owner.FindChildByName("Core");
+            if(theCore != null)
+            {
+                theCore.CoreController.AttachToNewParent(event);
+            }
+        }
+        if(otherObject.Name == "WallMonster" || otherObject.Name == "Wall" || otherObject.Name == "WallTrap")
+        {
+            this.CanMove = false;
+        }
+        if(otherObject.Name == "Door")
+        {
+            Console.WriteLine("SDSDS");
+        }
+    }
+/////////////////////////////////////////////////////////////////////////
+    function LaunchCore(theCore : Cog, launchVector : Real3)
+    {
+        //Console.WriteLine("LaunchCore has been called by PlayerLogicController!");
+        theCore.CoreController.LaunchingCore(launchVector);
+    }
+}

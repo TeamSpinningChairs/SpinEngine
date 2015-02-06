@@ -1,0 +1,47 @@
+{
+
+	"___ TWEAK BAR SETTINGS ___": 1.111111
+	"Tweak Bar Enabled": true
+	"Showing Tweak Bar": false
+
+	"___ INPUT RECORD/PLAYBACK SETTINGS ___": 1.111111
+	"Playback Input": false
+	"Record Input": false
+
+	"___ PHYSICS SETTINGS ___": 1.111111
+	"Gravity": -40.000000
+
+	"___ PLAYER MOVEMENT SETTINGS ___": 1.111111
+	"Player Run Speed": 9.250000
+	"Player Jump Velocity": 8.510000
+	"Jetpack Enabled": true
+	"Variable Jump Height Enabled": true
+	"Variable Jump Time": 0.200000
+	"Variable Jump Power": 1.200000
+	"Time To Jump After Leaving Ground": 0.200000
+	"Max Downwards Velocity": 40.000000
+	"Max Upwards Velocity": 20.000000
+
+	"___ COOL JETPACK/LASER SETTINGS ___": 1.111111
+	"Max Fuel": 8
+	"Fuel Regen Delay": 0.000000
+	"Fuel Regen Speed": 20.000000
+	"Thrust": 15.979999
+	"Laser Firing Speed": 0.200000
+	"Laser Speed": 20.000000
+
+	"___ WALL SETTINGS ___": 1.111111
+	"Wall Movement Speed": 6.000000
+
+	"___ BACKGROUND SETTINGS ___": 1.111111
+	"Foreground Speed": 0.200000
+	"Midground Speed": 0.500000
+	"Background Speed": 0.707000
+
+	"___ WALL CONTROLLER SETTINGS ___": 1.111111
+	"Wall Control Type": 2
+  
+	"___ CAMERA SETTINGS ___": 1.111111
+	"Camera Zoom Factor": 24.063
+  "Pixels Per Unit": 24.0
+}

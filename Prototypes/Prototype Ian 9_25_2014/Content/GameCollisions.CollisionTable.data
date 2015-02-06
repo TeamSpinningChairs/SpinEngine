@@ -1,0 +1,23 @@
+CollisionTable = 
+{
+	Array RegisteredGroups = 
+	[
+		"4e740859314e5515:DefaultGroup",
+		"53343fbd65c1df38:DeathWall",
+		"53343fa06738363b:Villain",
+	],
+	Array CollisionFilters = 
+	[
+		{
+			string TypeA = "53343fbd65c1df38:DeathWall",
+			string TypeB = "53343fa06738363b:Villain",
+			bool SkipResolution = false,
+			bool SkipDetectingCollision = false,
+			bool StartEvent = false,
+			bool EndEvent = false,
+			bool PersistedEvent = false,
+			bool PreSolveEvent = false,
+		},
+	],
+	bool AutoRegister = true,
+},

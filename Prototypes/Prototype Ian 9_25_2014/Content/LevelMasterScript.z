@@ -1,0 +1,47 @@
+class LevelMasterScript : ZilchComponent
+{
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        //Zero.Connect(this.Space, Events.KeyDown, this.OnKeyDown);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(Zero.Keyboard.KeyIsPressed(Keys.R))
+        {
+            
+            var nextLevel =  Level.Find("Level");
+            this.Space.LoadLevel(nextLevel);
+        }
+        if(Zero.Keyboard.KeyIsPressed(Keys.T))
+        {
+            
+            var nextLevel =  Level.Find("BasketBallPrototype");
+            this.Space.LoadLevel(nextLevel);
+        }
+        if(Zero.Keyboard.KeyIsPressed(Keys.Y))
+        {
+            
+            var nextLevel =  Level.Find("SummerPrototype");
+            this.Space.LoadLevel(nextLevel);
+        }
+        
+    }
+
+    function OnKeyDown(event : KeyboardEvent)
+    {
+        Console.WriteLine(event);
+        if(event.Keyboard.KeyIsDown(Keys.R))
+        {
+            Console.WriteLine("press r");
+            
+        }
+        if(Zero.Keyboard.KeyIsPressed(Keys.R))
+        {
+            Console.WriteLine("press r");
+            
+        }
+        
+    }
+}

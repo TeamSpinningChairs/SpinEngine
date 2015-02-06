@@ -1,0 +1,41 @@
+class ZilchActions : ZilchComponent
+{
+    //declare variables
+    var Hp: Real = 0.0;
+    var D: Real3 = Real3(0.0,0.0,0.0);
+    var IsDone: Boolean = false;
+
+    
+    function Done()
+    {
+        Console.WriteLine("Done");
+        this.IsDone = true;
+    }
+
+    function Initialize(init : CogInitializer)
+    {
+        //connect to onlogic update
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+        //create a variable named "seq", which is an instance of Action.Sequence. (action.sequence is done in order. Action.Group is done simultainously)
+        var seq = Action.Sequence(this.Owner.Actions as ActionSet);
+        //Delay the action named seq for 0.5 seconds
+        Action.Delay(seq, 0.5);
+        //change the property named Translation attached to this object's Transform component to y=10, ans stretch it out for the duration of 1.0 seconds
+        //Ease controls the acceleration and deceleration of the motion. try: linear, QuadOut, QuadInOut, QuadIn, SinIn, SinInOut, SinOut
+        Action.Property(seq, @this.Owner.Transform.Translation, Real3(0.0, 10.0, 0.0), 1.0, Ease.SinInOut);
+        Action.Property(seq, @this.Hp, 10.0, 2.0, 0);
+        Action.Property(seq, @this.D, Real3(0.0, 10.0, 0.0), 1.0, Ease.Linear);
+        Action.Call(seq, this.Done);
+
+    }
+
+    function OnLogicUpdate(e : UpdateEvent)
+    {
+        if(!this.IsDone)
+        {
+            Console.WriteLine(this.Hp);
+            Console.WriteLine(this.D);
+        }
+    }
+}

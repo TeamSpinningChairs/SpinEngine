@@ -1,0 +1,7 @@
+ContentLibrary = 
+{
+	string Name = "SwitchTest",
+	uint64 LibraryId = 53a6f135be19a94e,
+	string SourceControlType = "",
+	bool ReadOnly = false,
+},

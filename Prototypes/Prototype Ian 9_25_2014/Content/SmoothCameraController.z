@@ -1,0 +1,141 @@
+class SmoothCameraController : ZilchComponent
+{
+    //declare my properties
+    //targetobject is the object the camera cares about following
+    [Property]
+    var TargetObject : CogPath = null;
+    [Property]
+    var HoriTriggerDistance : Real = Real(0.0);
+    [Property]
+    var VertTriggerDistance : Real = Real(0.0);
+    [Property]
+    var SmoothMoveSpeed: Real = Real(1.0);
+    [Property]
+    var SmoothMovementIsOn: Boolean = Boolean(true);
+    [Property]
+    var MovementIsAllowed: Boolean = Boolean(true);
+    
+    var NewTranslation : Real3 = Real3(0,0,0);
+    var StartingTranslation : Real3 = Real3(0,0,0);
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        //add an event listener to the response call
+        Zero.Connect(this.Space, "RespondToCameraEvent", this.OnRespondToCameraEvent);
+        if(this.TargetObject.Cog != null)
+        {
+            
+            this.NewTranslation = (this.Owner.Transform.Translation);
+            this.StartingTranslation = (this.Owner.Transform.Translation);
+            
+            //add to this obejct's rotation a vec3 eaul to (target object's x - this object x , target y - this. y, target z - this.z)
+            var targetX = this.TargetObject.Cog.Transform.Translation.X;
+            var targetY = this.TargetObject.Cog.Transform.Translation.Y;
+            var currentX = this.Owner.Transform.Translation.X;
+            var currentY = this.Owner.Transform.Translation.Y;
+            var currentZ = this.Owner.Transform.Translation.Z;
+            this.Owner.Transform.Translation += Real3(targetX - currentX, 0, 0); //targetY - currentY, currentZ);
+        }
+        
+
+        //this.Owner.Transform.Translation += Veco
+    }
+
+    function CallForNewTarget()
+    {
+        //Console.WriteLine("Sending a Call for New Target");
+        
+        //this.TargetObject.Cog = this.Owner;
+        //Create a ScriptEvent
+        var myCameraNewTargetEvent = new CameraNewTargetEvent();
+        
+        //Attach Data
+        myCameraNewTargetEvent.InfoToSend = "Camera Needs a New Target";
+        //myInteractionEvent.NumberToSend = 5;
+        
+        //Console.WriteLine("dispatching a cameraNewTargetEvent");
+        //Sent by SPACE
+        this.Space.DispatchEvent("CameraNewTargetEvent", myCameraNewTargetEvent); 
+        
+            
+            
+    }
+//ALL objects with the pyscript CanBeTargetedByCamera send a response event to this function
+//when called by a CameraNewTargetEvent. This call contains information of their translation 
+//coordinates. The Camera evaulates each one, and if one of the returned calls has a higher
+//x translation, this function designates that object as the object as the target object
+    function OnRespondToCameraEvent(event : RespondToCameraEvent)
+    {
+        //Console.WriteLine("I received a response for newtargets!");
+        if(this.TargetObject.Cog != null)
+        {
+            if(event.PositionOfTarget.X > this.TargetObject.Cog.Transform.WorldTranslation.X)
+            {
+                this.TargetObject.Cog = event.NewObject;
+            }
+        }
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //log my current translation for later logic
+        var currentTranslation = this.Owner.Transform.WorldTranslation;
+        if(this.TargetObject.Cog == null)
+        {
+            this.TargetObject.Cog = this.Owner;
+        }
+        
+        
+        this.CallForNewTarget();
+        
+        var targetTranslation = this.TargetObject.Cog.Transform.WorldTranslation;
+        
+        //these distance variables are the difference between where the main object of focus (target object) is
+        // and the current position of the camera.
+        var horiDistance = targetTranslation.X - currentTranslation.X;
+        var vertDistance = targetTranslation.X - currentTranslation.Y;
+        
+        //If Follow target is ever true, the camera should follow the player
+        var followTarget : Boolean = Boolean(false);
+        //if the player ever exceeds the horizontal or vertical max set, trigger the camera to follow them by turning follow target true
+        if(horiDistance > this.HoriTriggerDistance)
+        {
+            followTarget = true;
+        }
+        if(horiDistance < -this.HoriTriggerDistance)
+        {
+            followTarget = true;
+        }
+        if(vertDistance > this.VertTriggerDistance)
+        {
+            followTarget = true;
+        }
+        if(vertDistance < -this.VertTriggerDistance)
+        {
+            followTarget = true;
+        }
+        
+        if(this.MovementIsAllowed == true)
+        {
+            if(followTarget == true)
+            {
+                //Change the y value passed here to make the camera track the y position
+                this.NewTranslation = Real3(this.TargetObject.Cog.Transform.WorldTranslation.X, this.Owner.Transform.WorldTranslation.Y, this.Owner.Transform.WorldTranslation.Z);
+            }
+            if(this.SmoothMovementIsOn == true)
+            {
+                //this.Owner.Transform.Translation = Math.Lerp(this.NewTranslation, event.Dt * this.SmoothMoveSpeed);
+                this.Owner.Transform.WorldTranslation = Math.Lerp(this.Owner.Transform.WorldTranslation, this.NewTranslation, event.Dt * this.SmoothMoveSpeed);
+                
+            }
+            else
+            {
+                this.Owner.Transform.WorldTranslation = this.NewTranslation;
+            }
+            
+            
+        }
+        
+    }
+}

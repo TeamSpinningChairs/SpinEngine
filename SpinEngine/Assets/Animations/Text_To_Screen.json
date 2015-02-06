@@ -1,0 +1,9 @@
+{
+  "statename": "running"
+  "texturepath": "Assets\Textures\Text_To_Screen2.png"
+  "texturename": "Text_To_Screen2.png"
+  "start_i": 0
+  "end_i": 127
+  "totalframes": 128
+  "timeperframe": 300.0
+}

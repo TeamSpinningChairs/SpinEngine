@@ -1,0 +1,142 @@
+/*
+the wall sends out an event call with it's current location. 
+
+if that location is close enough to this object's posiiton, sent out a return event
+ to the hand with itself as a cog parameter
+
+
+Hand will respond to that by spawning a shot towards that object 
+
+shots are lerped to a position given to them. 
+
+when they hit something, they and the new child object are pulled back to the wall 
+
+when the new child object hits the wall, delete it. 
+
+
+*/
+class HandController : ZilchComponent
+{
+    //[Dependency]
+    //var FollowTargetObjectScript : FollowTargetObjectScript = null;
+    
+    [Property]
+    var TimerBetweenShots : Real = 0;
+    var TimerCount : Real = 0;
+    
+    [Property]
+    var DistanceUntilTarget : Integer = 0;
+    
+    [Property]
+    var ObjectToFire : Archetype = null;
+    [Property]
+    var CanFire : Boolean = false;
+    var Wall : Cog = null;
+    var Camera : Cog = null;
+    //var FollowWall : Boolean = false;
+    var MinimumWallDistance : Real = (0.0);
+    
+    
+///////////////////////////////////////////////////////////////////////////
+    function Initialize(init : CogInitializer)
+    {
+        this.Wall = this.Space.FindObjectByName("Wall");
+        this.Camera = this.Space.FindObjectByName("Camera");
+        
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        Zero.Connect(this.Space, "TargetMeEvent", this.OnTargetMeEvent);
+        
+        this.TimerCount = this.TimerBetweenShots;
+    }//END OF FUNCTION Initialize
+///////////////////////////////////////////////////////////////////////////
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.CanFire == true)
+        {
+            this.SendWallIsCloseEvent();
+            this.SwitchTargetToFollow();
+        }
+    }//END OF FUNCTION OnLogicUpdate
+//////////////////////////////////////////////////////////////////////
+    function DramaticEffect()
+    {
+        this.CanFire = true;
+    }
+
+//////////////////////////////////////////////////////////////////////
+    function SwitchTargetToFollow()
+    {
+        //Console.WriteLine(this.Wall);
+        //Console.WriteLine(this.Camera);
+        //Console.WriteLine(this.Owner.FollowTargetObjectScript.ObjectToFollow.Cog);
+        
+        var cameraAndWallDistance = this.Wall.Transform.Translation.X - this.Camera.Transform.Translation.X;
+        
+        if(cameraAndWallDistance < 20)
+        {
+            this.Owner.Transform.WorldTranslation = this.Wall.Transform.WorldTranslation;
+            /*
+            Console.WriteLine("Switching to wall!");
+            //I need to re-input the hand's movement properties
+            this.Owner.FollowTargetObjectScript.RecalculateOriginalDistanceBetween();
+            this.Owner.FollowTargetObjectScript.SwitchObjectToFollow(this.Wall);
+            //this.Owner.FollowTargetObjectScript.ObjectToFollow.Cog = this.Wall;
+            */
+            this.Owner.RemoveComponentByName("FollowTargetObjectScript");
+        }
+//Console.WriteLine(cameraAndWallDistance);
+        //Console.WriteLine(this.Wall.Transform.WorldTranslation.X);
+        //Console.WriteLine(this.Camera.Transform.WorldTranslation.X);
+        //I want the wall to be 20 away before it switches back to camera
+        if(cameraAndWallDistance > 20)
+        {
+            Console.WriteLine("Switching to camera!");
+            if(this.Owner.FollowTargetObjectScript == null)
+            {
+                this.Owner.AddComponentByName("FollowTargetObjectScript");
+                this.Owner.FollowTargetObjectScript.SwitchObjectToFollow(this.Camera);
+                this.Owner.FollowTargetObjectScript.FollowXOfTarget = true;
+            }
+            
+        }
+        
+        //Console.WriteLine(this.Owner.FollowTargetObjectScript.ObjectToFollow.Cog);
+    }
+//////////////////////////////////////////////////////////////////////////
+    function SendWallIsCloseEvent()
+    {
+        //Console.WriteLine("sending a wall close event!");
+        //Create a ScriptEvent
+        var myWallEvent = new WallEvent();
+        //Attach Data
+        myWallEvent.InfoToSend = "Wall is at this position";
+        myWallEvent.TriggerDistance = this.DistanceUntilTarget;
+        myWallEvent.NumberToSend = this.Owner.Transform.Translation;
+        
+        //send the event via SPACE
+        this.Space.DispatchEvent("WallEvent", myWallEvent);
+    }
+////////////////////////////////////////////////////////////////////////////
+//Function OnTargetMeEvent recieves a TargetMeEvent from an object attached with a TargetableByWall component
+//
+    function OnTargetMeEvent(event : TargetMeEvent)
+    {
+        //Console.WriteLine(event.ObjectSendingEvent);
+        //Console.WriteLine("TargetMeEventIsBeingSent");
+        //create a new object called "newWallTrap"
+        var newWallTrap = this.Space.CreateAtPosition(this.ObjectToFire, this.Owner.Transform.Translation);            
+        //calculate the angle needed to set the object at
+        var point1 = newWallTrap.Transform.WorldTranslation;
+        var point2 = event.PositionOfTarget;
+        var xDifference = point2.X - point1.X;
+        var yDifference = point2.Y - point1.Y;
+        var angleBetweenTwoPoints = Math.ATan2(yDifference, xDifference);
+        //reorient the wall trap towards the player 
+        newWallTrap.Transform.SetEulerAnglesXYZ(0, 0, angleBetweenTwoPoints - Math.ToRadians(90));
+        //Console.WriteLine(newWallTrap.Transform.Rotation);
+        newWallTrap.WallTrapController.ParentToWall(this.Owner);
+        //call the AttackEnemyfunction of the object we just created
+        newWallTrap.WallTrapController.AttackEnemy(event);
+    }
+    
+}//END OF CLASS HandController

@@ -1,0 +1,9 @@
+{
+  "statename": "idle"
+  "texturepath": "Assets\Textures\Menu_Prompt.png"
+  "texturename": "Menu_Prompt.png"
+  "start_i": 0
+  "end_i": 0
+  "totalframes": 1
+  "timeperframe": 1.0
+}

@@ -1,0 +1,149 @@
+#include "Precompiled.h"
+#include "SoundManager.h"
+
+SoundManager *sound = nullptr;
+
+SoundManager::SoundManager() :ISystem("Sound", ST_Sound), m_MainSoundSystem(0), 
+  m_MasterBank(0), m_StringsBank(0)
+{
+
+}
+
+SoundManager::~SoundManager()
+{
+
+}
+
+bool SoundManager::Initialize()
+{
+  FMOD_RESULT result;
+  //create the sound system
+  char text[200];
+  if ( FMOD::Studio::System::create(&m_MainSoundSystem) )
+  {
+    MessageBox(NULL, "ERROR: Could not create Sound System", 
+      strcpy(text, strcat("Error: ", system_name)), NULL);
+
+    return false;
+  }
+
+  //For later... check for errors
+  if (m_MainSoundSystem->initialize(1024, FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_NORMAL, 0) )
+  {
+    MessageBox(NULL, "ERROR: Could not create Sound System", 
+      strcpy(text, strcat("Error: ", system_name)), NULL);
+   
+    return false;
+  }
+
+  result = m_MainSoundSystem->loadBankFile("Assets/Sound Banks/Master Bank.bank",
+    FMOD_STUDIO_LOAD_BANK_NORMAL, &m_MasterBank);
+  if (result != FMOD_OK)
+  {
+    return false;
+  }
+
+  result = m_MainSoundSystem->loadBankFile("Assets/Sound Banks/Ambience.bank",
+    FMOD_STUDIO_LOAD_BANK_NORMAL, &m_AmbienceBank);
+  if (result != FMOD_OK)
+  {
+    return false;
+  }
+
+  result = m_MainSoundSystem->loadBankFile("Assets/Sound Banks/Music.bank",
+    FMOD_STUDIO_LOAD_BANK_NORMAL, &m_MusicBank);
+  if (result != FMOD_OK)
+  {
+    return false;
+  }
+
+  result = m_MainSoundSystem->loadBankFile("Assets/Sound Banks/Master Bank.strings.bank",
+    FMOD_STUDIO_LOAD_BANK_NORMAL, &m_StringsBank);
+  if (result != FMOD_OK)
+  {
+    return false;
+  }
+
+  return true;
+}
+
+void SoundManager::Update(float dt)
+{
+  m_MainSoundSystem->update();
+}
+
+void SoundManager::Shutdown()
+{
+  for (SoundCollIter iter = m_LoopingSounds.begin(); iter != m_LoopingSounds.end(); iter++)
+  {
+    iter->second->release();
+  }
+  m_StringsBank->unload();
+  m_MasterBank->unload();
+  m_MainSoundSystem->unloadAll();
+  m_MainSoundSystem->release();
+}
+
+bool SoundManager::PlayEvent(std::string name)
+{
+  FMOD::Studio::EventDescription * eventDescription = NULL;
+  FMOD::Studio::EventInstance * eventInstance = NULL;
+
+  std::string temp = "event:/" + name;
+
+  FMOD_RESULT result = m_MainSoundSystem->getEvent(temp.c_str(), &eventDescription);
+
+  if (result == FMOD_ERR_EVENT_NOTFOUND)
+  {
+    return false;
+  }
+  eventDescription->createInstance(&eventInstance);
+  bool oneShot;
+  eventDescription->isOneshot(&oneShot);
+
+  if (!oneShot && m_LoopingSounds.find(name) != m_LoopingSounds.end())
+  {
+    return false;
+  }
+  eventInstance->start();
+
+  if (oneShot)
+    eventInstance->release();
+  else
+  {
+    m_LoopingSounds.insert(std::pair<std::string, FMOD::Studio::EventInstance *>(name, eventInstance));
+  }
+
+  return true;
+}
+
+bool SoundManager::StopSound(std::string name)
+{
+  if (m_LoopingSounds.find(name) == m_LoopingSounds.end())
+    return true;
+  if (m_LoopingSounds[name]->isValid())
+  {
+    FMOD_STUDIO_PLAYBACK_STATE b;
+    m_LoopingSounds[name]->getPlaybackState(&b);
+    int j = 4;
+    m_LoopingSounds[name]->release();
+    m_LoopingSounds[name]->setPaused(true);
+    m_LoopingSounds[name]->stop(FMOD_STUDIO_STOP_IMMEDIATE);
+
+    m_LoopingSounds[name]->getPlaybackState(&b);
+    j = 4;
+  }
+
+  m_LoopingSounds.erase(name);
+  return true;
+}
+
+void SoundManager::Pause(bool pause, std::string& name)
+{
+  m_LoopingSounds[name]->setPaused(pause);
+}
+
+void SoundManager::Volume(float vol, std::string& name)
+{
+  m_LoopingSounds[name]->setVolume(vol);
+}

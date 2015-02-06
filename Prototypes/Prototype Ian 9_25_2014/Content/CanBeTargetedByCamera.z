@@ -1,0 +1,27 @@
+class CanBeTargetedByCamera : ZilchComponent
+{
+    function Initialize(init : CogInitializer)
+    {
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        //Add a listener for a customevent
+        Zero.Connect(this.Space, "CameraNewTargetEvent", this.OnCameraNewTargetEvent);
+    }
+
+    function OnCameraNewTargetEvent(event : CameraNewTargetEvent)
+    {
+        
+        //Console.WriteLine("I can be targeted by the camera!");
+        //Create a ScriptEvent
+        var myRespondToCameraEvent = new RespondToCameraEvent();
+        
+        //Attach Data
+        myRespondToCameraEvent.InfoToSend = "data";
+        myRespondToCameraEvent.PositionOfTarget = this.Owner.Transform.Translation;
+        myRespondToCameraEvent.NewObject = this.Owner;
+        
+        //Sent by SPACE
+        this.Space.DispatchEvent("RespondToCameraEvent", myRespondToCameraEvent); 
+        
+        
+    }
+}

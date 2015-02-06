@@ -1,0 +1,86 @@
+class InteractsWithPlayer : ZilchComponent
+{
+    [Property]
+    var TriggerActionOnTouch : Boolean = false;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+        Zero.Connect(this.Owner, Events.CollisionEnded, this.OnCollisionEnded);
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        //Console.WriteLine("is interacting with player!");
+        var otherObject = event.OtherObject;
+        
+        if(otherObject.Name == "SphereInfluence")
+        {
+            
+            var otherParent = event.OtherObject.FindRoot();
+            var core = otherParent.FindChildByName("Core");
+            if(core != null)
+            {
+                Console.WriteLine("SDSD");
+                this.TriggerActionOnTouch = true;
+                this.Owner.TranslateOverTimeScript.MoveAlongYAxis = true;
+            }
+            
+            //make this object transparent to indicate it can be interacted with
+            this.Owner.Sprite.Color -= Real4(0, 0, 0, 0.5);
+            if(this.TriggerActionOnTouch == true)
+            {
+                this.Owner.TranslateOverTimeScript.CanMove = true;
+                this.Owner.TranslateOverTimeScript.ReturnToStart = true;
+                this.Owner.TranslateOverTimeScript.SwappedDirections = false;
+            }
+            else
+            {
+                
+                //Console.WriteLine("is interacting with player!");
+                
+                
+                //Add a listener for a customevent
+                Zero.Connect(this.Space, "InteractionEvent", this.OnInteractionEvent);
+            }
+
+        }
+        else if(otherObject.Name != "SphereInfluence" || otherObject.Name != "Player")
+        {
+            this.Owner.TranslateOverTimeScript.StopMoving();
+        }
+    }
+    
+    function OnCollisionEnded(event : CollisionEvent)
+    {
+        var otherObject = event.OtherObject;
+        if(otherObject.Name == "SphereInfluence")
+        {
+            //return this object to it's non-interactive state
+            this.Owner.Sprite.Color += Real4(0, 0, 0, 0.5);
+            //Disconnecting From Events    
+            Zero.Disconnect(this.Space, "InteractionEvent", this);
+        }
+        
+
+    }
+
+    function OnInteractionEvent(event : InteractionEvent)
+    {
+        
+        //Console.WriteLine("connected to Interaction event!");
+        
+        this.Owner.TranslateOverTimeScript.Interact();
+        
+        /*
+        else if(this.TriggerAction == false)
+        {
+            this.Owner.Transform.Scale = Real3(1, 1, 1);
+        }
+        */
+        //this.TriggerAction = !this.TriggerAction;
+        //Console.WriteLine(this.TriggerAction);
+    }
+
+}

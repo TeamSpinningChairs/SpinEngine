@@ -1,0 +1,8 @@
+class StaticTestFunction : ZilchComponent
+{
+    [Static]//marking this static allows me to reference the function without creating an instance of it. 
+    function StaticTest():String
+    {
+        return "StaticTestFunction is returning a string!";
+    }
+}

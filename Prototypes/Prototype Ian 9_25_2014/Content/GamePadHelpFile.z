@@ -1,0 +1,179 @@
+class GamePadHelpFile : ZilchComponent
+{
+    
+    //This property governs which controller is being accessed
+    [Property]
+    var GamePadIndex : Integer = 0;
+    
+    var GameController : Gamepad = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        this.GameController = Zero.Gamepads.GetGamePad(this.GamePadIndex);
+        //Zero.Connect(this.GameController,Events.ButtonDown, this.OnButtonDown);
+        
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnButtonDown(event : GamepadEvent)
+    {
+        Console.WriteLine(event.Button);
+        
+        if(event.Button == 0)
+        {
+            Console.WriteLine("you pressed the 'A' button");
+        }
+        if(event.Button == 1)
+        {
+            Console.WriteLine("you pressed the 'B' button");
+        }
+        if(event.Button == 2)
+        {
+            Console.WriteLine("you pressed the 'X' button");
+        }
+        if(event.Button == 3)
+        {
+            Console.WriteLine("you pressed the 'Y' button");
+        }
+        if(event.Button == 4)
+        {
+            Console.WriteLine("you pressed the 'Start' button");
+        }
+        if(event.Button == 5)
+        {
+            Console.WriteLine("you pressed the 'Select' button");
+        }
+        if(event.Button == 6)
+        {
+            Console.WriteLine("you pressed the 'Left Thumbstick' button");
+        }
+        if(event.Button == 7)
+        {
+            Console.WriteLine("you pressed the 'Right Thumbstick' button");
+        }
+        if(event.Button == 8)
+        {
+            Console.WriteLine("you pressed the 'Left Bumper' button");
+        }
+        if(event.Button == 9)
+        {
+            Console.WriteLine("you pressed the 'Right Bumper' button");
+        }
+        if(event.Button == 10)
+        {
+            Console.WriteLine("you pressed the 'Up Dpad' button");
+        }
+        if(event.Button == 11)
+        {
+            Console.WriteLine("you pressed the 'Down Dpad' button");
+        }
+        if(event.Button == 12)
+        {
+            Console.WriteLine("you pressed the 'Left Dpad' button");
+        }
+        if(event.Button == 13)
+        {
+            Console.WriteLine("you pressed the 'Right Dpad' button");
+        }
+        
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.GameController.IsActive == true)
+        {
+            Console.WriteLine("Controller is active");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.A))
+        {
+            
+            Console.WriteLine("you held the 'a' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.B))
+        {
+            Console.WriteLine("you held the 'b' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.X))
+        {
+            Console.WriteLine("you held the 'x' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.Y))
+        {
+            Console.WriteLine("you held the 'y' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.DpadUp))
+        {
+            Console.WriteLine("you held the 'Dpad Up' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.DpadDown))
+        {
+            Console.WriteLine("you held the 'Dpad Down' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.DpadLeft))
+        {
+            Console.WriteLine("you held the 'Dpad Left' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.DpadRight))
+        {
+            Console.WriteLine("you held the 'Dpad Right' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.Start))
+        {
+            Console.WriteLine("you held the Start button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.AnyButton))
+        {
+            Console.WriteLine("you held any of the buttons!");
+            this.GameController.Vibrate(0.1, 0.3, 0.3);
+            //void Vibrate(float time, float Powerofleftvibrate, float Powerofrightvibrate)
+        }
+        if(this.GameController.IsButtonHeld(Buttons.Back))
+        {
+            Console.WriteLine("you held the back button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.LeftShoulder))
+        {
+            Console.WriteLine("you held the 'left shoulder' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.RightShoulder))
+        {
+            Console.WriteLine("you held the 'right shoulder' button!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.LeftThumb))
+        {
+            Console.WriteLine("you held the left stick!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.RightThumb))
+        {
+            Console.WriteLine("you held the right stick!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.StickDown))
+        {
+            Console.WriteLine("you held down!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.StickUp))
+        {
+            Console.WriteLine("you held Up!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.StickLeft))
+        {
+            Console.WriteLine("you held Left!");
+        }
+        if(this.GameController.IsButtonHeld(Buttons.StickRight))
+        {
+            Console.WriteLine("you held right!");
+        }
+        
+        if(this.GameController.LeftStick != Real2(0,0))
+        {
+            Console.WriteLine(this.GameController.LeftStick);
+            //this also works for individual variables:
+            //Console.WriteLine(this.GameController.LeftStick.X);
+        }
+        if(this.GameController.RightStick != Real2(0,0))
+        {
+            Console.WriteLine(this.GameController.RightStick);
+        }
+        
+    }
+}
