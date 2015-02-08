@@ -10,7 +10,7 @@ class ZilchTest : ZilchComponent
 	{
 		Console.WriteLine("INITIALIZED");
 		Console.WriteLine(this.Butts);
-		//var seq = Action.Sequence(@this.Owner.Actions);
+		var seq = Action.Sequence(@this.Owner.Actions);
 		//Console.WriteLine(this.Owner.ZilchFriend.Pancakes);
 		//Action.Sequence(this.Owner.Actions, @Butts, 19, 6, 1);
 	}

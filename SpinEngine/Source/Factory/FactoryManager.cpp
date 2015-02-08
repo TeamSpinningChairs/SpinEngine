@@ -1100,9 +1100,8 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 						Zilch::BoundType* ZilchClass = (*library)->BoundTypes.findValue(compName.c_str(), nullptr);
 						ErrorIf(ZilchClass == nullptr, "Failed to find a Zilch type named ", compName);
 
-						Zilch::ExceptionReport report;
 						Zilch::ExecutableState* state = ZILCH->GetDependencies();
-						Zilch::Handle ActiveScript = state->AllocateDefaultConstructedHeapObject(ZilchClass, report, Zilch::HeapFlags::NonReferenceCounted);
+						Zilch::Handle ActiveScript = state->AllocateDefaultConstructedHeapObject(ZilchClass, ZILCH->Report, Zilch::HeapFlags::NonReferenceCounted);
 
 						ZilchComponent* script = (ZilchComponent*)ActiveScript.Dereference();
 						script->ThisHandle = ActiveScript;
@@ -1121,7 +1120,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 							Zilch::Call call(ZilchCreate, ZILCH->GetDependencies());
 							call.SetHandle(Zilch::Call::This, ActiveScript);
 							call.SetHandle(0, newObject);
-							call.Invoke(report);
+							call.Invoke(ZILCH->Report);
 						}
 
 						Zilch::Array<Zilch::Type*> args2;
@@ -1139,7 +1138,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 							call.SetHandle(Zilch::Call::This, ActiveScript);
 							call.SetHandle(0, properties);
 							call.SetHandle(1, obj->branch);
-							call.Invoke(report);
+							call.Invoke(ZILCH->Report);
 						}
 						newObject->AddZilchComponent(ActiveScript);
 					}

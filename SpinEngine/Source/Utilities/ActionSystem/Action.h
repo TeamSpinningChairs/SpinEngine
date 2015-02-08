@@ -59,6 +59,7 @@ class Action
 		//Generates a new action sequence at the given memory location. If a sequence already exists,
 		//then the exisisting sequence is cleared.
 		static ActionSequence* Sequence(ActionSequence** seq);
+		static ActionSequence* Sequence(Zilch::Any seq);
 
 		static void Property(ActionSequence* seq, float* startVal, float endVal, float time, Ease::Eases ease);
 		static void Property(ActionSequence* seq, int* startVal, int endVal, float time, Ease::Eases ease);

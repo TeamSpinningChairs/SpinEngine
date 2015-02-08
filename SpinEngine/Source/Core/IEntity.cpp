@@ -220,20 +220,22 @@ bool IEntity::Initialize()
     }
   }
   
-  
-  Zilch::ExceptionReport report;
-  Zilch::Array<Zilch::Type*> args;
-  for (auto i : ZilchComponents)
-  {
-	  Function* ZilchInitialize = i.Type->FindFunction("Initialize", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
-	  ErrorIf(ZilchInitialize == nullptr, "Failed to find function 'Initialize' on Zilch type ", i.Type);
+  if (ZilchComponents.size())
+  { 
+	  Zilch::Array<Zilch::Type*> args;
+	  for (auto i : ZilchComponents)
 	  {
-		  // Invoke the Create function, which assigns this object an owner.
-		  Zilch::Call call(ZilchInitialize, ZILCH->GetDependencies());
-		  call.SetHandle(Zilch::Call::This, i);
-		  call.Invoke(report);
+		  Function* ZilchInitialize = i.Type->FindFunction("Initialize", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
+		  ErrorIf(ZilchInitialize == nullptr, "Failed to find function 'Initialize' on Zilch type ", i.Type);
+		  {
+			  // Invoke the Create function, which assigns this object an owner.
+			  Zilch::Call call(ZilchInitialize, ZILCH->GetDependencies());
+			  call.SetHandle(Zilch::Call::This, i);
+			  call.Invoke(ZILCH->Report);
+		  }
 	  }
   }
+  
   
   return true;
 }
@@ -251,19 +253,18 @@ void IEntity::Update(float dt)
 
   if (ZilchComponents.size())
   {
-    Zilch::ExceptionReport report;
     Zilch::Array<Zilch::Type*> args;
     args.push_back(ZilchTypeId(float));
     for (auto i : ZilchComponents)
     {
-      Function* ZilchInitialize = i.Type->FindFunction("Update", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
+      Zilch::Function* ZilchInitialize = i.Type->FindFunction("Update", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
       ErrorIf(ZilchInitialize == nullptr, "Failed to find function 'Initialize' on Zilch type ", i.Type);
       {
         // Invoke the Create function, which assigns this object an owner.
         Zilch::Call call(ZilchInitialize, ZILCH->GetDependencies());
         call.SetHandle(Zilch::Call::This, i);
         call.Set(0, dt);
-        call.Invoke(report);
+        call.Invoke(ZILCH->Report);
       }
     }
   }
