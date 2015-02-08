@@ -442,14 +442,50 @@ ActionSequence* Action::Sequence(ActionSequence** seq)
 ActionSequence* Action::Sequence(Zilch::Any seq)
 {
 	Zilch::BoundType* type = (BoundType*)seq.StoredType;
+	Zilch::PropertyDelegateTemplate* type2 = (PropertyDelegateTemplate*)seq.GetData();
+	int i = 0;
+	int len = type->AllFunctions.size();
+	for (i = 0; i < len; ++i)
+	{
+		std::cout << type->AllFunctions[i]->Name.c_str() << std::endl;
+		std::cout << type->AllFunctions[i]->Type->ToString().c_str() << std::endl;
+	}
+	printf("\n");
+	int j = 0;
+	int len2 = type->AllProperties.size();
+	for (j = 0; j < len2; ++j)
+	{
+		std::cout << type->AllProperties[j]->Name.c_str() << std::endl;
+		std::cout << type->AllProperties[j]->PropertyType->ToString().c_str() << std::endl;
+	}
+
+	Zilch::Array<Zilch::Type*> args;
+	Zilch::Function* asd = type->FindFunction("[GetGet]", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
+
+	//std::cout << type->BaseType->ToString().c_str() << std::endl;
+
+
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
+	Zilch::Property* proper = (Zilch::Property*) type->AllProperties[0];
+	
+	
+	printf("\n");
+	int k = 0;
+	int len3 = 0;
+	for (k = 0; k < len3; ++k)
+	{
+		std::cout << type->Attributes[k].Name.c_str() << std::endl;
+	}
+	//std::cout << proper->Get->BoundFunction()->ToString() <<
+
 	Zilch::ExecutableState* state = ZILCH->GetDependencies();
 	//seq.StoredType->
 	Zilch::Handle handle = Zilch::Handle(state, type, seq.GetData());
-
-	//Zilch::HandleManagers& managers = HandleManagers::GetInstance();
-	//handle.Manager = managers.GetSharedManager(ZilchManagerId(PointerManager));
-	//handle.Type = (Zilch::Type) seq.StoredType;
+	//handle.Type->
+	/*Zilch::HandleManagers& managers = HandleManagers::GetInstance();
+	handle.Manager = managers.GetSharedManager(ZilchManagerId(PointerManager));
+	handle.Type = (Zilch::Type) seq.StoredType;*/
 	
 	
 
@@ -461,25 +497,59 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 	Zilch::Handle ActiveScript = state->AllocateDefaultConstructedHeapObject(ZilchClass, ZILCH->Report, Zilch::HeapFlags::NonReferenceCounted);
 	
 	
-
-	//ActionSequence* newSeq = new ActionSequence();
-	////36
-	//Zilch::Field* field1 = seq.StoredType->GetInstanceField("Set");
-	////std::string str = 
-	//Call call1(field1->Set, state);
-	////SIZEOF DOES NOT MATCH
-	////NOT HANDLE TYPE
-	//call1.SetHandle(Zilch::Call::This, handle);
-	//call1.SetHandle(0, ActiveScript);
-	////call1.Invoke(ZILCH->Report);
-	//field1->Set->BoundFunction(call1, ZILCH->Report);
-
-	Zilch::Field* field = seq.StoredType->GetInstanceField("Get");
-	Call call(field->Get, state);
-	call.SetHandle(Zilch::Call::This, handle);
-	call.Invoke(ZILCH->Report);
+	args.push_back(ZilchTypeId(ActionSequence));
 	
-	ActionSequence* seqence = (ActionSequence*)call.GetReturnUnchecked();
+	/*Zilch::Variable var = Zilch::Variable();
+	var.Name = "sequence";
+	var.ResultType = ZilchTypeId(ActionSequence);
+	ActionSequence* newSeq = new ActionSequence();*/
+	//36
+	Zilch::Field* field1 = seq.StoredType->GetInstanceField("Set");
+	//field1->Get->.append(&var);
+	//std::string str = 
+	//Zilch::Mana
+	//field1->Get->Type->Parameters.push_back(ZilchTypeId(ActionSequence));
+	field1->Get->Type->Return;
+	//Zilch::Handle hndl = Zilch::Handle(state, field1->Get->Owner, seq.GetData());
+	//field1->Get->Owner->HandleManager = ZilchManagerId(Zilch::HandleManager);
+	//Call call1(field1->Get, state);
+	//call1.DisableThisChecks();
+	//SIZEOF DOES NOT MATCH
+	//NOT HANDLE TYPE
+	//call1.SetHandle(Zilch::Call::This, handle);
+	//call1.
+	//call1.SetHandle(0, ActiveScript);
+	//call1.Invoke(ZILCH->Report);
+	//byte* data = call1.GetReturnUnchecked();
+	//Zilch::BoundType* bnd = (Zilch::BoundType*)field1->Get->Type->Return;
+	//data->
+	//Zilch::Handle funcHand = Zilch::Handle(state, , data);
+	//field1->Set->BoundFunction(call1, ZILCH->Report);
+	std::cout << field1->Get->Type->ToString().c_str() << std::endl;
+	
+	Zilch::Field* field = seq.StoredType->GetInstanceField("Get");
+	type2->Get.BoundFunction->Type = (Zilch::DelegateType*) field->Get->Type->Return;
+	//type2->Get.ThisHandle.;
+	Call call(type2->Get.BoundFunction, state);
+	call.DisableThisChecks();
+	//call.SetHandle(Zilch::Call::This, handle);
+	
+	//call.Invoke(ZILCH->Report);
+	std::cout << field->Get->Type->ToString().c_str() << std::endl;
+	ActionSequence* deltype = (ActionSequence*) field->Get->Type->Return;
+
+	//Zilch::Function* ad = seq.StoredType->FindFunction("Get", deltype);
+	//Zilch::Function* funer = type->FindFunction("Get", deltype, Zilch::FindMemberOptions::None)
+	/*Zilch::Delegate* jk;
+	Zilch::Function* fun;
+	fun->Attributes = deltype->Attributes;
+	fun->Type->Return = deltype->Return;
+	fun->Type->Attributes = deltype->Attributes*/;
+	//jk->BoundFunction = deltype->
+	//byte* sequence = call.GetChecked(field->Get->Type->Return->GetAllocatedSize(), field->Get->Type->, );
+
+	//sequence->Clear();
+
 	//PropertyDelegateTemplate* propertyDelegate;
 	//propertyDelegate->Get.BoundFunction = seq.StoredType->
 	//Zilch::TypeBinding::DynamicCast<MemberAccessNode*>(ActionSequence*)
@@ -505,19 +575,6 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 	call.SetHandle(Zilch::Call::This, Get->);
 	call.Invoke(ZILCH->Report);*/
 	//PropertyDelegateOperatorNode i;
-	//i.
-	
-	
-	
-	//ActionSequence* sequence = (ActionSequence*) call.GetReturnUnchecked();
-	/*if (*seq == nullptr)
-	{
-		*seq = new ActionSequence();
-	}
-	else
-	{
-		(*seq)->Clear();
-	}*/
 	return nullptr;
 }
 

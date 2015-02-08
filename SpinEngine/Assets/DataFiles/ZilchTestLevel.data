@@ -4,12 +4,12 @@ Cog =
 	{
 		string Name = "Tutorial1",
 	},
+    ActionTest = 
+	{
+	},
 	ZilchTest = 
 	{
 		int Butts = 42,
-	},
-	ActionTest = 
-	{
 	},
 },
 Cog = 

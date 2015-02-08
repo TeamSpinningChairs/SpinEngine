@@ -71,7 +71,7 @@ public:
   void SetInVisible();
   void Destroy();
   //Action Sequence
-  ActionSequence* Actions = nullptr;
+  ActionSequence* Actions = new ActionSequence();
 
   //Methods
   virtual bool Initialize();
