@@ -24,6 +24,7 @@ class FactoryAccess
 {
   friend class FactoryManager;
 public:
+  ZilchDeclareBaseType(FactoryAccess, Zilch::TypeCopyMode::ReferenceType);
   FactoryAccess(FactoryManager &factorymanager);
 
   //We only allow level & object creation
@@ -47,6 +48,7 @@ public:
   GameObject CheckTargets(Vector3D);
   void RemoveTarget(GameObject);
 
+  Sprite* ZCreateSprite(Zilch::String spritename);
   Sprite *CreateSprite(std::string spritename);
 
   ParticleEmitter &GetParticleEmitter(std::string particlename);
@@ -61,9 +63,9 @@ public:
   GameObjectUmap &GetGameObjectList();
 
   IComponent *GetWall();
-
-private:
   FactoryManager &factory_;
+private:
+  
   IDirect3DDevice9 *directXDevice_;
   
 

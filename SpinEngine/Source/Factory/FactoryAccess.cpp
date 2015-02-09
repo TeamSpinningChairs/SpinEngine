@@ -17,12 +17,23 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "SpriteRenderer.h" //To create sprite renderers
 #include "GraphicsManager.h" //To add sprite renderers to graphics manager
 #include "Wall.h"
+#include "ZInterface.h"
+
+ZilchDefineType(FactoryAccess, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
+}
 
 //We actually set this in Engine.cpp (during engine init), but we need to initialize here.
+//NO WE DON'T - Josh
 FactoryAccess *GlobalFactory = nullptr;
 
 FactoryAccess::FactoryAccess(FactoryManager &factorymanager) : factory_(factorymanager)
 {
+  //I fixed it
+	GlobalFactory = this;
+	ZInterface::Factory = this;
   directXDevice_ = factorymanager.directXDevice_;
 }
 
@@ -100,6 +111,10 @@ IEntity *FactoryAccess::CreateGameObject(std::string name, std::string spritenam
 //Needs to be passed a valid sprite name (I.E. one of the ones we load in)
 //Checks in object data, creates a sprite without needing to create a new texture
 //(I'm working on art pipeline, ask me about this)
+Sprite* FactoryAccess::ZCreateSprite(Zilch::String spritename)
+{
+	return CreateSprite(spritename.c_str());
+}
 Sprite *FactoryAccess::CreateSprite(std::string spritename)
 {
   return factory_.defaults.CreateSprite(factory_.defaults.GetIDFromSpriteName(spritename));

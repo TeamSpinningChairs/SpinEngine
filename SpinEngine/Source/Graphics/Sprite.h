@@ -37,6 +37,7 @@ typedef std::unordered_map< std::string, Animation>::iterator SpriteCollIterator
 class Sprite
 {
 public:
+	ZilchDeclareBaseType(Sprite, Zilch::TypeCopyMode::ReferenceType);
 	Sprite(IDirect3DTexture9 *texture = NULL, std::string textureName = defaultTexName, UINT start_i = 0,
     UINT end_i = 0, unsigned int total_frames = defaultTotalFrames, float timePerFrame = defaultTPF,
     std::string state_name = defaultStateName );
@@ -52,6 +53,7 @@ public:
   IDirect3DTexture9* GetTexture();
   const std::string &GetStateName() const;
   const std::string &GetTextureName() const;
+  Zilch::String ZGetTextureName();
   D3DXVECTOR3 GetSpriteCenter();
   bool isPaused();
   

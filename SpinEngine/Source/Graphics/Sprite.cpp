@@ -15,6 +15,12 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "Sprite.h"
 #include "Vertices.h"
 
+ZilchDefineType(Sprite, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	ZilchBindMethodAs(ZGetTextureName, "GetName");
+}
+
 Sprite::Sprite(IDirect3DTexture9 *texture, std::string textureName, UINT start_i,
   UINT end_i, unsigned int total_frames, float timePerFrame, std::string state_name) :
   m_texture(texture), m_textureName(textureName), m_currentFrame(start_i), start_i(start_i),
@@ -193,6 +199,11 @@ IDirect3DTexture9* Sprite::GetTexture()
 const std::string &Sprite::GetStateName() const
 {
   return m_stateName;
+}
+
+Zilch::String Sprite::ZGetTextureName()
+{
+	return Zilch::String(m_textureName.c_str());
 }
 
 const std::string &Sprite::GetTextureName() const

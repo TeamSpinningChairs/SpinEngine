@@ -20,6 +20,12 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #define PERSPECTIVE_CAMERA_DISTANCE 35.0f
 #define WALL_FOLLOW_OFFSET 16.0f
 
+ZilchDefineType(Camera, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
+}
+
 Camera::Camera(IEntity* Owner) : IComponent( CT_CameraComponent, Owner), 
 position(Vector3D()), rotation(Vector3D()), z_near(-10.0f), z_far(5000.0f), view_angle(D3DX_PI / 4.0f),
 width(800), height(600), background_color(d3dColors::Black), followingWall(false)

@@ -443,6 +443,7 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 {
 	Zilch::BoundType* type = (BoundType*)seq.StoredType;
 	Zilch::PropertyDelegateTemplate* type2 = (PropertyDelegateTemplate*)seq.GetData();
+	
 	int i = 0;
 	int len = type->AllFunctions.size();
 	for (i = 0; i < len; ++i)
@@ -482,6 +483,22 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 	Zilch::ExecutableState* state = ZILCH->GetDependencies();
 	//seq.StoredType->
 	Zilch::Handle handle = Zilch::Handle(state, type, seq.GetData());
+	type2->Get.ThisHandle = handle;
+	//type2->Get.BoundFunction->Name. = Zilch::String("Get");
+	type2->Get.BoundFunction->Type = (Zilch::DelegateType*) type->AllProperties[1]->PropertyType;
+
+	type2->Set.ThisHandle.Type = handle.Type;
+	type2->Set.ThisHandle.Offset = handle.Offset;
+	type2->Set.ThisHandle.Flags = handle.Flags;
+	type2->Set.ThisHandle.Manager = handle.Manager;
+	//type2->Set.BoundFunction->Name = Zilch::String("Set");
+	type2->Set.BoundFunction->Type = (Zilch::DelegateType*) type->AllProperties[0]->PropertyType;
+	//Zilch::HeapManager::
+	//Zilch::Call call1(type2->Get.BoundFunction, state);
+	//call1.Invoke(ZILCH->Report);
+	
+
+
 	//handle.Type->
 	/*Zilch::HandleManagers& managers = HandleManagers::GetInstance();
 	handle.Manager = managers.GetSharedManager(ZilchManagerId(PointerManager));
@@ -504,12 +521,12 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 	var.ResultType = ZilchTypeId(ActionSequence);
 	ActionSequence* newSeq = new ActionSequence();*/
 	//36
-	Zilch::Field* field1 = seq.StoredType->GetInstanceField("Set");
+	//Zilch::Field* field1 = seq.StoredType->GetInstanceField("Set");
 	//field1->Get->.append(&var);
 	//std::string str = 
 	//Zilch::Mana
 	//field1->Get->Type->Parameters.push_back(ZilchTypeId(ActionSequence));
-	field1->Get->Type->Return;
+	//field1->Get->Type->Return;
 	//Zilch::Handle hndl = Zilch::Handle(state, field1->Get->Owner, seq.GetData());
 	//field1->Get->Owner->HandleManager = ZilchManagerId(Zilch::HandleManager);
 	//Call call1(field1->Get, state);
@@ -525,7 +542,7 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 	//data->
 	//Zilch::Handle funcHand = Zilch::Handle(state, , data);
 	//field1->Set->BoundFunction(call1, ZILCH->Report);
-	std::cout << field1->Get->Type->ToString().c_str() << std::endl;
+	//std::cout << field1->Get->Type->ToString().c_str() << std::endl;
 	
 	Zilch::Field* field = seq.StoredType->GetInstanceField("Get");
 	type2->Get.BoundFunction->Type = (Zilch::DelegateType*) field->Get->Type->Return;

@@ -27,6 +27,7 @@ const float SCREEN_NEAR = 0.1f;
 class GraphicsManager : public ISystem
 {
 public:
+	ZilchDeclareDerivedType(GraphicsManager, ISystem);
 	GraphicsManager(UINT width, UINT height, std::string title, HINSTANCE	hAppInstance, HWND handle,
 		D3DCOLOR backgrdClr = d3dColors::Black, bool full_screen = false);
 	~GraphicsManager();

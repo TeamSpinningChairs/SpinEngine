@@ -55,6 +55,8 @@ using namespace std;
 		static void ZInterface::SetPaused(bool state);
 		static void SetSceneShader(String shader);
 
+		static IEntity* FindObjectByName(Zilch::String name);
+
 		static int DT;
 		
 		static Real2* VecToReal(Vector2D* vec);

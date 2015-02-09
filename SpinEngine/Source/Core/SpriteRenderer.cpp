@@ -26,6 +26,9 @@ const float HALF_PI = PI / 2.0f;
 ZilchDefineType(SpriteRenderer, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	ZilchBindMethodAs(ZChangeState, "ChangeState");
+	ZilchBindMethodOverload(AddSprite, void, Sprite*);
+	ZilchBindMethod(GetPosition);
 
 }
 
@@ -167,8 +170,8 @@ SpriteCollection* SpriteRenderer::GetSpriteCollection()
 }
 
 //Only use this for testing/placeholder spawns in Engine.cpp, as it results in textures being loaded more than once.
-void SpriteRenderer::AddSprite(std::string textureName, UINT start_i, UINT end_i, unsigned int total_frames,
-  float timePerFrame, std::string state_name, bool isDefaultNow)
+void SpriteRenderer::AddSprite(std::string textureName, UINT start_i = 0, UINT end_i = 0, unsigned int total_frames = 1,
+  float timePerFrame = 1.0f, std::string state_name = "NewState", bool isDefaultNow)
 {
   if ( m_spriteStates.find(state_name) == m_spriteStates.end() )
   {
@@ -223,6 +226,11 @@ void SpriteRenderer::AddSprite(Sprite *newSprite)
       delete newSprite;
     }
   }
+}
+
+void SpriteRenderer::ZChangeState(Zilch::String name)
+{
+	ChangeState(name.c_str());
 }
 
 void SpriteRenderer::ChangeState(std::string new_State_Name)

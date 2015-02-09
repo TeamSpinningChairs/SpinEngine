@@ -23,6 +23,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 class Camera : public IComponent
 {
 public:
+	ZilchDeclareDerivedType(Camera, IComponent);
   Camera(IEntity* Owner);
   ~Camera()  override;
 

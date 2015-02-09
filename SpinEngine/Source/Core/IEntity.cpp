@@ -28,6 +28,7 @@ ZilchDefineType(IEntity, SpinningZilch)
 	ZilchBindMethod(Destroy);
 	ZilchBindFieldGetSetAs(IsVisible, "Visible");
 	ZilchBindFieldGetSet(Actions);
+	ZilchBindMethodAs(ZGetName, "GetName");
 }
 
 ZilchDefineType(IComponent, SpinningZilch)
@@ -46,7 +47,7 @@ IEntity::IEntity(EntityId id, Vector3D pos, Vector3D rot, Vector3D scal, std::st
   //EntityComponents[CT_TransformComponent] = new Transform(this, pos, rot, scal);
   //Entity_Id = total_game_object_count++;
   std::memset(Components, 0, sizeof(Components) );
-  strcpy(this->name, name.c_str());
+  this->name = name;
   strcpy(this->tag, tag.c_str());
 
   ITransform* new_transform_comp = reinterpret_cast<ITransform*>(
@@ -64,6 +65,11 @@ IEntity::~IEntity()
 		Actions = nullptr;
 	}
   CleanupComponents();
+}
+
+Zilch::String IEntity::ZGetName()
+{
+	return Zilch::String(name.c_str());
 }
 
 EntityId IEntity::GetEntityId() const
@@ -122,7 +128,7 @@ void IEntity::AddGameComponent(Component_Type type,Component comp)
       char temp[500] = "ERROR: COMPONENT ";
       std::strcat(temp, comp->GetName());
       std::strcat(temp, " ALREADY ADDED TO ");
-      std::strcat(temp, this->name);
+      std::strcat(temp, this->name.c_str());
 
       MessageBox(NULL, temp, NULL, NULL);
     }
@@ -131,7 +137,7 @@ void IEntity::AddGameComponent(Component_Type type,Component comp)
   {
     char temp[500];
     std::strcat(temp, "ERROR: NULL COMPONENT TO ");
-    std::strcat(temp, this->name);
+    std::strcat(temp, this->name.c_str());
     MessageBox(NULL, temp, NULL, NULL);
   }
 }
@@ -298,9 +304,9 @@ ITransform* IEntity::GetTransform()
   return reinterpret_cast<ITransform*>(Components[CT_TransformComponent]);
 }
 
-char* IEntity::GetName()
+std::string* IEntity::GetName()
 {
-  return name;
+  return &name;
 }
 
 char* IEntity::GetTag()
@@ -324,7 +330,7 @@ void IEntity::SetInVisible()
     IsVisible = false;
 }
 
-void IEntity::SetName(char * newname)
+void IEntity::SetName(std::string newname)
 {
-    strcpy(this->name, newname);
+    name = newname;
 }

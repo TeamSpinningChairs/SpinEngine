@@ -17,6 +17,17 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "Settings.h" //TWEAK_BAR_ENABLED and ShowingTweakBar
 #include "MenuController.h"
 
+ZilchDefineType(GraphicsManager, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	ZilchBindMethod(GetMainCamera);
+	ZilchBindMethodAs(setWireframeTransform, "DebugDrawWireframe");
+	ZilchBindMethodAs(setBoxCollWireframeTransform, "DebugDrawBox");
+	ZilchBindMethodAs(setCircleCollWireframeTransform, "DebugDrawCircle");
+	ZilchBindMethod(IsInBounds);
+	ZilchBindMethodAs(IsAppPaused, "IsPaused");
+}
+
 //const DWORD d3dVertex::CUSTOMVERTEX::FVF = CUSTOMFVF;
 
 GraphicsManager::GraphicsManager(UINT width, UINT height, std::string title, 
@@ -935,7 +946,7 @@ void GraphicsManager::prepare_ui_elements()
     //Put the wall (if it exists) below all other UI sprites
     for (SpriteRendVecIter it = uiSpriteCollection.begin(); it != uiSpriteCollection.end(); ++it)
     {
-        if (strcmp((*it)->GetOwner()->GetName(), "WallImage") == 0)
+        if ((*(*it)->GetOwner()->GetName()).compare("WallImage") == 0)
         {
             std::iter_swap(it, uiSpriteCollection.begin());
             break;

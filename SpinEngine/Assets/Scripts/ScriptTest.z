@@ -10,13 +10,19 @@ class ZilchTest : ZilchComponent
 	{
 		Console.WriteLine("INITIALIZED");
 		Console.WriteLine(this.Butts);
-		var seq = Action.Sequence(@this.Owner.Actions);
+        var obj = ZInterface.FindObjectByName("MainPlayer");
+        Console.WriteLine(obj.GetName());
+        obj.Transform.Translation.X += 1;
+		//var seq = Action.Sequence(@this.Owner.Actions);
 		//Console.WriteLine(this.Owner.ZilchFriend.Pancakes);
 		//Action.Sequence(this.Owner.Actions, @Butts, 19, 6, 1);
 	}
 	
 	function Update(dt:Real)
 	{
+        var obj = ZInterface.FindObjectByName("MainPlayer");
+        //Console.WriteLine(obj.GetName());
+        obj.Transform.Translation.X += 0.4;
 		//this.Owner.Transform.Translation.X += 2;
 		//Console.WriteLine(dt);
 		if(ZInterface.InputManager.IsKeyDown(Keys.D))
