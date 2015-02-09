@@ -67,7 +67,8 @@ public:
   Camera& operator=(const Camera& cam);
 
   void AddPlayerPosition(Transform *);
-
+  void SetZoom(float zoom);
+  float GetZoom();
 private:
   void AlignToNearestPixel();
   void WallCameraMovement();
@@ -76,8 +77,8 @@ private:
 
 	D3DXMATRIX m_viewMatrix;
   D3DXMATRIX m_projMatrix;
-	Vector3D position;
-	Vector3D rotation;
+	Vector3D position = Vector3D(0,0,0);
+	Vector3D rotation = Vector3D(0,0,0);
 
   float z_near;
   float z_far;

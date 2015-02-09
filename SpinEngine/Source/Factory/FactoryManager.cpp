@@ -1087,7 +1087,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 		
 		//newobj->Name = *Trunk->branch->next->branch->value_.String_;
 		//Skip 1st 3 objects
-		auto ct = Trunk;
+		auto ct = Trunk->branch;
 		//Ct = "Cog"
 		while (ct)
 		{

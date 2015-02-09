@@ -19,6 +19,7 @@
 	SoundManager* ZInterface::Sound = sound;
 	PhysicsManager* ZInterface::Physics = physics;
 	InputManager* ZInterface::Input = nullptr;
+	GraphicsManager* ZInterface::Graphics = nullptr;
 
 	ZilchDefineType(ZilchFile, SpinningZilch)
 	{
@@ -51,6 +52,7 @@
 		ZilchBindStaticMethod(SetPaused);
 		ZilchBindStaticMethod(SetSceneShader);
 		ZilchBindStaticMethod(FindObjectByName);
+		ZilchBindStaticFieldGetAs(Graphics, "GraphicsManager");
 		
 		
 	}

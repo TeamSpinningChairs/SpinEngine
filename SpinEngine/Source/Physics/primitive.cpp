@@ -16,6 +16,23 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "Precompiled.h"
 #include "primitives.h"
 
+ZilchDefineType(Primitive, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	ZilchBindFieldGetSetAs(active, "Active");
+	ZilchBindFieldGetSetAs(radius, "Radius")
+}
+
+ZilchDefineType(Circle, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+}
+
+ZilchDefineType(AABB, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+}
+
 ////// PRIMITIVE //////
 Primitive::Primitive(GameObject parent, ShapeID pID, Component_Type type)
   :IComponent(type, parent), Id(pID)
@@ -91,6 +108,10 @@ bool AABB::Initialize()
   pTrans = Owner->GetTransform();
   physics->colliders.push_back(this);
   return true;
+}
+void AABB::Serialize(DynamicElement* props, Serializer::DataNode* data)
+{
+
 }
 void AABB::Update(float dt){}
 

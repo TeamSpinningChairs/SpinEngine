@@ -23,7 +23,21 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 ZilchDefineType(Camera, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	ZilchBindMethodOverload(SetPosition, void, Vector3D);
+	ZilchBindMethodOverload(SetPosition, void, float, float, float);
+	ZilchBindMethodOverload(SetRotation, void, Vector3D);
+	ZilchBindMethodOverload(SetRotation, void, float, float, float);
+	ZilchBindMethodAs(SetZfar, "SetZFar");
+	ZilchBindMethodAs(SetZnear, "SetZNear");
+	ZilchBindMethod(GetPosition);
+	ZilchBindMethod(AddPlayerPosition);
+	ZilchBindMethod(SnapToNearestPixel);
+	ZilchBindMethodAs(Set_Width_Height, "SetDimensions");
+	ZilchBindMethod(SetZoom);
+	ZilchBindMethod(GetZoom);
+	ZilchBindFieldGetSet(Owner);
 
+	
 }
 
 Camera::Camera(IEntity* Owner) : IComponent( CT_CameraComponent, Owner), 
@@ -178,6 +192,16 @@ Camera& Camera::operator=(const Camera& cam)
   height = cam.height;
 
   return *this;
+}
+
+void Camera::SetZoom(float zoom)
+{
+	*zoomFactor = zoom;
+}
+
+float Camera::GetZoom()
+{
+	return *zoomFactor;
 }
 
 void Camera::SetZnear(float z)
