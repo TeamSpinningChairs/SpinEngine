@@ -46,6 +46,7 @@ class CameraFollow : ZilchComponent
 	var TargetName:String = "Player1";
     var IsOwner:Boolean = true;
     var Zoom:Real = 23;
+    var CameraSpeed:Real = 0.014;
     var Target:IEntity = null;
     var Cam:Camera = null;
     
@@ -75,10 +76,9 @@ class CameraFollow : ZilchComponent
         var pos2 = this.Target.Transform.Translation;
         var differenceX = Math.Abs(pos2.X - pos1.X); 
 		var differenceY = Math.Abs(pos2.Y - pos1.Y);
-		var cameraSpeed = 0.014;
 		
-		var newposX = Math.Lerp(pos1.X, pos2.X, cameraSpeed * differenceX);
-		var newposY = Math.Lerp(pos1.Y, pos2.Y, cameraSpeed * differenceY);
+		var newposX = Math.Lerp(pos1.X, pos2.X, this.CameraSpeed * differenceX);
+		var newposY = Math.Lerp(pos1.Y, pos2.Y, this.CameraSpeed * differenceY);
         // //Console.WriteLine(pos2);
         //var vec = pos1;
         //Console.WriteLine("Vec: `vec.X` `vec.Y`, `vec.Z`");
