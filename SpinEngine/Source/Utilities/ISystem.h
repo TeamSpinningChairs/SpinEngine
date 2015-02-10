@@ -33,6 +33,7 @@ enum SystemType
   ST_Sound,
   ST_Graphics,
   ST_Zilch,
+  ST_FactoryAccess,
   //ST_GameStateMgr,
   //Graphics is updated last, but I think all the relevant stuff to order-of-execution is in Render,
   //which is called after all the systems update anyways

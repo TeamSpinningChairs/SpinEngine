@@ -19,6 +19,7 @@
 	SoundManager* ZInterface::Sound = sound;
 	PhysicsManager* ZInterface::Physics = physics;
 	InputManager* ZInterface::Input = nullptr;
+	GraphicsManager* ZInterface::Graphics = nullptr;
 
 	ZilchDefineType(ZilchFile, SpinningZilch)
 	{
@@ -50,8 +51,21 @@
 		ZilchBindStaticMethod(IsPaused);
 		ZilchBindStaticMethod(SetPaused);
 		ZilchBindStaticMethod(SetSceneShader);
+		ZilchBindStaticMethod(FindObjectByName);
+		ZilchBindStaticFieldGetAs(Graphics, "GraphicsManager");
 		
 		
+	}
+
+	IEntity* ZInterface::FindObjectByName(Zilch::String name)
+	{
+		IEntity* obj = Factory->factory_.FindObjectByName(name.c_str());
+		if (obj == nullptr)
+		{
+			printf("Could not find object %s.\n", name.c_str());
+		}
+		
+		return obj;
 	}
 
 	IEntity* CreateAtPosition(String filepath, Real3 position)

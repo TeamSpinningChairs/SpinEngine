@@ -32,6 +32,7 @@ class FactoryManager : public ISystem
   friend class FactoryAccess;
 
 public:
+	ZilchDeclareDerivedType(FactoryManager, ISystem);
   //Constructor & Destructor
   FactoryManager(GraphicsManager* m_pGraphicsManager);
   ~FactoryManager();
@@ -66,7 +67,8 @@ public:
   TileMapData tileMap_;
 
   GameObjectUmap m_Targets;
-
+  FactoryAccess* FactAccess;
+  
 private:
   GameObjectUmap m_GameObjectList;
   //Graphics - related properties'

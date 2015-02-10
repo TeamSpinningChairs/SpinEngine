@@ -49,7 +49,7 @@ class ScriptSystem : public ISystem
     //Returns pointer to the dependency library
     Zilch::ExecutableState *GetDependencies(){ return LinkedLibs; }
 
-	
+	Zilch::ExceptionReport Report;
     //Hack!!!!!!!
     Zilch::LibraryRef lib;
   private:

@@ -60,9 +60,9 @@ public:
   bool IsObjectActive();
   bool IsObjectVisible();
   ITransform* GetTransform();
-  char* GetName();
+  std::string* GetName();
   char* GetTag();
-  void SetName(char *);
+  void SetName(std::string);
   //Setters
   void AddGameComponent(Component_Type type, Component comp);
   void AddZilchComponent(Zilch::Handle comp);
@@ -70,8 +70,10 @@ public:
   void SetVisible();
   void SetInVisible();
   void Destroy();
+
+  Zilch::String ZGetName();
   //Action Sequence
-  ActionSequence* Actions = nullptr;
+  ActionSequence* Actions = new ActionSequence();
 
   //Methods
   virtual bool Initialize();
@@ -93,6 +95,6 @@ protected:
   bool IsVisible;
   bool IsActive;
   char tag[sizeof_name_tag];
-  char name[sizeof_name_tag];
+  std::string name;
   void CleanupComponents();
 };

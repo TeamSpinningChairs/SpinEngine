@@ -23,6 +23,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 class Primitive:  public IComponent
 {
 public:
+	ZilchDeclareDerivedType(Primitive, IComponent);
   enum ShapeID
   {
     pCircle,
@@ -57,7 +58,7 @@ public:
 class Circle : public Primitive
 {
 public:
-
+	ZilchDeclareDerivedType(Circle, Primitive);
   Circle();
   Circle(GameObject Owner);
   ~Circle();
@@ -84,12 +85,13 @@ public:
 class AABB : public Primitive
 {
 public:
+	ZilchDeclareDerivedType(AABB, Primitive);
   AABB();
   AABB(GameObject Owner);
   ~AABB();
 
   bool Initialize() override;
-  void Serialize (DynamicElement* props, Serializer::DataNode* data) {}
+  void Serialize(DynamicElement* props, Serializer::DataNode* data);
   void Update(float dt) override;
   void Release() override;
 

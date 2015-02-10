@@ -19,6 +19,11 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 
 PhysicsManager *physics = nullptr;
 
+ZilchDefineType(PhysicsManager, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+}
+
 
 PhysicsManager::PhysicsManager() : ISystem("Physics", SystemType::ST_Physics)
 {

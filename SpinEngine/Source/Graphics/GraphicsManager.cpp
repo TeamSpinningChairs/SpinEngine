@@ -16,15 +16,28 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include"Engine.h"
 #include "Settings.h" //TWEAK_BAR_ENABLED and ShowingTweakBar
 #include "MenuController.h"
+#include "ZInterface.h"
+
+ZilchDefineType(GraphicsManager, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	ZilchBindMethod(GetMainCamera);
+	ZilchBindMethodAs(setWireframeTransform, "DebugDrawWireframe");
+	ZilchBindMethodAs(setBoxCollWireframeTransform, "DebugDrawBox");
+	ZilchBindMethodAs(setCircleCollWireframeTransform, "DebugDrawCircle");
+	ZilchBindMethod(IsInBounds);
+	ZilchBindMethodAs(IsAppPaused, "IsPaused");
+}
 
 //const DWORD d3dVertex::CUSTOMVERTEX::FVF = CUSTOMFVF;
 
-GraphicsManager::GraphicsManager(UINT width, UINT height, std::string title, 
-  HINSTANCE	hAppInstance, HWND handle, D3DCOLOR backgrdClr, bool full_screen) : ISystem("Graphics", ST_Graphics),
-  mainWindow(new Window(width, height, title, hAppInstance, handle, full_screen)), m_pDirect3D(0),
-  m_pDevice3D(0), m_bHandleDeviceLost(true), m_bDeviceLost(false), m_DevType(D3DDEVTYPE_HAL), 
-  backgroundColor(backgrdClr), default_editor_camera(NULL), m_bFullScreen(full_screen),
-  
+GraphicsManager::GraphicsManager(UINT width, UINT height, std::string title,
+	HINSTANCE	hAppInstance, HWND handle, D3DCOLOR backgrdClr, bool full_screen) : ISystem("Graphics", ST_Graphics),
+	mainWindow(new Window(width, height, title, hAppInstance, handle, full_screen)), m_pDirect3D(0),
+	m_pDevice3D(0), m_bHandleDeviceLost(true), m_bDeviceLost(false), m_DevType(D3DDEVTYPE_HAL),
+	backgroundColor(backgrdClr), default_editor_camera(NULL), m_bFullScreen(full_screen),
+
+
   //DEBUG DRAW INITIALIZERS
   debug_draw_on(false),
   debug_draw_transform_information(false),
@@ -40,6 +53,7 @@ GraphicsManager::GraphicsManager(UINT width, UINT height, std::string title,
 {
   mainWindow->m_PmainGraphicsMang = this;
   main_camera = &default_editor_camera;
+  ZInterface::Graphics = this;
 }
 
 GraphicsManager::~GraphicsManager()
@@ -935,7 +949,7 @@ void GraphicsManager::prepare_ui_elements()
     //Put the wall (if it exists) below all other UI sprites
     for (SpriteRendVecIter it = uiSpriteCollection.begin(); it != uiSpriteCollection.end(); ++it)
     {
-        if (strcmp((*it)->GetOwner()->GetName(), "WallImage") == 0)
+        if ((*(*it)->GetOwner()->GetName()).compare("WallImage") == 0)
         {
             std::iter_swap(it, uiSpriteCollection.begin());
             break;

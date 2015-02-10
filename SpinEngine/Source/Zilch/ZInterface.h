@@ -43,17 +43,20 @@ using namespace std;
 		static SoundManager* Sound;
 		static PhysicsManager* Physics;
 		static InputManager* Input;
+		static GraphicsManager* Graphics;
 
 		static void QuitGame();
 
 
 		//static CreateGameObject(String Name, String SpriteName);
-		static IEntity* CreateAtPosition(String filepath, Real3 position);
+		static IEntity* CreateAtPosition(Zilch::String filepath, Real3 position);
 		//static Sound* GetSound(String soundName);
 		static void TogglePaused();
 		static Boolean IsPaused();
 		static void ZInterface::SetPaused(bool state);
-		static void SetSceneShader(String shader);
+		static void SetSceneShader(Zilch::String shader);
+
+		static IEntity* FindObjectByName(Zilch::String name);
 
 		static int DT;
 		

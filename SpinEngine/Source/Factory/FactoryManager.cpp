@@ -53,6 +53,13 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "WallController.h"
 #include "FactoryAccess.h"
 
+
+ZilchDefineType(FactoryManager, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
+}
+
 FactoryManager::FactoryManager(GraphicsManager* m_pGraphicsManager) :ISystem("Factory", SystemType::ST_Factory),
                                  m_GameObjectList( GameObjectUmap()), m_TotalObjectCount(0),
                                  m_CurrentObjectCount(0), m_DeletedObjectCount(0), m_pGraphicsManager(m_pGraphicsManager), PlayerSpawn(NULL), m_Targets(GameObjectUmap())
@@ -100,6 +107,8 @@ FactoryManager::FactoryManager(GraphicsManager* m_pGraphicsManager) :ISystem("Fa
 
 FactoryManager::~FactoryManager()
 {
+	FactAccess = new FactoryAccess(*this);
+
 	std::unordered_map<std::string, ComponentCreator *>::iterator iterator;
 	for (iterator = SerialMap.begin(); iterator != SerialMap.end(); ++iterator)
 	{
@@ -116,6 +125,7 @@ void FactoryManager::AddComponentCreator(std::string name, ComponentCreator* cre
 
 bool FactoryManager::Initialize()
 {
+  
   for(unsigned i = 0; i < this->m_GameObjectList.size(); i++)
   {
     if (!m_GameObjectList[i]->Initialize())
@@ -573,6 +583,12 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
   //@If it's an issue, make a "nosprite" tag in the editor and check for that.
   DynamicElement *currProperty;
 
+  if (!object->GetObjectMember(&currProperty, "name"))
+	MessageBox(NULL, "Failed to get object Name.", NULL, NULL);
+
+  newObject->SetName(currProperty->data.val_stringPtr->c_str());
+
+  //newObject->SetName(object)
   if (!properties->GetObjectMember(&currProperty, "nosprite"))
   {
     //Create the sprite renderer
@@ -1071,7 +1087,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 		
 		//newobj->Name = *Trunk->branch->next->branch->value_.String_;
 		//Skip 1st 3 objects
-		auto ct = Trunk;
+		auto ct = Trunk->branch;
 		//Ct = "Cog"
 		while (ct)
 		{
@@ -1100,9 +1116,8 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 						Zilch::BoundType* ZilchClass = (*library)->BoundTypes.findValue(compName.c_str(), nullptr);
 						ErrorIf(ZilchClass == nullptr, "Failed to find a Zilch type named ", compName);
 
-						Zilch::ExceptionReport report;
 						Zilch::ExecutableState* state = ZILCH->GetDependencies();
-						Zilch::Handle ActiveScript = state->AllocateDefaultConstructedHeapObject(ZilchClass, report, Zilch::HeapFlags::NonReferenceCounted);
+						Zilch::Handle ActiveScript = state->AllocateDefaultConstructedHeapObject(ZilchClass, ZILCH->Report, Zilch::HeapFlags::NonReferenceCounted);
 
 						ZilchComponent* script = (ZilchComponent*)ActiveScript.Dereference();
 						script->ThisHandle = ActiveScript;
@@ -1121,7 +1136,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 							Zilch::Call call(ZilchCreate, ZILCH->GetDependencies());
 							call.SetHandle(Zilch::Call::This, ActiveScript);
 							call.SetHandle(0, newObject);
-							call.Invoke(report);
+							call.Invoke(ZILCH->Report);
 						}
 
 						Zilch::Array<Zilch::Type*> args2;
@@ -1139,7 +1154,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
 							call.SetHandle(Zilch::Call::This, ActiveScript);
 							call.SetHandle(0, properties);
 							call.SetHandle(1, obj->branch);
-							call.Invoke(report);
+							call.Invoke(ZILCH->Report);
 						}
 						newObject->AddZilchComponent(ActiveScript);
 					}
@@ -1217,7 +1232,7 @@ void FactoryManager::CreatePlayer()
     {
         GameObject mem_ = MemoryManager::Allocate_GameObj();
         GameObject obj = new (mem_)IEntity(m_TotalObjectCount++, PlayerSpawn->GetTransform()->GetPosition());
-
+		obj->SetName("Player");
         m_GameObjectList.push_back(obj);
         m_CurrentObjectCount++;
     }
@@ -1230,7 +1245,7 @@ GameObject FactoryManager::FindObjectByName(std::string Target)
 {
   for(unsigned int i = 0; i < m_GameObjectList.size(); ++i)
   {
-    std::string test =  m_GameObjectList[i]->GetName();
+    std::string test =  *(m_GameObjectList[i]->GetName());
 
     if(test == Target)
     {

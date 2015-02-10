@@ -1,95 +1,87 @@
-Cog = 
+Level = 
 {
-	Named = 
-	{
-		string Name = "Tutorial1",
-	},
-	ZilchTest = 
-	{
-		int Butts = 42,
-	},
-	ActionTest = 
-	{
-	},
-},
-Cog = 
+    Cog = 
     {
         Named = 
         {
-            string Name = "Player",
+            string Name = "Tutorial1",
         },
-        Transform = 
+        ActionTest = 
         {
-            Vec3 Translation = [0, 0, 0],
-            Vec3 Scale = [9, 9, 9],
-            Quat Rotation = [0, 0, 0, 1],
         },
-        Sprite = 
+        ZilchTest = 
         {
-            bool Visible = true,
-            string SpriteSource = "DigiPenLogo.png",
-            bool AnimationActive = false,
-            string Shader = "Default",
-            Vec4 Color = [1, 1, 1, 1],
-        },
-        NewZilch = 
-        {
+            int Butts = 42,
         },
     },
-Cog = 
-    {
-        LinkId = 
+    Cog = 
         {
-            uint Id = 2,
+            Named = 
+            {
+                string Name = "Player1",
+            },
+            CameraFollow = 
+            {
+            },
+            ZilchController = 
+            {
+            },
         },
-        Named = 
+    Cog = 
         {
-            string Name = "MovingPlatform1",
+            LinkId = 
+            {
+                uint Id = 2,
+            },
+            Named = 
+            {
+                string Name = "MovingPlatform1",
+            },
+            Transform = 
+            {
+                Vec3 Translation = [0, 0, 0],
+                Vec3 Scale = [9, 9, 9],
+                Quat Rotation = [0, 0, 0, 1],
+            },
+            Sprite = 
+            {
+                bool Visible = true,
+                string SpriteSource = "DigiPenLogo.png",
+                bool AnimationActive = false,
+                string Shader = "Default",
+                Vec4 Color = [1, 1, 1, 1],
+            },
+            NewZilch = 
+            {
+            },
         },
-        Transform = 
+    Cog = 
         {
-            Vec3 Translation = [0, 0, 0],
-            Vec3 Scale = [9, 9, 9],
-            Quat Rotation = [0, 0, 0, 1],
-        },
-        Sprite = 
-        {
-            bool Visible = true,
-            string SpriteSource = "DigiPenLogo.png",
-            bool AnimationActive = false,
-            string Shader = "Default",
-            Vec4 Color = [1, 1, 1, 1],
-        },
-        NewZilch = 
-        {
-        },
+            LinkId = 
+            {
+                uint Id = 2,
+            },
+            Named = 
+            {
+                string Name = "MovingPlatform2",
+            },
+            Transform = 
+            {
+                Vec3 Translation = [0, 0, 0],
+                Vec3 Scale = [9, 9, 9],
+                Quat Rotation = [0, 0, 0, 1],
+            },
+            Sprite = 
+            {
+                bool Visible = true,
+                string SpriteSource = "DigiPenLogo.png",
+                bool AnimationActive = false,
+                string Shader = "Default",
+                Vec4 Color = [1, 1, 1, 1],
+            },
+            Player = 
+            {
+                int Butts = 24,
+            },
     },
-Cog = 
-    {
-        LinkId = 
-        {
-            uint Id = 2,
-        },
-        Named = 
-        {
-            string Name = "MovingPlatform2",
-        },
-        Transform = 
-        {
-            Vec3 Translation = [0, 0, 0],
-            Vec3 Scale = [9, 9, 9],
-            Quat Rotation = [0, 0, 0, 1],
-        },
-        Sprite = 
-        {
-            bool Visible = true,
-            string SpriteSource = "DigiPenLogo.png",
-            bool AnimationActive = false,
-            string Shader = "Default",
-            Vec4 Color = [1, 1, 1, 1],
-        },
-        Player = 
-        {
-            int Butts = 24,
-        },
 },

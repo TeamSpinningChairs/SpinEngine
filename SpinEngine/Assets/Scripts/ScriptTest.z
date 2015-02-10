@@ -10,6 +10,9 @@ class ZilchTest : ZilchComponent
 	{
 		Console.WriteLine("INITIALIZED");
 		Console.WriteLine(this.Butts);
+        //var obj = ZInterface.FindObjectByName("MainPlayer");
+        //Console.WriteLine(obj.GetName());
+        //obj.Transform.Translation.X += 1;
 		//var seq = Action.Sequence(@this.Owner.Actions);
 		//Console.WriteLine(this.Owner.ZilchFriend.Pancakes);
 		//Action.Sequence(this.Owner.Actions, @Butts, 19, 6, 1);
@@ -17,6 +20,9 @@ class ZilchTest : ZilchComponent
 	
 	function Update(dt:Real)
 	{
+        //var obj = ZInterface.FindObjectByName("MainPlayer");
+        //Console.WriteLine(obj.GetName());
+        //obj.Transform.Translation.X += 0.4;
 		//this.Owner.Transform.Translation.X += 2;
 		//Console.WriteLine(dt);
 		if(ZInterface.InputManager.IsKeyDown(Keys.D))
@@ -32,6 +38,94 @@ class ZilchTest : ZilchComponent
 	function Destroyed()
 	{
 		Console.WriteLine("I AM DEAD!");
+	}
+}
+
+class CameraFollow : ZilchComponent
+{
+	var TargetName:String = "Player1";
+    var IsOwner:Boolean = true;
+    var Zoom:Real = 23;
+    var CameraSpeed:Real = 0.014;
+    var Target:IEntity = null;
+    var Cam:Camera = null;
+    
+	constructor():base()
+	{
+	}
+	
+	function Initialize()
+	{
+        this.Cam = ZInterface.GraphicsManager.GetMainCamera();
+        if (this.IsOwner)
+        {
+            this.Target = this.Owner;
+        }
+        else
+        {
+            this.Target = ZInterface.FindObjectByName(this.TargetName);
+        }
+        
+        this.Cam.SetPosition(this.Target.Transform.Translation);
+        this.Cam.SetZoom(this.Zoom);
+	}
+	
+	function Update(dt:Real)
+	{
+        var pos1 = this.Cam.GetPosition();
+        var pos2 = this.Target.Transform.Translation;
+        var differenceX = Math.Abs(pos2.X - pos1.X); 
+		var differenceY = Math.Abs(pos2.Y - pos1.Y);
+		
+		var newposX = Math.Lerp(pos1.X, pos2.X, this.CameraSpeed * differenceX);
+		var newposY = Math.Lerp(pos1.Y, pos2.Y, this.CameraSpeed * differenceY);
+        // //Console.WriteLine(pos2);
+        //var vec = pos1;
+        //Console.WriteLine("Vec: `vec.X` `vec.Y`, `vec.Z`");
+        // //Console.WriteLine("`pos1` vs `newposX`, `newposY`");
+        
+        if(ZInterface.InputManager.IsKeyDown(Keys.I))
+		{
+			this.Cam.SetZoom(this.Cam.GetZoom() + 0.3);
+		}
+        if(ZInterface.InputManager.IsKeyDown(Keys.O))
+		{
+			this.Cam.SetZoom(this.Cam.GetZoom() - 0.3);
+		}
+        this.Cam.SetPosition(newposX, newposY, 0);
+	}
+	
+	function Destroyed()
+	{
+	}
+}
+
+class ZilchController : ZilchComponent
+{
+	var Speed:Integer = 10;
+	constructor():base()
+	{
+	}
+	
+	function Initialize()
+	{
+        
+	}
+	
+	function Update(dt:Real)
+	{
+        if(ZInterface.InputManager.IsKeyDown(Keys.RIGHT))
+		{
+			this.Owner.Transform.Translation.X += this.Speed * dt;
+		}
+        if(ZInterface.InputManager.IsKeyDown(Keys.LEFT))
+		{
+			this.Owner.Transform.Translation.X -= this.Speed * dt;
+		}
+	}
+	
+	function Destroyed()
+	{
 	}
 }
 

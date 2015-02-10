@@ -67,6 +67,7 @@ public:
   //Overloaded to add sprites already allocated. (Mostly for use later, when all sprites are kept in ObjectData
   //and renderers only access constant references. If that's possible; it seems like a thing)
   void AddSprite(Sprite *newSprite);
+  void ZChangeState(Zilch::String name);
   void ChangeState(std::string new_State_Name);
   void Release();
   Sprite* GetCurrentSprite(void); 

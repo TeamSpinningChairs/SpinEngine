@@ -24,6 +24,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 class PhysicsManager : public ISystem
 {
 public:
+	ZilchDeclareDerivedType(PhysicsManager, ISystem);
   PhysicsManager();
   ~PhysicsManager();
 
