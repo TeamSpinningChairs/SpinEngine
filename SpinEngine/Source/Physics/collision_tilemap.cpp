@@ -33,7 +33,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #define HOPPABLE_PLATFORM 9
 
 TileMapCollision::TileMapCollision(IEntity *owner, TileMapData &tilemap) :
-IComponent(Component_Type::CT_TileMapCollider, owner), pos_(owner->GetTransform()->GetPosition()), tilemap_(tilemap),
+IComponent(Component_Type::CT_TileMapCollider, owner), pos_(owner->GetTransform()->GetPosition()), tilemap_(&tilemap),
 rigid_(*reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))),
 vel_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->velocity),
 acc_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->acceleration),
@@ -42,6 +42,20 @@ transform_(*reinterpret_cast<Transform *>(owner->GetComponent(CT_TransformCompon
   //owner->GetComponent(CT_Body)
   //Where do I add the component so it gets updated?
   //pos_ = transform_->GetPosition();
+
+}
+
+TileMapCollision::TileMapCollision(IEntity *owner) :
+IComponent(Component_Type::CT_TileMapCollider, owner), pos_(owner->GetTransform()->GetPosition()), tilemap_(nullptr),
+rigid_(*reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))),
+vel_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->velocity),
+acc_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->acceleration),
+transform_(*reinterpret_cast<Transform *>(owner->GetComponent(CT_TransformComponent)))
+{
+	tilemap_ = &GlobalFactory->factory_.tileMap_;
+	//owner->GetComponent(CT_Body)
+	//Where do I add the component so it gets updated?
+	//pos_ = transform_->GetPosition();
 
 }
 
@@ -124,7 +138,7 @@ int TileMapCollision::GetCellValue(float fx, float fy)
 
   //Preventing access outside of the array.
   //(aka what happens when/if we go beyond the map)
-  if (x >= tilemap_.width || y >= tilemap_.height
+  if (x >= tilemap_->width || y >= tilemap_->height
     || x < 0 || y < 0)
   {
     return 0;
@@ -133,8 +147,8 @@ int TileMapCollision::GetCellValue(float fx, float fy)
   //return (*(tilemap_.tiles))[(y * tilemap_.width) + x];
   //return (*(tilemap_.tiles))[tilemap_.numTiles - (tilemap_.width * y) - (tilemap_.width - x + 1)];
   //int index = tilemap_.numTiles - 1 - (tilemap_.width * (tilemap_.height - 1 - y)) - (tilemap_.width - 1 - x);
-  int index = tilemap_.numTiles - 1 - (tilemap_.width - 1) + x - (tilemap_.width * y);
-  return (*(tilemap_.tiles))[index];
+  int index = tilemap_->numTiles - 1 - (tilemap_->width - 1) + x - (tilemap_->width * y);
+  return (*(tilemap_->tiles))[index];
 }
 
 

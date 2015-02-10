@@ -49,10 +49,10 @@ public:
   //Primitive(IEntity* Owner);
   Primitive(GameObject parent, ShapeID pID, Component_Type type);
 
-  virtual ~Primitive() = 0;
-  virtual Primitive *Clone(void) const = 0;
-  virtual void SetOrientation(float radians) const = 0;
-  virtual ShapeID GetID(void) const = 0;
+  virtual ~Primitive();
+  virtual Primitive *Clone(void) const { return nullptr; }
+  virtual void SetOrientation(float radians) const {}
+  virtual ShapeID GetID(void) const { return Id; }
 };
 
 class Circle : public Primitive

@@ -15,6 +15,42 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 /****************************************************************************/
 #include "Precompiled.h"
 
+ZilchDefineType(RigidBody, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	ZilchBindMethodAs(set, "Set");
+	ZilchBindMethodOverloadAs(setPosition, "SetPosition", void, float, float);
+	ZilchBindMethodAs(getPosition, "GetPosition");
+	ZilchBindMethodOverloadAs(setAcceleration, "SetAcceleration", void, float, float);
+	ZilchBindMethodAs(getAcceleration, "GetAcceleration");
+	ZilchBindMethodOverloadAs(setVelocity, "SetVelocity", void, float, float);
+	ZilchBindMethodAs(getVelocity, "GetVelocity");
+	ZilchBindMethodAs(setMass, "SetMass");
+	ZilchBindMethodAs(getMass, "GetMass");
+	ZilchBindMethodAs(setRotation, "SetRotation");
+	ZilchBindMethodAs(getRotation, "GetRotation");
+	ZilchBindMethodAs(getInvMass, "GetInverseMass");
+	ZilchBindMethodOverloadAs(AddForce, "ApplyForce", void, Vector2D*);
+	ZilchBindMethodOverloadAs(ApplyImpulse, "ApplyImpulse", void, Vector2D*, Vector2D*);
+	ZilchBindMethod(SetDensity);
+	ZilchBindMethod(SetStatic);
+	ZilchBindMethodAs(setRotation, "SetRotation");
+	ZilchBindMethodAs(getRotation, "GetRotation");
+	ZilchBindMethod(SetDensity);
+
+	ZilchBindFieldGetSetAs(isStatic, "Static");
+	ZilchBindFieldGetSetAs(isKinematic, "Kinematic");
+	ZilchBindFieldGetSetAs(isGhost, "Ghost");
+	ZilchBindFieldGetSetAs(useGravity, "UsesGravity");
+	ZilchBindFieldGetSetAs(mass, "Mass");
+	ZilchBindFieldGetSetAs(rotation, "Rotation");
+
+
+
+
+
+}
+
 float RandomF(float low, float high)
 {
   float a = (float)rand();
@@ -26,6 +62,7 @@ float RandomF(float low, float high)
 RigidBody::RigidBody(IEntity* Owner, Primitive *shape) : 
   IComponent(Component_Type::CT_Body, Owner), bodyShape(shape->Clone())
 {
+  Owner->RigidBody = this;
   bodyShape->body = this;
   bodyShape->radius = shape->radius;
   bodyShape->halfSize.x = shape->halfSize.x;
@@ -202,6 +239,11 @@ void RigidBody::AddForce(const Vector2D &force)
   forceAccum += force;
 }
 
+void RigidBody::AddForce(Vector2D* force)
+{
+	forceAccum += *force;
+}
+
 void RigidBody::SetStatic(void)
 {
   // Sets the object to static
@@ -218,6 +260,12 @@ void RigidBody::ApplyImpulse(const Vector2D& impulse, const Vector2D& contactVec
 {
   velocity += invMass * impulse;
   angularVelocity += invInertia * Vector2D::CrossProduct(contactVec, impulse);
+}
+
+void RigidBody::ApplyImpulse(Vector2D* impulse, Vector2D* contactVec)
+{
+	velocity += invMass * *impulse;
+	angularVelocity += invInertia * Vector2D::CrossProduct(*contactVec, *impulse);
 }
 
 void RigidBody::SetOrientation(float radians)

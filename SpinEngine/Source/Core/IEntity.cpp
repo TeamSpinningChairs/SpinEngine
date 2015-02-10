@@ -16,6 +16,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "FactoryAccess.h" //So that you can get the graphics manager
 #include "GraphicsManager.h" //So that you can remove sprite renderers from the graphics manager when removing/deleting sprite renderers
 
+
 #pragma warning(disable:4351) //So we don't get a warning for including Components() in the initializer list.
 //(I set this so it'd initialize the array to default (null), which I think it was already doing, but this is more explicit.)
 
@@ -24,11 +25,17 @@ ZilchDefineType(IEntity, SpinningZilch)
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindMethodOverload(GetComponent, IComponent*, Zilch::String);
 	//ZilchBindMethod(GetTransform);
-	ZilchBindFieldGetSet(Transform);
+
 	ZilchBindMethod(Destroy);
 	ZilchBindFieldGetSetAs(IsVisible, "Visible");
 	ZilchBindFieldGetSet(Actions);
 	ZilchBindMethodAs(ZGetName, "GetName");
+
+	ZilchBindFieldGetSet(Transform);
+	ZilchBindFieldGetSet(RigidBody);
+	ZilchBindFieldGetSet(SpriteRenderer);
+	ZilchBindFieldGetSet(Primitive);
+
 }
 
 ZilchDefineType(IComponent, SpinningZilch)

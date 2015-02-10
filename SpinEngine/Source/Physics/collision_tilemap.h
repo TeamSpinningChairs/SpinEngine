@@ -17,6 +17,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "IComponent.h"
 #include "FactoryManager.h"
 #include "Transform.h"
+#include "FactoryAccess.h"
 
 struct TileMapData;
 
@@ -24,6 +25,7 @@ class TileMapCollision : public IComponent
 {
 public:
   TileMapCollision(IEntity *owner, TileMapData &tilemap);
+  TileMapCollision(IEntity* owner);
 
   bool Initialize() override;
   void Serialize (DynamicElement* props, Serializer::DataNode* data) {}
@@ -54,7 +56,7 @@ private:
 
   //Valid reference as long as FactoryManager is alive,
   //and TileMapCollision is only alive while FactoryManager is.
-  TileMapData &tilemap_;
+  TileMapData* tilemap_;
   
   //How do we get info to our owner? We need to communicate our flags to them.
   //iscollidingup/down/left/right

@@ -39,6 +39,7 @@ Primitive::Primitive(GameObject parent, ShapeID pID, Component_Type type)
 {
   radius = 0.0f;
   active = true; //false;
+  //Owner->Primitive = this;
 }
 
 Primitive::~Primitive()
@@ -79,6 +80,7 @@ Circle::~Circle(){}
 
 bool Circle::Initialize()
 {
+	Owner->Primitive = this;
   pTrans = Owner->GetTransform();
   physics->colliders.push_back(this);
   return true;
@@ -105,6 +107,7 @@ AABB::~AABB()
 
 bool AABB::Initialize()
 {
+	Owner->Primitive = this;
   pTrans = Owner->GetTransform();
   physics->colliders.push_back(this);
   return true;

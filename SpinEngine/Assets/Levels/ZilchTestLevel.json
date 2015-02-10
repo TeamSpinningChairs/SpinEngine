@@ -113,7 +113,9 @@
                  "name":"Player1",
                  "properties":
                     {
-                     "DataFile":"ZilchTestLevel"
+                     "AABB":"",
+                     "DataFile":"ZilchTestLevel",
+                     "RigidBody":""
                     },
                  "rotation":0,
                  "type":"",

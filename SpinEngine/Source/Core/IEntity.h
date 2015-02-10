@@ -25,7 +25,7 @@ const int sizeof_name_tag = 100;
 
 //Forward Declaration
 class IEntity;
-
+class Primitive;
 //typedefs
 typedef IEntity* GameObject;
 
@@ -80,9 +80,11 @@ public:
   virtual void Update(float dt);
 
   //Component Pointers For Easy Access
-
+  
   ComponentPointer(Transform);
   ComponentPointer(SpriteRenderer);
+  ComponentPointer(RigidBody);
+  ComponentPointer(Primitive);
 
   bool IsCaptured;
 

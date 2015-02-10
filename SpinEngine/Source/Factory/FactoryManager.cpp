@@ -97,17 +97,19 @@ FactoryManager::FactoryManager(GraphicsManager* m_pGraphicsManager) :ISystem("Fa
   //RegisterComponent(ScrollComponent);
   //RegisterComponent(SpawnedBlock);
   RegisterComponent(SwitchComponent);
-  //RegisterComponent(TileMapCollision);
+  RegisterComponent(TileMapCollision);
   RegisterComponent(WallComp);
   //RegisterComponent(WallHand);
   RegisterComponent(WallTarget);
   RegisterComponent(WallTriggerComp);
+  RegisterComponent(Circle);
+  RegisterComponent(AABB);
   //RegisterComponent(SpriteRend);
 }
 
 FactoryManager::~FactoryManager()
 {
-	FactAccess = new FactoryAccess(*this);
+	//delete FactAccess;
 
 	std::unordered_map<std::string, ComponentCreator *>::iterator iterator;
 	for (iterator = SerialMap.begin(); iterator != SerialMap.end(); ++iterator)

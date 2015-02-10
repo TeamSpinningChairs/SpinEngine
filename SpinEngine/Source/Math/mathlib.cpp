@@ -28,6 +28,8 @@ ZilchDefineType(Vector2D, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindConstructor();
+	ZilchBindVirtualConstructor(float, float);
+	ZilchBindVirtualConstructor(Zilch::Real2);
 	ZilchBindDestructor();
 	ZilchBindFieldGetSetAs(x, "X");
 	ZilchBindFieldGetSetAs(y, "Y");
@@ -37,6 +39,8 @@ ZilchDefineType(Vector3D, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindConstructor();
+	ZilchBindVirtualConstructor(float, float, float);
+	ZilchBindVirtualConstructor(Zilch::Real3);
 	ZilchBindDestructor();
 	ZilchBindFieldGetSetAs(x, "X");
 	ZilchBindFieldGetSetAs(y, "Y");
@@ -47,6 +51,8 @@ ZilchDefineType(Vector4D, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindConstructor();
+	ZilchBindVirtualConstructor(float, float, float, float);
+	ZilchBindVirtualConstructor(Zilch::Real4);
 	ZilchBindDestructor();
 	ZilchBindFieldGetSetAs(x, "X");
 	ZilchBindFieldGetSetAs(y, "Y");

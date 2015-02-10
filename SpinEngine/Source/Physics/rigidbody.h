@@ -23,6 +23,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 class RigidBody : public IComponent
 {
 public:
+	ZilchDeclareDerivedType(RigidBody, IComponent);
   
   // Will make these variables private later
   friend class Primitive;
@@ -84,8 +85,10 @@ public:
   float getRotation() const;
 
   void AddForce(const Vector2D &force);
+  void AddForce(Vector2D* force);
   void SetStatic(void);
   void ApplyImpulse(const Vector2D& impulse, const Vector2D& contactVec);
+  void ApplyImpulse(Vector2D* impulse, Vector2D* contactVec);
   void SetOrientation(float radians);
 
   bool IsStatic();

@@ -24,10 +24,12 @@ class IEntity; //<-- This will suffice
 class CollisionDelegate
 {
 public:
+  ZilchDeclareBaseType(CollisionDelegate, Zilch::TypeCopyMode::ReferenceType);
+
   CollisionDelegate(IEntity *parent);
   void InitializeCollisionCallback();
   //The callback function
-  virtual void OnCollision(IEntity *object) = 0;
+  virtual void OnCollision(IEntity *object) {}
 
 
 private:

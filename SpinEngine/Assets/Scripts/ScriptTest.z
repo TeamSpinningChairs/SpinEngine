@@ -43,6 +43,7 @@ class ZilchTest : ZilchComponent
 
 class CameraFollow : ZilchComponent
 {
+	var Active:Boolean = true;
 	var TargetName:String = "Player1";
     var IsOwner:Boolean = true;
     var Zoom:Real = 23;
@@ -65,13 +66,18 @@ class CameraFollow : ZilchComponent
         {
             this.Target = ZInterface.FindObjectByName(this.TargetName);
         }
-        
-        this.Cam.SetPosition(this.Target.Transform.Translation);
+        if(this.Active)
+		{
+			var vec = this.Target.Transform.Translation;
+			//vec.Z = 0;
+			this.Cam.SetPosition(vec);
+		}
         this.Cam.SetZoom(this.Zoom);
 	}
 	
 	function Update(dt:Real)
 	{
+	
         var pos1 = this.Cam.GetPosition();
         var pos2 = this.Target.Transform.Translation;
         var differenceX = Math.Abs(pos2.X - pos1.X); 
@@ -79,10 +85,6 @@ class CameraFollow : ZilchComponent
 		
 		var newposX = Math.Lerp(pos1.X, pos2.X, this.CameraSpeed * differenceX);
 		var newposY = Math.Lerp(pos1.Y, pos2.Y, this.CameraSpeed * differenceY);
-        // //Console.WriteLine(pos2);
-        //var vec = pos1;
-        //Console.WriteLine("Vec: `vec.X` `vec.Y`, `vec.Z`");
-        // //Console.WriteLine("`pos1` vs `newposX`, `newposY`");
         
         if(ZInterface.InputManager.IsKeyDown(Keys.I))
 		{
@@ -109,18 +111,32 @@ class ZilchController : ZilchComponent
 	
 	function Initialize()
 	{
-        
+		this.Owner.RigidBody.Static = false;
+		this.Owner.RigidBody.Ghost = false;
+		this.Owner.RigidBody.Kinematic = true;
+		this.Owner.RigidBody.UsesGravity = false;
+		this.Owner.RigidBody.Set(0.5);
+		var mass = this.Owner.RigidBody.GetMass();
+		var trans = this.Owner.Transform.Translation;
+		this.Owner.RigidBody.SetPosition(trans.X, trans.Y);
+        Console.WriteLine(mass);
 	}
 	
 	function Update(dt:Real)
 	{
+		var vec2D = this.Owner.RigidBody.GetPosition();
+		this.Owner.Transform.Translation = Vector3D(vec2D.X, vec2D.Y, 0);
         if(ZInterface.InputManager.IsKeyDown(Keys.RIGHT))
 		{
-			this.Owner.Transform.Translation.X += this.Speed * dt;
+			//this.Owner.Transform.Translation.X += this.Speed * dt;
+			this.Owner.RigidBody.SetVelocity(5, 0);
+			Console.WriteLine(vec2D.X, vec2D.Y);
 		}
         if(ZInterface.InputManager.IsKeyDown(Keys.LEFT))
 		{
-			this.Owner.Transform.Translation.X -= this.Speed * dt;
+			//this.Owner.Transform.Translation.X -= this.Speed * dt;
+			this.Owner.RigidBody.SetVelocity(-5, 0);
+			Console.WriteLine(vec2D.X, vec2D.Y);
 		}
 	}
 	

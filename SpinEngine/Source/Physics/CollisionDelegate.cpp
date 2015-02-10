@@ -13,6 +13,11 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "IEntity.h"
 #include "CollisionDelegate.h"
 
+ZilchDefineType(CollisionDelegate, SpinningZilch)
+{
+	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+}
+
 CollisionDelegate::CollisionDelegate(IEntity *parent) : parent_(parent)
 {
 }
