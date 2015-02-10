@@ -14,8 +14,6 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "InputManager.h"
 #include "ZInterface.h"
 
-const string l = "josh";
-
 InputManager* INPUTMANAGER = nullptr;
 
 InputManager::InputManager() : ISystem("Input", SystemType::ST_Input)
