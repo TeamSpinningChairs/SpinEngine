@@ -129,7 +129,8 @@ bool Engine::Initialize()
 #ifndef _DEBUG
   GameStateMgrInit(GS_MENU, "Digipen_Splash_Screen");
 #else
-  GameStateMgrInit(GS_LOAD, "ZilchTestLevel"); //LEVEL WE ARE LOADING
+  //GameStateMgrInit(GS_LOAD, "ZilchTestLevel"); //LEVEL WE ARE LOADING
+  GameStateMgrInit(GS_LOAD, "New_Wall_And_Gameplay");
 #endif
   
   return true;
@@ -339,7 +340,6 @@ void Engine::Run()
       }
     }
 
-    
     //Regardless of whether we're loading a new level or reloading this one,
     //we unload whatever's currently there.
     GameStateUnload();

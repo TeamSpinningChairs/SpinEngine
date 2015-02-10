@@ -168,10 +168,11 @@ bool GraphicsManager::InitDirect3D()
     d3dVertex::CUSTOMVERTEX verts[NUM_VERTS] =
     {
       //U V Coordinates
+      //  0            1
       //(0,0)--------(0,1)
-      //
-      //
-      //
+      //               
+      //               
+      //  3            2
       //(0,1)--------(1,1)
 
       //Front Face
