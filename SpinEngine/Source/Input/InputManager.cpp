@@ -31,6 +31,7 @@ ZilchDefineType(InputManager, SpinningZilch)
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindMethod(IsKeyDown);
 	ZilchBindMethodAs(IsKeyPressed, "IsKeyTriggered");
+	ZilchBindMethodAs(IsKeyPressed, "IsKeyPressed");
 	ZilchBindMethod(IsKeyReleased);
 	ZilchBindMethod(IsAnyKeyTriggered);
 

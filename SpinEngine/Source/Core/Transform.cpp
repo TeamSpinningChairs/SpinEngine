@@ -20,7 +20,7 @@ ZilchDefineType(Transform, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindFieldGetSetAs(position, "Translation");
-	ZilchBindFieldGetSetAs(rotation, "Rotaion");
+	ZilchBindFieldGetSetAs(rotation, "Rotation");
 	ZilchBindFieldGetSetAs(scale, "Scale");
 
 }

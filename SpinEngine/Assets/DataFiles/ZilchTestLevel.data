@@ -9,10 +9,6 @@ Level =
         ActionTest = 
         {
         },
-        ZilchTest = 
-        {
-            int Butts = 42,
-        },
     },
     Cog = 
         {
@@ -32,31 +28,13 @@ Level =
         },
     Cog = 
         {
-            LinkId = 
-            {
-                uint Id = 2,
-            },
             Named = 
             {
-                string Name = "MovingPlatform1",
+                string Name = "Core",
             },
-            Transform = 
-            {
-                Vec3 Translation = [0, 0, 0],
-                Vec3 Scale = [9, 9, 9],
-                Quat Rotation = [0, 0, 0, 1],
-            },
-            Sprite = 
-            {
-                bool Visible = true,
-                string SpriteSource = "DigiPenLogo.png",
-                bool AnimationActive = false,
-                string Shader = "Default",
-                Vec4 Color = [1, 1, 1, 1],
-            },
-            NewZilch = 
-            {
-            },
+			ZilchTest = 
+			{
+			},
         },
     Cog = 
         {

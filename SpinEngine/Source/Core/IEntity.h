@@ -73,7 +73,7 @@ public:
 
   Zilch::String ZGetName();
   //Action Sequence
-  ActionSequence* Actions = new ActionSequence();
+  ActionSequence* Actions = nullptr;
 
   //Methods
   virtual bool Initialize();

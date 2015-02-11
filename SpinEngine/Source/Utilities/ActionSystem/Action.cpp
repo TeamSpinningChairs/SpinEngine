@@ -6,8 +6,23 @@
 ZilchDefineType(Action, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+	
+	ZilchBindStaticMethodOverload(Sequence, ActionSequence*, IEntity*);
 	ZilchBindStaticMethodOverload(Sequence, ActionSequence*, Zilch::Any);
-	//ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Zilch::Property startVal, float endVal, float time, int ease);
+
+	ZilchBindStaticMethodOverload(Group, ActionGroup*, ActionSequence*);
+
+	ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Vector2D* startVal, Vector2D endVal, float time, int ease);
+	ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Vector3D* startVal, Vector3D endVal, float time, int ease);
+	ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Vector4D* startVal, Vector4D endVal, float time, int ease);
+	ZilchBindStaticMethodOverload(Delay, void, ActionSequence* seq, float time);
+	ZilchBindStaticMethodOverload(Call, void, ActionSequence* seq, Zilch::Any);
+
+	ZilchBindStaticMethodOverload(Property, void, ActionGroup* seq, Vector2D* startVal, Vector2D endVal, float time, int ease);
+	ZilchBindStaticMethodOverload(Property, void, ActionGroup* seq, Vector3D* startVal, Vector3D endVal, float time, int ease);
+	ZilchBindStaticMethodOverload(Property, void, ActionGroup* seq, Vector4D* startVal, Vector4D endVal, float time, int ease);
+	//ZilchBindStaticMethodOverload(Call, void, ActionGroup* seq, Zilch::Any);
+	ZilchBindStaticMethodOverload(Delay, void, ActionGroup* seq, float time);
 }
 
 ZilchDefineType(ActionGroup, SpinningZilch)
@@ -28,7 +43,12 @@ Action::Action()
 	Time = 0;
 	TimePassed = 0;
 }
-
+//Calls
+template<typename T>
+Action::Action(T function)
+{
+	SetValues(function);
+}
 //Floats
 Action::Action(float* startVal, float endVal, float time, Ease::Eases ease)
 {
@@ -69,7 +89,7 @@ Action::Action(float time)
 void Action::SetValues(float time)
 {
 	Update = &Action::UpdateDelay;
-	time = time;
+	Time = time;
 	TimePassed = 0;
 	StartVal = Vector4D(0, 0, 0, 0);
 	CurrentVal = nullptr;
@@ -77,6 +97,21 @@ void Action::SetValues(float time)
 	Active = true;
 	Started = true;
 	Completed = false;
+}
+template<typename T>
+void Action::SetValues(T function)
+{
+	Update = &Action::UpdateDelay;
+	Time = 0;
+	TimePassed = 0;
+	StartVal = Vector4D(0, 0, 0, 0);
+	CurrentVal = nullptr;
+	EndVal = Vector4D(0, 0, 0, 0);
+	Active = true;
+	Started = true;
+	Completed = true;
+	//No need for a "UpdateCall" function.
+	//function();
 }
 
 void Action::SetValues(float startVal, float* currentVal, float endVal, float time, Ease::Eases ease)
@@ -415,15 +450,7 @@ bool Action::IsStarted()
 	return Started;
 }
 
-void Action::Delay(ActionSequence* seq, float delay)
-{
-	seq->AddProperty(new ActionProperty(delay));
-}
 
-void Action::Delay(ActionGroup* grp, float delay)
-{
-	grp->AddProperty(new ActionProperty(delay));
-}
 
 ActionSequence* Action::Sequence(ActionSequence** seq)
 {
@@ -441,58 +468,110 @@ ActionSequence* Action::Sequence(ActionSequence** seq)
 
 ActionSequence* Action::Sequence(Zilch::Any seq)
 {
-	Zilch::BoundType* type = (BoundType*)seq.StoredType;
-	Zilch::PropertyDelegateTemplate* type2 = (PropertyDelegateTemplate*)seq.GetData();
-	
-	int i = 0;
-	int len = type->AllFunctions.size();
-	for (i = 0; i < len; ++i)
+	Zilch::Handle* handle = (Zilch::Handle*) (seq.GetData());
+	Zilch::PropertyDelegateTemplate* property = (Zilch::PropertyDelegateTemplate*) handle->Dereference();
+	ExecutableState* state = ZILCH->GetDependencies();
+
+	Zilch::Call call(property->Get, state);
+	call.Invoke(ZILCH->Report);
+
+	Zilch::Handle* sequence = (Zilch::Handle*) call.GetReturnUnchecked();
+	ActionSequence* act = (ActionSequence*)sequence->Dereference();
+
+	if (sequence->Dereference() == nullptr)
 	{
-		std::cout << type->AllFunctions[i]->Name.c_str() << std::endl;
-		std::cout << type->AllFunctions[i]->Type->ToString().c_str() << std::endl;
+		Zilch::LibraryRef* library = &(ZILCH->lib);
+		Zilch::BoundType* ZilchClass = ZilchTypeId(ActionSequence);
+		ErrorIf(ZilchClass == nullptr, "Failed to find a Zilch type named ", "ActionSequence");
+		Zilch::Handle newSequence = state->AllocateDefaultConstructedHeapObject(ZilchClass, ZILCH->Report, Zilch::HeapFlags::NonReferenceCounted);
+
+		Zilch::Call call2(property->Set, state);
+		call2.SetHandle(0, newSequence);
+		call2.Invoke(ZILCH->Report);
 	}
-	printf("\n");
-	int j = 0;
-	int len2 = type->AllProperties.size();
-	for (j = 0; j < len2; ++j)
+	else
 	{
-		std::cout << type->AllProperties[j]->Name.c_str() << std::endl;
-		std::cout << type->AllProperties[j]->PropertyType->ToString().c_str() << std::endl;
+		act->Clear();
 	}
 
-	Zilch::Array<Zilch::Type*> args;
-	Zilch::Function* asd = type->FindFunction("[GetGet]", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
-
-	//std::cout << type->BaseType->ToString().c_str() << std::endl;
-
-
-	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
-
-	Zilch::Property* proper = (Zilch::Property*) type->AllProperties[0];
-	
-	
-	printf("\n");
-	int k = 0;
-	int len3 = 0;
-	for (k = 0; k < len3; ++k)
+	if (sequence->Dereference() != nullptr)
 	{
-		std::cout << type->Attributes[k].Name.c_str() << std::endl;
+		ActionSequence* act = (ActionSequence*) sequence;
 	}
-	//std::cout << proper->Get->BoundFunction()->ToString() <<
 
-	Zilch::ExecutableState* state = ZILCH->GetDependencies();
-	//seq.StoredType->
-	Zilch::Handle handle = Zilch::Handle(state, type, seq.GetData());
-	type2->Get.ThisHandle = handle;
-	//type2->Get.BoundFunction->Name. = Zilch::String("Get");
-	type2->Get.BoundFunction->Type = (Zilch::DelegateType*) type->AllProperties[1]->PropertyType;
+	return act;
+}
 
-	type2->Set.ThisHandle.Type = handle.Type;
-	type2->Set.ThisHandle.Offset = handle.Offset;
-	type2->Set.ThisHandle.Flags = handle.Flags;
-	type2->Set.ThisHandle.Manager = handle.Manager;
-	//type2->Set.BoundFunction->Name = Zilch::String("Set");
-	type2->Set.BoundFunction->Type = (Zilch::DelegateType*) type->AllProperties[0]->PropertyType;
+ActionSequence* Action::Sequence(IEntity* seq)
+{
+
+
+
+	if (seq->Actions == nullptr)
+	{
+		seq->Actions = new ActionSequence();
+	}
+	else
+	{
+		seq->Actions->Clear();
+	}
+	return seq->Actions;
+
+	//typecast GetData() as ZilchHandle and then typescast handle.Dereference as ZilchPropertyDelegateTempelate.
+
+	//##########################ZILCH TEST##############################
+	//Zilch::BoundType* type = (BoundType*)seq.StoredType;
+	//Zilch::PropertyDelegateTemplate* type2 = (PropertyDelegateTemplate*)seq.GetData();
+	//
+	//int i = 0;
+	//int len = type->AllFunctions.size();
+	//for (i = 0; i < len; ++i)
+	//{
+	//	std::cout << type->AllFunctions[i]->Name.c_str() << std::endl;
+	//	std::cout << type->AllFunctions[i]->Type->ToString().c_str() << std::endl;
+	//}
+	//printf("\n");
+	//int j = 0;
+	//int len2 = type->AllProperties.size();
+	//for (j = 0; j < len2; ++j)
+	//{
+	//	std::cout << type->AllProperties[j]->Name.c_str() << std::endl;
+	//	std::cout << type->AllProperties[j]->PropertyType->ToString().c_str() << std::endl;
+	//}
+
+	//Zilch::Array<Zilch::Type*> args;
+	//Zilch::Function* asd = type->FindFunction("[GetGet]", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
+
+	////std::cout << type->BaseType->ToString().c_str() << std::endl;
+
+
+	//type->HandleManager = ZilchManagerId(Zilch::PointerManager);
+
+	//Zilch::Property* proper = (Zilch::Property*) type->AllProperties[0];
+	//
+	//
+	//printf("\n");
+	//int k = 0;
+	//int len3 = 0;
+	//for (k = 0; k < len3; ++k)
+	//{
+	//	std::cout << type->Attributes[k].Name.c_str() << std::endl;
+	//}
+	////std::cout << proper->Get->BoundFunction()->ToString() <<
+
+	//Zilch::ExecutableState* state = ZILCH->GetDependencies();
+	////seq.StoredType->
+	//Zilch::Handle handle = Zilch::Handle(state, type, seq.GetData());
+	//type2->Get.ThisHandle = handle;
+	////type2->Get.BoundFunction->Name. = Zilch::String("Get");
+	//type2->Get.BoundFunction->Type = (Zilch::DelegateType*) type->AllProperties[1]->PropertyType;
+
+	//type2->Set.ThisHandle.Type = handle.Type;
+	//type2->Set.ThisHandle.Offset = handle.Offset;
+	//type2->Set.ThisHandle.Flags = handle.Flags;
+	//type2->Set.ThisHandle.Manager = handle.Manager;
+	////type2->Set.BoundFunction->Name = Zilch::String("Set");
+	//type2->Set.BoundFunction->Type = (Zilch::DelegateType*) type->AllProperties[0]->PropertyType;
 	//Zilch::HeapManager::
 	//Zilch::Call call1(type2->Get.BoundFunction, state);
 	//call1.Invoke(ZILCH->Report);
@@ -508,13 +587,13 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 
 	
 	
-	Zilch::LibraryRef* library = &(ZILCH->lib);
+	/*Zilch::LibraryRef* library = &(ZILCH->lib);
 	Zilch::BoundType* ZilchClass = ZilchTypeId(ActionSequence);
 	ErrorIf(ZilchClass == nullptr, "Failed to find a Zilch type named ", "ActionSequence");
 	Zilch::Handle ActiveScript = state->AllocateDefaultConstructedHeapObject(ZilchClass, ZILCH->Report, Zilch::HeapFlags::NonReferenceCounted);
 	
 	
-	args.push_back(ZilchTypeId(ActionSequence));
+	args.push_back(ZilchTypeId(ActionSequence));*/
 	
 	/*Zilch::Variable var = Zilch::Variable();
 	var.Name = "sequence";
@@ -543,17 +622,17 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 	//Zilch::Handle funcHand = Zilch::Handle(state, , data);
 	//field1->Set->BoundFunction(call1, ZILCH->Report);
 	//std::cout << field1->Get->Type->ToString().c_str() << std::endl;
-	
-	Zilch::Field* field = seq.StoredType->GetInstanceField("Get");
-	type2->Get.BoundFunction->Type = (Zilch::DelegateType*) field->Get->Type->Return;
-	//type2->Get.ThisHandle.;
-	Call call(type2->Get.BoundFunction, state);
-	call.DisableThisChecks();
-	//call.SetHandle(Zilch::Call::This, handle);
-	
-	//call.Invoke(ZILCH->Report);
-	std::cout << field->Get->Type->ToString().c_str() << std::endl;
-	ActionSequence* deltype = (ActionSequence*) field->Get->Type->Return;
+	//
+	//Zilch::Field* field = seq.StoredType->GetInstanceField("Get");
+	//type2->Get.BoundFunction->Type = (Zilch::DelegateType*) field->Get->Type->Return;
+	////type2->Get.ThisHandle.;
+	//Call call(type2->Get.BoundFunction, state);
+	//call.DisableThisChecks();
+	////call.SetHandle(Zilch::Call::This, handle);
+	//
+	////call.Invoke(ZILCH->Report);
+	//std::cout << field->Get->Type->ToString().c_str() << std::endl;
+	//ActionSequence* deltype = (ActionSequence*) field->Get->Type->Return;
 
 	//Zilch::Function* ad = seq.StoredType->FindFunction("Get", deltype);
 	//Zilch::Function* funer = type->FindFunction("Get", deltype, Zilch::FindMemberOptions::None)
@@ -602,51 +681,85 @@ Action::~Action()
 	CurrentVal = nullptr;
 }
 
-
-void Action::Property(ActionSequence* seq, float* startVal, float endVal, float time, Ease::Eases ease)
+void Action::Delay(ActionSequence* seq, float delay)
 {
-	seq->AddProperty(new ActionProperty(startVal, endVal, time, ease));
-}
-void Action::Property(ActionSequence* seq, int* startVal, int endVal, float time, Ease::Eases ease)
-{
-	seq->AddProperty(new ActionProperty(startVal, endVal, time, ease));
-}
-void Action::Property(ActionSequence* seq, Vector2D* startVal, Vector2D endVal, float time, Ease::Eases ease)
-{
-	seq->AddProperty(new ActionProperty(startVal, &endVal, time, ease));
-}
-void Action::Property(ActionSequence* seq, Vector3D* startVal, Vector3D endVal, float time, Ease::Eases ease)
-{
-	seq->AddProperty(new ActionProperty(startVal, &endVal, time, ease));
-}
-void Action::Property(ActionSequence* seq, Vector4D* startVal, Vector4D endVal, float time, Ease::Eases ease)
-{
-	seq->AddProperty(new ActionProperty(startVal, &endVal, time, ease));
+	seq->AddProperty(new ActionProperty(delay));
 }
 
-void Action::Property(ActionGroup* grp, float* startVal, float endVal, float time, Ease::Eases ease)
+void Action::Delay(ActionGroup* grp, float delay)
 {
-	grp->AddProperty(new ActionProperty(startVal, endVal, time, ease));
+	grp->AddProperty(new ActionProperty(delay));
 }
-void Action::Property(ActionGroup* grp, int* startVal, int endVal, float time, Ease::Eases ease)
+
+template<typename T>
+void Action::Call(ActionSequence* seq, T function)
 {
-	grp->AddProperty(new ActionProperty(startVal, endVal, time, ease));
+	seq->AddProperty(new ActionProperty(func));
 }
-void Action::Property(ActionGroup* grp, Vector2D* startVal, Vector2D endVal, float time, Ease::Eases ease)
+
+template<typename T>
+void Action::Call(ActionGroup* grp, T function)
 {
-	grp->AddProperty(new ActionProperty(startVal, &endVal, time, ease));
+	grp->AddProperty(new ActionProperty(func));
 }
-void Action::Property(ActionGroup* grp, Vector3D* startVal, Vector3D endVal, float time, Ease::Eases ease)
+
+void Action::Call(ActionSequence* seq, Zilch::Any func)
 {
-	grp->AddProperty(new ActionProperty(startVal, &endVal, time, ease));
+	//DelegateType* type = (DelegateType*)func.GetData();
+	//Zilch::Handle handle = Zilch::Handle(ZILCH->GetDependencies(), (BoundType*)func.StoredType, func.GetData());
+	
+	
+	//Zilch::Call call(hand, ZILCH->GetDependencies());
+
+
+	return;
 }
-void Action::Property(ActionGroup* grp, Vector4D* startVal, Vector4D endVal, float time, Ease::Eases ease)
+
+void Action::Property(ActionSequence* seq, float* startVal, float endVal, float time, int ease)
 {
-	grp->AddProperty(new ActionProperty(startVal, &endVal, time, ease));
+	seq->AddProperty(new ActionProperty(startVal, endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionSequence* seq, int* startVal, int endVal, float time, int ease)
+{
+	seq->AddProperty(new ActionProperty(startVal, endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionSequence* seq, Vector2D* startVal, Vector2D endVal, float time, int ease)
+{
+	seq->AddProperty(new ActionProperty(startVal, &endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionSequence* seq, Vector3D* startVal, Vector3D endVal, float time, int ease)
+{
+	seq->AddProperty(new ActionProperty(startVal, &endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionSequence* seq, Vector4D* startVal, Vector4D endVal, float time, int ease)
+{
+	seq->AddProperty(new ActionProperty(startVal, &endVal, time, Ease::Eases(ease)));
+}
+
+void Action::Property(ActionGroup* grp, float* startVal, float endVal, float time, int ease)
+{
+	grp->AddProperty(new ActionProperty(startVal, endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionGroup* grp, int* startVal, int endVal, float time, int ease)
+{
+	grp->AddProperty(new ActionProperty(startVal, endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionGroup* grp, Vector2D* startVal, Vector2D endVal, float time, int ease)
+{
+	grp->AddProperty(new ActionProperty(startVal, &endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionGroup* grp, Vector3D* startVal, Vector3D endVal, float time, int ease)
+{
+	grp->AddProperty(new ActionProperty(startVal, &endVal, time, Ease::Eases(ease)));
+}
+void Action::Property(ActionGroup* grp, Vector4D* startVal, Vector4D endVal, float time, int ease)
+{
+	grp->AddProperty(new ActionProperty(startVal, &endVal, time, Ease::Eases(ease)));
 }
 
 ActionGroup* Action::Group(ActionSequence* seq)
 {
+	seq->AddProperty(new ActionProperty(0.0f));
 	ActionGroup* grp = new ActionGroup();
 	ActionProperty* prop = new ActionProperty(grp);
 	seq->AddProperty(prop);
@@ -756,6 +869,16 @@ ActionProperty::ActionProperty(float time)
 	Time = time;
 	SetValues = &ActionProperty::ValueSetterDelay;
 }
+
+template<typename T>
+ActionProperty::ActionProperty(T function)
+{
+	StartValue = function;
+	EndValue = Vector4D(0, 0, 0, 0);
+	
+	SetValues = &ActionProperty::ValueSetterCall;
+}
+
 ActionProperty::ActionProperty(float* startVal, float endVal, float time, Ease::Eases ease)
 {
 	StartValue = startVal;
@@ -817,6 +940,10 @@ ActionProperty::~ActionProperty()
 void ActionProperty::ValueSetterDelay(Action* action)
 {
 	action->SetValues(Time);
+}
+void ActionProperty::ValueSetterCall(Action* action)
+{
+	action->SetValues(StartValue);
 }
 void ActionProperty::ValueSetterFloat(Action* action)
 {

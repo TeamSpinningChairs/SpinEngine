@@ -1,6 +1,8 @@
 class ZilchTest : ZilchComponent
 {
 	var Butts:Integer = 8;
+	var Sequence:ActionSequence = null;
+	var Group:ActionGroup = null;
 	constructor():base()
 	{
 		Console.WriteLine("I AM THE ZILCH CONSTRUCTOR!");
@@ -9,30 +11,47 @@ class ZilchTest : ZilchComponent
 	function Initialize()
 	{
 		Console.WriteLine("INITIALIZED");
-		Console.WriteLine(this.Butts);
+		//Console.WriteLine(this.Butts);
         //var obj = ZInterface.FindObjectByName("MainPlayer");
         //Console.WriteLine(obj.GetName());
         //obj.Transform.Translation.X += 1;
-		//var seq = Action.Sequence(@this.Owner.Actions);
+		var seq = Action.Sequence(this.Owner);
+		var grp = Action.Group(seq);
+		Action.Property(grp, this.Owner.Transform.Rotation, Vector3D(0.001, 0.001, 970), 3, 3);
+		//Action.Property(this.Sequence, this.Owner.Transform.Rotation, Vector3D(0.1, 360, 0.1), 3, 3);
+		//Action.Property(this.Sequence, this.Owner.Transform.Rotation, Vector3D(360, 0.1, 0.1), 3, 3);
+		var trans = this.Owner.Transform.Translation;
+		var newPos = Vector3D(trans.X + 10, trans.Y + 10,0);
+		//Action.Call(seq, this.Test);
+		Action.Property(grp, this.Owner.Transform.Translation, newPos, 3, 2);
+		Action.Property(grp, this.Owner.Transform.Scale, Vector3D(2, 0.5, 0.5), 3, 3);
+		var grp2 = Action.Group(seq);
+		newPos.X -= 20;
+		Action.Property(seq, this.Owner.Transform.Translation, newPos, 3, Eases.QntInOut);
 		//Console.WriteLine(this.Owner.ZilchFriend.Pancakes);
 		//Action.Sequence(this.Owner.Actions, @Butts, 19, 6, 1);
 	}
 	
+	function Test()
+	{
+	}
+	
 	function Update(dt:Real)
 	{
+		this.Owner.Actions.Update(dt);
         //var obj = ZInterface.FindObjectByName("MainPlayer");
         //Console.WriteLine(obj.GetName());
         //obj.Transform.Translation.X += 0.4;
 		//this.Owner.Transform.Translation.X += 2;
 		//Console.WriteLine(dt);
-		if(ZInterface.InputManager.IsKeyDown(Keys.D))
-		{
-			this.Owner.Transform.Translation.X += 2 * dt;
-			//Console.WriteLine(transform);
-			//transform.Translation.X += 2 * dt;
-			//Console.WriteLine("LEFT");
-			this.Owner.Visible = !this.Owner.Visible;
-		}
+		// if(ZInterface.InputManager.IsKeyDown(Keys.D))
+		// {
+			// this.Owner.Transform.Translation.X += 2 * dt;
+			// //Console.WriteLine(transform);
+			// //transform.Translation.X += 2 * dt;
+			// //Console.WriteLine("LEFT");
+			// this.Owner.Visible = !this.Owner.Visible;
+		// }
 	}
 	
 	function Destroyed()
@@ -114,29 +133,37 @@ class ZilchController : ZilchComponent
 		this.Owner.RigidBody.Static = false;
 		this.Owner.RigidBody.Ghost = false;
 		this.Owner.RigidBody.Kinematic = true;
-		this.Owner.RigidBody.UsesGravity = false;
+		this.Owner.RigidBody.UsesGravity = true;
 		this.Owner.RigidBody.Set(0.5);
 		var mass = this.Owner.RigidBody.GetMass();
 		var trans = this.Owner.Transform.Translation;
-		this.Owner.RigidBody.SetPosition(trans.X, trans.Y);
+		//this.Owner.RigidBody.SetPosition(trans.X, trans.Y);
         Console.WriteLine(mass);
 	}
 	
 	function Update(dt:Real)
 	{
-		var vec2D = this.Owner.RigidBody.GetPosition();
-		this.Owner.Transform.Translation = Vector3D(vec2D.X, vec2D.Y, 0);
+		//this.Owner.Transform.Translation = Vector3D(vec2D.X, vec2D.Y, 0);
+		//Console.WriteLine(this.Owner.RigidBody.GetPosition());
         if(ZInterface.InputManager.IsKeyDown(Keys.RIGHT))
 		{
 			//this.Owner.Transform.Translation.X += this.Speed * dt;
-			this.Owner.RigidBody.SetVelocity(5, 0);
-			Console.WriteLine(vec2D.X, vec2D.Y);
+			this.Owner.RigidBody.ApplyForce(Vector2D(5, 0));
 		}
         if(ZInterface.InputManager.IsKeyDown(Keys.LEFT))
 		{
 			//this.Owner.Transform.Translation.X -= this.Speed * dt;
-			this.Owner.RigidBody.SetVelocity(-5, 0);
-			Console.WriteLine(vec2D.X, vec2D.Y);
+			this.Owner.RigidBody.ApplyForce(Vector2D(-5, 0));
+		}
+		else
+		if(ZInterface.InputManager.IsKeyReleased(Keys.LEFT))
+		{
+		
+		}
+		if(ZInterface.InputManager.IsKeyPressed(Keys.UP))
+		{
+			//this.Owner.Transform.Translation.X -= this.Speed * dt;
+			this.Owner.RigidBody.SetVelocity(Vector2D(0, 20));
 		}
 	}
 	

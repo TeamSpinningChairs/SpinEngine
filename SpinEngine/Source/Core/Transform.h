@@ -61,7 +61,7 @@ public:
 
 
 private:
-  Vector3D position;
-  Vector3D scale;
-  Vector3D rotation;
+  Vector3D position = Vector3D();
+  Vector3D scale = Vector3D();
+  Vector3D rotation = Vector3D();
 };

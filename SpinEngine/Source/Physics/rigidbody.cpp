@@ -24,6 +24,7 @@ ZilchDefineType(RigidBody, SpinningZilch)
 	ZilchBindMethodOverloadAs(setAcceleration, "SetAcceleration", void, float, float);
 	ZilchBindMethodAs(getAcceleration, "GetAcceleration");
 	ZilchBindMethodOverloadAs(setVelocity, "SetVelocity", void, float, float);
+	ZilchBindMethodOverloadAs(setVelocity, "SetVelocity", void, Vector2D*);
 	ZilchBindMethodAs(getVelocity, "GetVelocity");
 	ZilchBindMethodAs(setMass, "SetMass");
 	ZilchBindMethodAs(getMass, "GetMass");
@@ -143,7 +144,7 @@ void RigidBody::set(float mass_num)
 
 bool RigidBody::Initialize()
 {
-  pTrans = Owner->GetTransform();
+  pTrans = Owner->Transform;
 
   position.x = pTrans->position.x;
   position.y = pTrans->position.y;
@@ -173,9 +174,9 @@ void RigidBody::setPosition(const float x, const float y)
 
 }
 
-Vector2D RigidBody::getPosition() const
+Vector2D* RigidBody::getPosition()
 {
-  return position;
+  return &position;
 }
 
 void RigidBody::setAcceleration(const Vector2D &acc)
@@ -199,15 +200,20 @@ void RigidBody::setVelocity(const Vector2D &velocity)
   RigidBody::velocity = velocity;
 }
 
+void RigidBody::setVelocity(Vector2D* velocity)
+{
+	RigidBody::velocity = *velocity;
+}
+
 void RigidBody::setVelocity(const float x, const float y)
 {
   velocity.x = x;
   velocity.y = y;
 }
 
-Vector2D RigidBody::getVelocity() const
+Vector2D* RigidBody::getVelocity()
 {
-  return velocity;
+  return &velocity;
 }
 void RigidBody::setMass(const float m)
 {

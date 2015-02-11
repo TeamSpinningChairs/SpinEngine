@@ -29,6 +29,8 @@ class Action
 		//DO NOT CALL THIS DEFAULT CONSTRUCTOR.
 		Action();
 		Action(float time);
+		template<typename T>
+		Action(T function); //Void Function Pointer
 		Action(float* startVal, float endVal, float time, Ease::Eases ease);
 		Action(int* startVal, int endVal, float time, Ease::Eases ease);
 		Action(Vector2D* startVal, Vector2D endVal, float time, Ease::Eases ease);
@@ -38,6 +40,8 @@ class Action
 		
 		//These functions reset the values in the action so that it can be used multiple times.
 		void SetValues(float time);
+		template<typename T>
+		void SetValues(T function); //Void Function Pointer
 		void SetValues(float startVal, float* currentVal, float endVal, float time, Ease::Eases ease);
 		void SetValues(int startVal, int* currentVal, int endVal, float time, Ease::Eases ease);
 		void SetValues(Vector2D* startVal, Vector2D* currentVal, Vector2D* endVal, float time, Ease::Eases ease);
@@ -59,32 +63,36 @@ class Action
 		//Generates a new action sequence at the given memory location. If a sequence already exists,
 		//then the exisisting sequence is cleared.
 		static ActionSequence* Sequence(ActionSequence** seq);
+		static ActionSequence* Sequence(IEntity* seq);
 		static ActionSequence* Sequence(Zilch::Any seq);
 
-		static void Property(ActionSequence* seq, float* startVal, float endVal, float time, Ease::Eases ease);
-		static void Property(ActionSequence* seq, int* startVal, int endVal, float time, Ease::Eases ease);
-		static void Property(ActionSequence* seq, Vector2D* startVal, Vector2D endVal, float time, Ease::Eases ease);
-		static void Property(ActionSequence* seq, Vector3D* startVal, Vector3D endVal, float time, Ease::Eases ease);
-		static void Property(ActionSequence* seq, Vector4D* startVal, Vector4D endVal, float time, Ease::Eases ease);
+		static void Property(ActionSequence* seq, float* startVal, float endVal, float time, int ease);
+		static void Property(ActionSequence* seq, int* startVal, int endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Vector2D* startVal, Vector2D endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Vector3D* startVal, Vector3D endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Vector4D* startVal, Vector4D endVal, float time, int ease);
 
-		static void Property(ActionGroup* grp, float* startVal, float endVal, float time, Ease::Eases ease);
-		static void Property(ActionGroup* grp, int* startVal, int endVal, float time, Ease::Eases ease);
-		static void Property(ActionGroup* grp, Vector2D* startVal, Vector2D endVal, float time, Ease::Eases ease);
-		static void Property(ActionGroup* grp, Vector3D* startVal, Vector3D endVal, float time, Ease::Eases ease);
-		static void Property(ActionGroup* grp, Vector4D* startVal, Vector4D endVal, float time, Ease::Eases ease);
+		static void Property(ActionGroup* grp, float* startVal, float endVal, float time, int ease);
+		static void Property(ActionGroup* grp, int* startVal, int endVal, float time, int ease);
+		static void Property(ActionGroup* grp, Vector2D* startVal, Vector2D endVal, float time, int ease);
+		static void Property(ActionGroup* grp, Vector3D* startVal, Vector3D endVal, float time, int ease);
+		static void Property(ActionGroup* grp, Vector4D* startVal, Vector4D endVal, float time, int ease);
 
 		//ZILCH VERSIONS
-		static void Property(ActionSequence* seq, Zilch::Property startVal, float endVal, float time, int ease);
+		/*static void Property(ActionSequence* seq, Zilch::Property startVal, float endVal, float time, int ease);
 		static void Property(ActionSequence* seq, Zilch::Property startVal, int endVal, float time, int ease);
 		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector2D endVal, float time, int ease);
 		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector3D endVal, float time, int ease);
-		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector4D endVal, float time, int ease);
+		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector4D endVal, float time, int ease);*/
 
 		static void Delay(ActionSequence* seq, float delay);
-		//static void Call(ActionSequence* seq, void (*func)(void));
+		template<typename T>
+		static void Call(ActionSequence* seq, T function);
+		static void Call(ActionSequence* seq, Zilch::Any);
 
 		static void Delay(ActionGroup* grp, float delay);
-		//static void Call(ActionGroup* grp, float func);
+		template<typename T>
+		static void Call(ActionGroup* grp, T function);
 
 		static ActionGroup* Group(ActionSequence* seq);
 
@@ -148,11 +156,14 @@ class ActionProperty
 		ZilchDeclareBaseType(ActionProperty, Zilch::TypeCopyMode::ReferenceType);
 		ActionProperty(ActionGroup* grp);
 		ActionProperty(float time);
+		template<typename T>
+		ActionProperty(T function); //Void Function Pointer
 		ActionProperty(float* startVal, float endVal, float time, Ease::Eases ease);
 		ActionProperty(int* startVal, int endVal, float time, Ease::Eases ease);
 		ActionProperty(Vector2D* startVal, Vector2D* endVal, float time, Ease::Eases ease);
 		ActionProperty(Vector3D* startVal, Vector3D* endVal, float time, Ease::Eases ease);
 		ActionProperty(Vector4D* startVal, Vector4D* endVal, float time, Ease::Eases ease);
+
 		
 		~ActionProperty();
 		
@@ -172,6 +183,7 @@ class ActionProperty
 		void ValueSetterVec4(Action* action);
 		
 		void ValueSetterDelay(Action* action);
+		void ValueSetterCall(Action* action); //Void Function Pointer
 		void ValueSetterGroup(Action* action);
 
 		

@@ -418,9 +418,9 @@ void SpriteRenderer::UpdateMatrices()
   D3DXVECTOR2 scale2D, translate2D;
 
   Vector3D rot = Owner->GetTransform()->GetRotation();
-  D3DXMatrixRotationX(&Rx, rot.x);
-  D3DXMatrixRotationY(&Ry, rot.y);
-  D3DXMatrixRotationZ(&Rz, rot.z);
+  D3DXMatrixRotationX(&Rx, Math::DegToRad(rot.x));
+  D3DXMatrixRotationY(&Ry, Math::DegToRad(rot.y));
+  D3DXMatrixRotationZ(&Rz, Math::DegToRad(rot.z));
 
   Vector3D scal = Owner->GetTransform()->GetScale();
   D3DXMatrixScaling(&Scale, scal.x, scal.y, scal.z);

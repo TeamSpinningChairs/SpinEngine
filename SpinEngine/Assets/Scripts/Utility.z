@@ -78,3 +78,38 @@ enum Mouse
 	BUTTONX1 = 5,
 	BUTTONX2 = 6
 }
+
+enum Eases
+{
+	Linear,
+	QuadIn,
+	QuadInOut,
+	QuadOut,
+	//Not Yet Implemented
+	//SinIn,
+	//Not Yet Implemented
+	//SinInOut,
+	//Not Yet Implemented
+	//SinOut,
+	//Not Yet Implemented
+	//ExpoIn,
+	//Not Yet Implemented
+	//ExpoInOut,
+	//Not Yet Implemented
+	//ExpoOut,
+	//Not Yet Implemented
+	//CircIn,
+	//Not Yet Implemented
+	//CircInOut,
+	//Not Yet Implemented
+	//CircOut,
+	CubicIn,
+	CubicInOut,
+	CubicOut,
+	QuarticIn,
+	QuarticInOut,
+	QuarticOut,
+	QntIn,
+	QntInOut,
+	QntOut
+}
