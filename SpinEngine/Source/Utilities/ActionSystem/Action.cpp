@@ -306,7 +306,7 @@ void Action::UpdateVec2(float dt)
 
 	TimePassed += dt;
 
-	if (newVal.x != endVal.x)
+	if (newVal != endVal)
 	{
 		*valPtr = newVal;
 	}
@@ -339,7 +339,7 @@ void Action::UpdateVec3(float dt)
 
 	TimePassed += dt;
 
-	if (newVal.x != endVal.x)
+	if (newVal != endVal)
 	{
 		*valPtr = newVal;
 	}
@@ -373,7 +373,7 @@ void Action::UpdateVec4(float dt)
 
 	TimePassed += dt;
 
-	if (newVal.x != endVal.x)
+	if (newVal != endVal)
 	{
 		*valPtr = newVal;
 	}

@@ -32,9 +32,6 @@ Level =
             {
                 string Name = "Core",
             },
-			ZilchTest = 
-			{
-			},
         },
     Cog = 
         {
