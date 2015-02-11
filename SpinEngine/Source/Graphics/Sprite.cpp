@@ -140,17 +140,18 @@ void Sprite::Draw(IDirect3DDevice9* device, D3DXMATRIX transform,
   }
   else
   {
-    temp[0].u = m_current_column * 0.25;
-    temp[0].v = m_current_row * 0.25;
+    const float offset = 0.005f;
+    temp[0].u = (m_current_column * 0.2500) + offset;
+    temp[0].v = (m_current_row * 0.2500) + offset;
 
-    temp[1].u = (m_current_column + 1) * 0.25f;
-    temp[1].v = m_current_row * 0.25f;
+    temp[1].u = ((m_current_column + 1) * 0.2500f) - offset;
+    temp[1].v = (m_current_row * 0.2500f) + offset;
 
-    temp[2].u = (m_current_column)* 0.25f;
-    temp[2].v = (m_current_row + 1)* 0.25f;
+    temp[2].u = (m_current_column * 0.2500f) + offset;
+    temp[2].v = ((m_current_row + 1)* 0.2500f) - offset;
 
-    temp[3].u = (m_current_column + 1) * 0.25f;
-    temp[3].v = (m_current_row + 1) * 0.25f;
+    temp[3].u = ((m_current_column + 1) * 0.2500f) - offset;
+    temp[3].v = ((m_current_row + 1) * 0.2500f) - offset;
   }
 
   temp[0].color = temp[1].color = temp[2].color = temp[3].color = color;
@@ -177,17 +178,17 @@ void Sprite::Draw(IDirect3DDevice9* device, D3DXMATRIX transform,
   {
     device->SetTexture(0, m_texture);
   }
-  //else
-  //{
-  //  device->SetTexture(0, NULL);
-  //}
+  else
+  {
+    device->SetTexture(0, NULL);
+  }
 
   //device->SetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
   device->SetSamplerState(0, D3DSAMP_ADDRESSU,  D3DTADDRESS_CLAMP);
   device->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
   //device->SetTransform(D3DTS_TEXTURE0, &textureTransform); //<-- TEXTURE TRANSFORM
   device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, /*NUM_INDICES*/ 6, 0, /*NUM_INDICES = 6 / 3 */ 2 );
-  //device->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 4 );//0, /*NUM_INDICES*/ 6, 0, /*NUM_INDICES*/ 6 / 3);
+  //device->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2 );//0, /*NUM_INDICES*/ 6, 0, /*NUM_INDICES*/ 6 / 3);
   //device->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
 }
 

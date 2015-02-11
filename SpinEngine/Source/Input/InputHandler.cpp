@@ -728,7 +728,7 @@ void InputHandler::StartAnyRecording(std::string levelname)
 
 */
 /*************************************************************************/
-bool InputHandler::StickTriggered(int ControllerNum, CONTROLLER_DIR Check)
+bool InputHandler::StickTriggered(int ControllerNum, int Check)
 {
     if (Check == CONTROLLER_DIR::LEFT)
     {
@@ -770,7 +770,7 @@ bool InputHandler::StickTriggered(int ControllerNum, CONTROLLER_DIR Check)
 
 */
 /*************************************************************************/
-bool InputHandler::StickReleased(int ControllerNum, CONTROLLER_DIR Check)
+bool InputHandler::StickReleased(int ControllerNum, int Check)
 {
     if (Check == CONTROLLER_DIR::LEFT)
     {
@@ -800,8 +800,11 @@ bool InputHandler::StickReleased(int ControllerNum, CONTROLLER_DIR Check)
 
 */
 /*************************************************************************/
-bool InputHandler::StickDown(int ControllerNum, CONTROLLER_DIR Check)
+bool InputHandler::StickDown(int ControllerNum, int Check)
 {
+  if (this->Active_Controllers[ControllerNum] != true)
+    false;
+
     if (Check == CONTROLLER_DIR::LEFT)
     {
         if (SticksPresent[ControllerNum].LeftStick.first)
@@ -843,8 +846,11 @@ bool InputHandler::StickDown(int ControllerNum, CONTROLLER_DIR Check)
 
 */
 /*************************************************************************/
-bool InputHandler::TriggerTriggered(int ControllerNum, CONTROLLER_DIR Check)
+bool InputHandler::TriggerTriggered(int ControllerNum, int Check)
 {
+  if (this->Active_Controllers[ControllerNum] != true)
+    false;
+
     if (Check == CONTROLLER_DIR::LEFT)
     {
         if (SticksPresent[ControllerNum].Triggers.first && !SticksPast[ControllerNum].Triggers.first)
@@ -875,8 +881,11 @@ bool InputHandler::TriggerTriggered(int ControllerNum, CONTROLLER_DIR Check)
 
 */
 /*************************************************************************/
-bool InputHandler::TriggerReleased(int ControllerNum, CONTROLLER_DIR Check)
+bool InputHandler::TriggerReleased(int ControllerNum, int Check)
 {
+  if (this->Active_Controllers[ControllerNum] != true)
+    false;
+
     if (Check == CONTROLLER_DIR::LEFT)
     {
         if (!SticksPresent[ControllerNum].Triggers.first && SticksPast[ControllerNum].Triggers.first)
@@ -908,8 +917,11 @@ bool InputHandler::TriggerReleased(int ControllerNum, CONTROLLER_DIR Check)
 
 */
 /*************************************************************************/
-bool InputHandler::TriggerDown(int ControllerNum, CONTROLLER_DIR Check)
+bool InputHandler::TriggerDown(int ControllerNum, int Check)
 {
+  if (this->Active_Controllers[ControllerNum] != true)
+    false;
+
     if (Check == CONTROLLER_DIR::LEFT)
     {
         if (SticksPresent[ControllerNum].Triggers.first)
@@ -1024,4 +1036,17 @@ int InputHandler::CheckControllerStates(int i, InputMessage & Message)
     }
 
     return Inactive;
+}
+
+Vector2D InputHandler::GetStickVector(int ControllerNum, int Check)
+{
+  if (Check == CONTROLLER_DIR::LEFT)
+  {
+    return Vector2D(SticksPresent[ControllerNum].LeftStick.first, SticksPresent[ControllerNum].LeftStick.second);
+  }
+
+  else
+  {
+    return Vector2D(SticksPresent[ControllerNum].RightStick.first, SticksPresent[ControllerNum].RightStick.second);
+  }
 }

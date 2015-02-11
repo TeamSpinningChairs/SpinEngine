@@ -50,8 +50,6 @@ private:
   GameObject parent;
   WallControllerListener * WallListener;
 
-
-
   float movevalue;
 
   GameObject Runners[10];

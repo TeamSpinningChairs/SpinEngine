@@ -13,7 +13,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 */
 /****************************************************************************/
 #pragma once
-
+#include "Precompiled.h"
 #include <Windows.h>
 #include <XInput.h>
 #include "Core\NewMessageSystem.h"
@@ -148,21 +148,21 @@ public:
   // checks to see if a button was released this frame
   bool ButtonReleased(int ControllerNum, int ButtonType);
 
-  bool StickTriggered(int ControllerNum, CONTROLLER_DIR Check);
-  bool StickReleased(int ControllerNum, CONTROLLER_DIR Check);
-  bool StickDown(int ControllerNum, CONTROLLER_DIR Check);
+  bool StickTriggered(int ControllerNum, int Check);
+  bool StickReleased(int ControllerNum, int Check);
+  bool StickDown(int ControllerNum, int Check);
 
-  bool TriggerTriggered(int ControllerNum, CONTROLLER_DIR Check);
-  bool TriggerReleased(int ControllerNum, CONTROLLER_DIR Check);
-  bool TriggerDown(int ControllerNum, CONTROLLER_DIR Check);
+  bool TriggerTriggered(int ControllerNum, int Check);
+  bool TriggerReleased(int ControllerNum, int Check);
+  bool TriggerDown(int ControllerNum, int Check);
 
-
-
+  Vector2D GetStickVector(int ControllerNum, int Check);
 
   //When the GSM loads a level, it calls these
   void InitializeAnyPlayback(std::string levelname);
   void StartAnyRecording(std::string levelname);
-  
+
+
   //When the GSM unloads a level, it calls these
   void UninitializeAnyPlayback();
   void StopAnyRecording();

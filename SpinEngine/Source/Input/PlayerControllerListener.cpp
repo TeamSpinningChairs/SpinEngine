@@ -25,6 +25,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "WallControllerListener.h"
 #include "WallController.h"
 #include "HeadlessChickenAI.h"
+#include "HeadController.h"
 
 /*************************************************************************/
 /*!
@@ -136,32 +137,33 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
     // Throw Head Prototype
     if (GivenInput->RightTriggerState == TRIGGER_TRIGGERED)
     {
-        //GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "Claw-Open.png", this->PlayerTransform->GetPosition() + Vector3D(2 * PlayerTransform->GetScale().x, 0, 0));
+      GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "Claw-Open.png", this->PlayerTransform->GetPosition() + Vector3D(2 * PlayerTransform->GetScale().x, 0, 0));
 
-        ////add a rigid body
-        //AABB *box = new AABB(newObject);
-        //box->SetHalfSize(1.0f, 1.0f);
-        //newObject->AddGameComponent(CT_BoxCollider, box);
-        //
-        //RigidBody *body = new RigidBody(newObject, reinterpret_cast<Primitive*>(box));
-        //body->set(5.0f);
-        ////body->restitution = 0.0f;
-        ////body->useGravity = false;
+      //Box collider and rigidbody
+      AABB *box = new AABB(newObject);
+      box->SetHalfSize(0.2f, 0.9f);
+      newObject->AddGameComponent(CT_BoxCollider, box);
+      
+      RigidBody *body = new RigidBody(newObject, reinterpret_cast<Primitive*>(box));
+      body->set(5.0f);
+      body->restitution = 0;
+      newObject->AddGameComponent(CT_Body, body);
+      
+      //Tilemap collider
+      TileMapCollision *tcoll = new TileMapCollision(newObject, GlobalFactory->GetTileMapData());
+      newObject->AddGameComponent(CT_TileMapCollider, tcoll);
+      
+      HeadController * head = new HeadController(newObject, 0);
+      newObject->AddGameComponent(CT_HEAD_CONTROLLER, reinterpret_cast<Component>(head));
 
-        //newObject->AddGameComponent(CT_Body, body);
+      this->playerController->Active = false;
 
-        //HeadlessChickenAI * test = new HeadlessChickenAI(AI_TYPE::AI_PACE, newObject);
+      box->Initialize();
+      body->Initialize();
+      tcoll->Initialize();
+      head->Initialize();
 
-        //TileMapCollision *tcoll = new TileMapCollision(newObject, GlobalFactory->GetTileMapData());
-        //newObject->AddGameComponent(CT_TileMapCollider, tcoll);
-        //newObject->AddGameComponent(CT_HEADLESS_CHICKEN, test);
-
-        //box->Initialize();
-        //body->Initialize(); 
-        //tcoll->Initialize();
-        //test->Initialize();
-
-        //body->velocity.Set(10 * PlayerTransform->GetScale().x, 20);
+      body->velocity.Set(10 * PlayerTransform->GetScale().x, 10);
     }
 
 

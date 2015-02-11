@@ -137,3 +137,53 @@ void InputManager::StopAnyRecording()
 {
   m_Controller->StopAnyRecording();
 }
+
+bool InputManager::IsButtonDown(int Controller, int button)
+{
+  return m_Controller->ButtonDown(Controller, button);
+}
+
+bool InputManager::IsButtonPressed(int Controller, int button)
+{
+  return m_Controller->ButtonTriggered(Controller, button);
+}
+
+bool InputManager::IsButtonReleased(int Controller, int button)
+{
+  return m_Controller->ButtonReleased (Controller, button);
+}
+
+bool InputManager::isStickPressed(int Controller, int Stick)
+{
+  return m_Controller->StickTriggered(Controller, Stick);
+}
+
+bool InputManager::isStickDown(int Controller, int Stick)
+{
+  return m_Controller->StickDown(Controller, Stick);
+}
+
+bool InputManager::isStickReleased(int Controller, int Stick)
+{
+  return m_Controller->StickReleased(Controller, Stick);
+}
+
+bool InputManager::isTriggerPressed(int Controller, int trigger)
+{
+  return m_Controller->TriggerTriggered(Controller, trigger);
+}
+
+bool InputManager::isTriggerDown(int Controller, int trigger)
+{
+  return m_Controller->TriggerDown(Controller, trigger);
+}
+
+bool InputManager::isTriggerReleased(int Controller, int trigger)
+{
+  return m_Controller->TriggerReleased(Controller, trigger);
+}
+
+Vector2D  InputManager::GetStickPosition(int Controller, int Stick)
+{
+  return m_Controller->GetStickVector(Controller, Stick);
+}
