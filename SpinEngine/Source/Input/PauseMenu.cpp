@@ -77,7 +77,7 @@ void createPauseMenu()
   GameObject Button6 = GlobalFactory->CreateGameObject("PauseController", "Menu_Level1.png", Vector3D(0, 0, 0), d3dColors::White, true);
   Button6->GetTransform()->GetScale().x = 2;
   Button6->GetTransform()->GetScale().y = 2;
-  MenuButtons * MButton6 = new MenuButtons(Button6, "Level_1");
+  MenuButtons * MButton6 = new MenuButtons(Button6, "New_Wall_And_Gameplay");
   Button6->AddGameComponent(CT_MENUBUTTON, MButton6);
 
 

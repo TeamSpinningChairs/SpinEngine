@@ -75,6 +75,7 @@ enum Component_Type
   CT_LASERBEAM,
   CT_WALL_CONTROLLER,
   CT_HEADLESS_CHICKEN,
+  CT_HEAD_CONTROLLER,
   //future add
 
   //Logic or Script Components

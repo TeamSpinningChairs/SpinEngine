@@ -27,21 +27,21 @@ void HeadlessChickenAI::Update(float dt)
     break;
 
     case AI_TYPE::AI_RUN_RIGHT:
-      Owner->GetTransform()->GetPosition().x -= this->MoveSpeed * dt;
-      ChickenBody->position.x += this->MoveSpeed * dt;
+    Owner->GetTransform()->GetPosition().x -= this->MoveSpeed * dt;
+    ChickenBody->position.x += this->MoveSpeed * dt;
     break;
 
     case AI_TYPE::AI_PACE:
-      Owner->GetTransform()->GetPosition().x += (MoveModifier * MoveSpeed * dt);
-      ChickenBody->position.x += (MoveModifier * MoveSpeed * dt);
+    Owner->GetTransform()->GetPosition().x += (MoveModifier * MoveSpeed * dt);
+    ChickenBody->position.x += (MoveModifier * MoveSpeed * dt);
 
-      MoveDistance += (MoveSpeed * dt);
+    MoveDistance += (MoveSpeed * dt);
 
-      if (MoveDistance > this->MoveRange)
-      {
-        MoveDistance *= -1;
-        MoveModifier *= -1;
-      }
+    if (MoveDistance > this->MoveRange)
+    {
+      MoveDistance *= -1;
+      MoveModifier *= -1;
+    }
     break;
   }
 }
