@@ -140,6 +140,8 @@ class ZilchController : ZilchComponent
 		var trans = this.Owner.Transform.Translation;
 		//this.Owner.RigidBody.SetPosition(trans.X, trans.Y);
         Console.WriteLine(mass);
+		
+		
 	}
 	
 	function Update(dt:Real)
@@ -151,7 +153,8 @@ class ZilchController : ZilchComponent
 			//this.Owner.Transform.Translation.X += this.Speed * dt;
 			this.Owner.RigidBody.ApplyForce(Vector2D(5, 0));
 		}
-        if(ZInterface.InputManager.IsKeyDown(Keys.LEFT))
+        if(ZInterface.InputManager.IsKeyDown(Keys.LEFT) ||
+			ZInterface.InputManager.IsTriggerDown(Controller.ONE, ControllerDir.LEFT))
 		{
 			//this.Owner.Transform.Translation.X -= this.Speed * dt;
 			this.Owner.RigidBody.ApplyForce(Vector2D(-5, 0));

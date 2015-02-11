@@ -35,6 +35,24 @@ ZilchDefineType(InputManager, SpinningZilch)
 	ZilchBindMethod(IsKeyReleased);
 	ZilchBindMethod(IsAnyKeyTriggered);
 
+	ZilchBindMethod(IsButtonDown);
+	ZilchBindMethodAs(IsButtonReleased, "IsButtonReleased");
+	ZilchBindMethodAs(IsButtonPressed, "IsKeyTriggered");
+	ZilchBindMethodAs(IsButtonPressed, "IsKeyPressed");
+
+	ZilchBindMethodAs(isTriggerPressed, "IsTriggerPressed");
+	ZilchBindMethodAs(isTriggerPressed, "IsTriggerTriggered");
+	ZilchBindMethodAs(isTriggerDown, "IsTriggerDown");
+	ZilchBindMethodAs(isTriggerReleased, "IsTriggerReleased");
+
+	ZilchBindMethodAs(isStickPressed, "IsStickPressed");
+	ZilchBindMethodAs(isStickPressed, "IsStickTriggered");
+	ZilchBindMethodAs(isStickDown, "IsStickDown");
+	ZilchBindMethodAs(isStickReleased, "IsStickReleased");
+
+	ZilchBindMethod(GetStickPosition);
+
+
 }
 
 InputManager::~InputManager()

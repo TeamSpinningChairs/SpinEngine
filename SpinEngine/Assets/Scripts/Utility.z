@@ -79,13 +79,13 @@ enum Mouse
 	BUTTONX2 = 6
 }
 
-enum CONTROLLER_DIR
+enum ControllerDir
 {
     LEFT,
     RIGHT
-};
+}
 
-enum STICK
+enum Stick
 {
     TRIGGERED,
     DOWN,
@@ -93,7 +93,7 @@ enum STICK
     RELEASED
 }
 
-enum TRIGGER
+enum Trigger
 {
     TRIGGERED,
     DOWN,
@@ -101,7 +101,7 @@ enum TRIGGER
     RELEASED
 }
 
-enum BUTTONS
+enum Buttons
 {
   A,
   X,
@@ -117,6 +117,15 @@ enum BUTTONS
   DPAD_DOWN,
   LEFT_STICK,
   RIGHT_STICK
+}
+
+enum Controller
+{
+	ONE,
+	TWO,
+	THREE,
+	FOUR
+	
 }
 
 enum Eases
