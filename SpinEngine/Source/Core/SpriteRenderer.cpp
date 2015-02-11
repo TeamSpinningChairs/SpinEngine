@@ -301,15 +301,15 @@ void SpriteRenderer::UpdateTileSprite()
     //And then rotate appropriately
     if (!rightNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = -HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = -90;
     }
     else if (!leftNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (!bottomNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
     }
     else //no top neighbor
     {
@@ -330,17 +330,17 @@ void SpriteRenderer::UpdateTileSprite()
       m_spriteStates[currentStateName]->SetFrame(15);
       //Flip on a 50/50 chance=
       if (rand() % 2 == 0)
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
       else
         reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0;
     }
     else if (rightNeighbor && topNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
     }
     else if (rightNeighbor && bottomNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (bottomNeighbor && topNeighbor)
     {
@@ -348,9 +348,9 @@ void SpriteRenderer::UpdateTileSprite()
       m_spriteStates[currentStateName]->SetFrame(15);
       //rotate 90 degrees and then flip on a 50/50 chance
       if (rand() % 2 == 0)
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI + HALF_PI;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
       else
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = HALF_PI;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (bottomNeighbor && leftNeighbor)
     {
@@ -358,7 +358,7 @@ void SpriteRenderer::UpdateTileSprite()
     }
     else if (leftNeighbor && topNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI + HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
     }
 
     UpdateMatrices();
