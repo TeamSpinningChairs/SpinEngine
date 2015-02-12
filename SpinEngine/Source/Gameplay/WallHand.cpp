@@ -66,7 +66,7 @@ void WallHand::ChaseUpdate(float dt)
       ChooseTarget();
     } while (!TargetIsValid());*/
 
-    SetStartingPoint(Owner->GetTransform()->GetWorldPosition());
+    SetStartingPoint(Owner->GetTransform()->GetPosition());
 
     //Choose a random vector to extend along
     myTargetVector = GetRandomTargetVector();
@@ -95,7 +95,7 @@ void WallHand::ChaseUpdate(float dt)
 
   // check if distance from starting point is greater than max Chase range
   //float Distance = this->CalculateDistance(this->StartingPoint);
-  float Distance = myTransform->GetPosition().x - Owner->GetTransform()->GetWorldPosition().x;
+  float Distance = myTransform->GetPosition().x - Owner->GetTransform()->GetPosition().x;
   if (Distance >= MAX_DISTANCE)
   {
     myState = HST_RETURNING;
@@ -109,7 +109,7 @@ void WallHand::ChaseUpdate(float dt)
     currObjIndex = TileCheck->GetCurrentGameObjectIndex();
     TileCheck->RemoveCurrentTileFromMap();
     //THE TILE IS OURS, SIR
-    myTargetsPosition = &(myTarget->GetTransform()->GetWorldPosition());
+    myTargetsPosition = &(myTarget->GetTransform()->GetPosition());
     (*(reinterpret_cast<SpriteRenderer*>(myTarget->GetComponent(CT_SpriteRenderer)))).ToggleAsTile();
     myState = HST_RETURNING;
     isEnteringState = true;
@@ -157,7 +157,7 @@ void WallHand::ReturnUpdate(float dt)
   // check if distance from the wall if close enough set to inactive set chase target to null 
   //float ReturnDistance = CalculateDistance(Wall);
 
-  if ((myTargetsPosition != NULL) && (myTransform->GetPosition().x < Wall->GetTransform()->GetWorldPosition().x))
+  if ((myTargetsPosition != NULL) && (myTransform->GetPosition().x < Wall->GetTransform()->GetPosition().x))
   {
     //Destroy our object
     GlobalFactory->RemoveTileObject(myTarget->GetEntityId());
@@ -209,8 +209,8 @@ void WallHand::SetStartingPoint(Vector3D &startPoint)
 	StartingPoint.x = startPoint.x;
   StartingPoint.y = startPoint.y + (static_cast<float>((std::rand() % 30)) / 4.0f) * (std::rand() % 2 == 0 ? -1 : 1);
 
-  //StartingPoint.x -= Owner->GetTransform()->GetWorldPosition().x;
-  //StartingPoint.y -= Owner->GetTransform()->GetWorldPosition().y;
+  //StartingPoint.x -= Owner->GetTransform()->GetPosition().x;
+  //StartingPoint.y -= Owner->GetTransform()->GetPosition().y;
 }
 
 void WallHand::ChooseTarget()

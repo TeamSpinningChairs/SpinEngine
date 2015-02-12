@@ -28,7 +28,7 @@ ZilchDefineType(SpriteRenderer, SpinningZilch)
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindMethodAs(ZChangeState, "ChangeSprite");
 	ZilchBindMethodOverload(AddSprite, void, Sprite*);
-	ZilchBindMethod(GetWorldPosition);
+	ZilchBindMethod(GetPosition);
 
 }
 
@@ -38,8 +38,8 @@ SpriteRenderer::SpriteRenderer(IEntity* Owner, IDirect3DDevice9* device, D3DCOLO
   myPos(const_cast<Vector3D&>((*reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))).GetWorldPosition()))
 {
   Owner->SpriteRenderer = this;
-  reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldScale().x *= 1.02f;
-  reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldScale().y *= 1.04f;
+  reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetScale().x *= 1.02f;
+  reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetScale().y *= 1.04f;
 }
 
 SpriteRenderer::~SpriteRenderer()
@@ -145,7 +145,7 @@ void SpriteRenderer::ToggleAsTile()
   isStationary = !isStationary;
 }
 
-const Vector3D &SpriteRenderer::GetWorldPosition()
+const Vector3D &SpriteRenderer::GetPosition()
 {
   return myPos;
 }
@@ -154,7 +154,7 @@ void SpriteRenderer::Draw(IDirect3DVertexBuffer9** m_ppVBuffer, IDirect3DIndexBu
 {
 
   //Vector3D p = reinterpret_cast<Transform*>( 
-  //  Owner->GetComponent(CT_TransformComponent))->GetWorldPosition();
+  //  Owner->GetComponent(CT_TransformComponent))->GetPosition();
 
   m_spriteStates[currentStateName]->Draw(spriteDrawingDevice, GetWorld(), color, m_ppVBuffer, m_ppIBuffer);
 }
@@ -301,19 +301,19 @@ void SpriteRenderer::UpdateTileSprite()
     //And then rotate appropriately
     if (!rightNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = -90;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = -90;
     }
     else if (!leftNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 90;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (!bottomNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 180;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
     }
     else //no top neighbor
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 0.0f;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0.0f;
     }
     UpdateMatrices();
     return;
@@ -330,17 +330,17 @@ void SpriteRenderer::UpdateTileSprite()
       m_spriteStates[currentStateName]->SetFrame(15);
       //Flip on a 50/50 chance=
       if (rand() % 2 == 0)
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 180;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
       else
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 0;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0;
     }
     else if (rightNeighbor && topNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 180;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
     }
     else if (rightNeighbor && bottomNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 90;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (bottomNeighbor && topNeighbor)
     {
@@ -348,19 +348,18 @@ void SpriteRenderer::UpdateTileSprite()
       m_spriteStates[currentStateName]->SetFrame(15);
       //rotate 90 degrees and then flip on a 50/50 chance
       if (rand() % 2 == 0)
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 270;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
       else
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 90;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (bottomNeighbor && leftNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 0.0f;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0.0f;
     }
     else if (leftNeighbor && topNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 270;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
     }
-
     UpdateMatrices();
     return;
   }
@@ -372,19 +371,19 @@ void SpriteRenderer::UpdateTileSprite()
   m_spriteStates[currentStateName]->SetFrame((rand() % 2) + 13);
   if (rightNeighbor)
   {
-    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 90;
+    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
   }
   else if (leftNeighbor)
   {
-    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 270;
+    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
   }
   else if (topNeighbor)
   {
-    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 90;
+    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
   }
   else //bottom neighbor
   {
-    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetWorldRotation().z = 0;
+    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0;
   }
   UpdateMatrices();
   return;
@@ -414,6 +413,7 @@ void SpriteRenderer::UpdateSurroundingTileSprites()
 //we run it every frame.)
 void SpriteRenderer::UpdateMatrices()
 {
+  Owner->Transform->UpdateTransformations();
   D3DXMATRIX Scale, Rx, Ry, Rz, Translation;
   D3DXVECTOR2 scale2D, translate2D;
 

@@ -67,7 +67,7 @@ void ScrollComponent::Update(float dt)
 
     if (Scrolling == true)
     {
-        this->Owner->GetTransform()->GetWorldPosition() += (this->ScrollDirection * (this->ScrollSpeed * dt));
+        this->Owner->GetTransform()->GetPosition() += (this->ScrollDirection * (this->ScrollSpeed * dt));
     }
 }
 

@@ -649,7 +649,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       std::string scalestr;
       custom->GetStringVal(&scalestr);
       float sc = std::stof(scalestr);
-      newObject->GetTransform()->GetWorldScale() *= sc;
+      newObject->GetTransform()->GetScale() *= sc;
     }
     
     //Player (Includes input, tilemap collision, box collider, rigidbody)
@@ -807,9 +807,9 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       m_Targets.push_back(newObject);
 
         // scale the door to the correct size;
-        newObject->GetTransform()->GetWorldScale().x = 2;
-        newObject->GetTransform()->GetWorldScale().y = 5;
-        newObject->GetTransform()->GetWorldPosition().y -= 4;
+        newObject->GetTransform()->GetScale().x = 2;
+        newObject->GetTransform()->GetScale().y = 5;
+        newObject->GetTransform()->GetPosition().y -= 4;
 
         AABB *box = new AABB(newObject);
         box->SetHalfSize(2, 5);
@@ -843,9 +843,9 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
     if (properties->GetObjectMember(&custom, "HeavyDoor"))
     {
         // scale the door to the correct size;
-        newObject->GetTransform()->GetWorldScale().x = 2;
-        newObject->GetTransform()->GetWorldScale().y = 5;
-        newObject->GetTransform()->GetWorldPosition().y -= 4;
+        newObject->GetTransform()->GetScale().x = 2;
+        newObject->GetTransform()->GetScale().y = 5;
+        newObject->GetTransform()->GetPosition().y -= 4;
 
         AABB *box = new AABB(newObject);
         box->SetHalfSize(2, 5);
@@ -865,7 +865,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
         newObject->AddGameComponent(CT_SWITCH, SwitchComp);
 
         body->position.y += 5;
-        newObject->GetTransform()->GetWorldPosition().y += 5;
+        newObject->GetTransform()->GetPosition().y += 5;
     }
 
 
@@ -938,7 +938,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       newObject->AddGameComponent(CT_MENUCONTROLLER, TestMenu);
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->AddSprite(defaults.CreateSprite(16));
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->ChangeState("cursor");
-      newObject->GetTransform()->GetWorldScale() *= 1.2f;
+      newObject->GetTransform()->GetScale() *= 1.2f;
     }
                            
     if (properties->GetObjectMember(&custom, "MenuButton"))
@@ -950,7 +950,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
         MenuButtons * Testbutton = new MenuButtons(newObject, lvlname);
       newObject->AddGameComponent(CT_MENUBUTTON, Testbutton);
 
-      newObject->GetTransform()->GetWorldScale() *= 3.0f;
+      newObject->GetTransform()->GetScale() *= 3.0f;
     }
 
     if (properties->GetObjectMember(&custom, "OnCollideGoToLevel"))
@@ -1017,8 +1017,8 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       Sprite *mmb = defaults.CreateSprite(defaults.GetIDFromSpriteName("MainMenuBackground.png"));
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->AddSprite(mmb);
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->ChangeState("mainmenubg");
-      newObject->GetTransform()->GetWorldScale().x *= 2.06f; //Correct the aspect ratio
-      newObject->GetTransform()->GetWorldScale() *= 13.0f; //Scale it way up (it's a tiny rectangle)
+      newObject->GetTransform()->GetScale().x *= 2.06f; //Correct the aspect ratio
+      newObject->GetTransform()->GetScale() *= 13.0f; //Scale it way up (it's a tiny rectangle)
     }
 
     if (properties->GetObjectMember(&custom, "KillPlayer"))
@@ -1235,7 +1235,7 @@ void FactoryManager::CreatePlayer()
     for (int i = 0; i < 4; ++i)
     {
         GameObject mem_ = MemoryManager::Allocate_GameObj();
-        GameObject obj = new (mem_)IEntity(m_TotalObjectCount++, PlayerSpawn->GetTransform()->GetWorldPosition());
+        GameObject obj = new (mem_)IEntity(m_TotalObjectCount++, PlayerSpawn->GetTransform()->GetPosition());
 		obj->SetName("Player");
         m_GameObjectList.push_back(obj);
         m_CurrentObjectCount++;

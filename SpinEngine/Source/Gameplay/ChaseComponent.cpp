@@ -48,8 +48,8 @@ void ChaseComponent::Update(float dt)
 	// calculate the distance between this object and the target object
 	Vector2D Direction;
 
-	Direction.x = this->target->GetTransform()->GetWorldPosition().x - this->Owner->GetTransform()->GetWorldPosition().x;
-	Direction.y = this->target->GetTransform()->GetWorldPosition().y - this->Owner->GetTransform()->GetWorldPosition().y;
+	Direction.x = this->target->GetTransform()->GetPosition().x - this->Owner->GetTransform()->GetPosition().x;
+	Direction.y = this->target->GetTransform()->GetPosition().y - this->Owner->GetTransform()->GetPosition().y;
 	
 	// normalize the direction
 	Direction.Normalize();
@@ -57,8 +57,8 @@ void ChaseComponent::Update(float dt)
 	// if the owner of this script does not have a rigid body, translate it instead
 	if (PlayerBody == NULL)
 	{
-		this->Owner->GetTransform()->GetWorldPosition().x += Direction.x * dt;
-		this->Owner->GetTransform()->GetWorldPosition().y += Direction.y * dt;
+		this->Owner->GetTransform()->GetPosition().x += Direction.x * dt;
+		this->Owner->GetTransform()->GetPosition().y += Direction.y * dt;
 
 		return;
 	}

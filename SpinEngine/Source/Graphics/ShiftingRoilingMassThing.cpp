@@ -27,7 +27,7 @@ void ShiftingRoilingMassThing::Initialize(Vector3D *wallTransform)
 
     GameObject particleObject = GlobalFactory->CreateGameObject("RoilingParticle", "RoilingParticle.png", *wallTransform,4294967295UL,true);
     ShiftingRoilingParticle *particle = new ShiftingRoilingParticle; //reinterpret_cast<ShiftingRoilingParticle*>(MemoryManager::Allocate_Component(CT_CoolRoilingParticle));
-    particle->Initialize(&particleObject->GetTransform()->GetWorldPosition(), wallTransform);
+    particle->Initialize(&particleObject->GetTransform()->GetPosition(), wallTransform);
     particleObject->AddGameComponent(CT_CoolRoilingParticle, reinterpret_cast<Component>(particle));    
     coolRoilingParticles.push_back(particle);
   }

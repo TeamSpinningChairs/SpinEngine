@@ -107,7 +107,7 @@ IEntity *FactoryAccess::CreateGameObject(std::string name, std::string spritenam
   if (is_UI)
   {
     factory_.m_pGraphicsManager->AddUISpriteRend(spRend);
-    obj->GetTransform()->GetWorldPosition().z = -9.f; //Everything below 0 is "in front" of everything above 0
+    obj->GetTransform()->GetPosition().z = -9.f; //Everything below 0 is "in front" of everything above 0
   }
   else
     factory_.m_pGraphicsManager->AddSpriteRend(spRend); 
@@ -162,8 +162,8 @@ GameObject FactoryAccess::CheckTargets(Vector3D TargetPoint)
       continue;
     }
 
-    float X1 = factory_.m_Targets[i]->GetTransform()->GetWorldPosition().x;
-    float Y1 = factory_.m_Targets[i]->GetTransform()->GetWorldPosition().y;
+    float X1 = factory_.m_Targets[i]->GetTransform()->GetPosition().x;
+    float Y1 = factory_.m_Targets[i]->GetTransform()->GetPosition().y;
 
     float X2 = TargetPoint.x;
     float Y2 = TargetPoint.y;

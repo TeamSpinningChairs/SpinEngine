@@ -109,7 +109,7 @@ bool WallComp::Initialize()
 {
 
   //Create all of the shifting roiling particle things
-  //particleSwarm.Initialize(&parent->GetTransform()->GetWorldPosition());
+  //particleSwarm.Initialize(&parent->GetTransform()->GetPosition());
 
 
 
@@ -117,7 +117,7 @@ bool WallComp::Initialize()
   /*
 	for (int i = 0; i < HANDCOUNT; i++)
 	{
-		GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw.png", this->Owner->GetTransform()->GetWorldPosition());
+		GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw.png", this->Owner->GetTransform()->GetPosition());
 
 		WallHand * TempHand = new WallHand(hand, this->Owner, i, activeTargets);
 		
@@ -130,17 +130,17 @@ bool WallComp::Initialize()
 		hand->AddGameComponent(CT_TileMapDetector, TileCheck);
 
 		//Have their starting position be somewhere along the y-axis near the wall's center. Anywhere from -3 to +3
-		hand->GetTransform()->GetWorldPosition().y += (static_cast<float>((std::rand() % 30)) / 4.0f) * (std::rand() % 2 == 0 ? -1 : 1);
-		hand->GetTransform()->GetWorldPosition().y += 3.5f;
+		hand->GetTransform()->GetPosition().y += (static_cast<float>((std::rand() % 30)) / 4.0f) * (std::rand() % 2 == 0 ? -1 : 1);
+		hand->GetTransform()->GetPosition().y += 3.5f;
 	}
   */
 
 	// fill in the array for dynamic hands, that will target the player, or platforms, or in a random direction;
 	for (int i = 0; i < DYNAMIC_HANDCOUNT + RESERVED_HANDS; i++)
 	{
-		//GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw.png", this->Owner->GetTransform()->GetWorldPosition());
+		//GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw.png", this->Owner->GetTransform()->GetPosition());
 
-		GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw-Open.png", this->Owner->GetTransform()->GetWorldPosition());
+		GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw-Open.png", this->Owner->GetTransform()->GetPosition());
 
 		SpriteRend Handrend = reinterpret_cast<SpriteRend>(hand->GetComponent(CT_SpriteRenderer));
     //Handrend->GetSpriteColor() = d3dColors::Red;
@@ -173,23 +173,23 @@ bool WallComp::Initialize()
   // create the wall image behind the wall
   
   
-  WallImage = GlobalFactory->CreateGameObject("WallImage", "SCBody.png", Owner->GetTransform()->GetWorldPosition(), d3dColors::White, true);
-  WallImage2 = GlobalFactory->CreateGameObject("WallImage", "SCPrison.png", Owner->GetTransform()->GetWorldPosition(), d3dColors::White, true);
+  WallImage = GlobalFactory->CreateGameObject("WallImage", "SCBody.png", Owner->GetTransform()->GetPosition(), d3dColors::White, true);
+  WallImage2 = GlobalFactory->CreateGameObject("WallImage", "SCPrison.png", Owner->GetTransform()->GetPosition(), d3dColors::White, true);
 
-  WallImage->GetTransform()->GetWorldScale().x = 8.5;//16;// 15;
-  WallImage->GetTransform()->GetWorldScale().y = 7.5;//400;// 15;
+  WallImage->GetTransform()->GetScale().x = 8.5;//16;// 15;
+  WallImage->GetTransform()->GetScale().y = 7.5;//400;// 15;
 
-  WallImage2->GetTransform()->GetWorldScale().x = 8.5;//16;// 15;
-  WallImage2->GetTransform()->GetWorldScale().y = 7.5;//400;// 15;
+  WallImage2->GetTransform()->GetScale().x = 8.5;//16;// 15;
+  WallImage2->GetTransform()->GetScale().y = 7.5;//400;// 15;
 
-  //WallImage->GetTransform()->GetWorldPosition().x -= 15.0f;
+  //WallImage->GetTransform()->GetPosition().x -= 15.0f;
   //WallImage->SetInVisible();
 
   Owner->SetInVisible();
 
 	//this->WallActive = true;
-	this->Position.x = this->Owner->GetTransform()->GetWorldPosition().x;
-	this->Position.y = this->Owner->GetTransform()->GetWorldPosition().y;
+	this->Position.x = this->Owner->GetTransform()->GetPosition().x;
+	this->Position.y = this->Owner->GetTransform()->GetPosition().y;
 
   Player = ENGINE->m_Factory->FindObjectByName("MainPlayer");
 
@@ -296,24 +296,24 @@ void WallComp::Update(float dt)
 
   if(this->Player != NULL)
   {
-    float distance = this->Player->GetTransform()->GetWorldPosition().x - this->Owner->GetTransform()->GetWorldPosition().x; 
+    float distance = this->Player->GetTransform()->GetPosition().x - this->Owner->GetTransform()->GetPosition().x; 
 
     float SpeedScalar = distance * .070;
 
-    this->Owner->GetTransform()->GetWorldPosition().x += (*moveSpeed + SpeedScalar) * dt;
-    WallImage->GetTransform()->GetWorldPosition() = this->Owner->GetTransform()->GetWorldPosition() - Vector3D(1.5,0,0);
-    WallImage2->GetTransform()->GetWorldPosition() = this->Owner->GetTransform()->GetWorldPosition() - Vector3D(1.5, 0, 0);
+    this->Owner->GetTransform()->GetPosition().x += (*moveSpeed + SpeedScalar) * dt;
+    WallImage->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(1.5,0,0);
+    WallImage2->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(1.5, 0, 0);
     //Keep both wall images in front of the world and claw/segment sprites, but just behind the actual UI sprites
-    WallImage->GetTransform()->GetWorldPosition().z = -8.f;
-    WallImage2->GetTransform()->GetWorldPosition().z = -8.f;
+    WallImage->GetTransform()->GetPosition().z = -8.f;
+    WallImage2->GetTransform()->GetPosition().z = -8.f;
 
     //@follow player on y-axis
-    this->Owner->GetTransform()->GetWorldPosition().y = Player->GetTransform()->GetWorldPosition().y;
+    this->Owner->GetTransform()->GetPosition().y = Player->GetTransform()->GetPosition().y;
   }
   else
   {
-    this->Owner->GetTransform()->GetWorldPosition().x += *moveSpeed * dt;
-    WallImage->GetTransform()->GetWorldPosition().x += *moveSpeed *dt;
+    this->Owner->GetTransform()->GetPosition().x += *moveSpeed * dt;
+    WallImage->GetTransform()->GetPosition().x += *moveSpeed *dt;
 
     this->Player = ENGINE->m_Factory->FindObjectByName("MainPlayer");
   }
@@ -466,8 +466,8 @@ Vector3D WallComp::ChooseRandomDirection(void)
 	float test3 = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
 	float test4 = YLO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (YHI - YLO)));
 
-	RandDir.x = (test3 + Owner->GetTransform()->GetWorldPosition().x);
-	RandDir.y = (test4 + Owner->GetTransform()->GetWorldPosition().y);
+	RandDir.x = (test3 + Owner->GetTransform()->GetPosition().x);
+	RandDir.y = (test4 + Owner->GetTransform()->GetPosition().y);
 	RandDir.z = 0;
 
 	return RandDir;

@@ -32,6 +32,9 @@ Transform::Transform(IEntity* Owner, Vector3D pos, Vector3D rot, Vector3D scal) 
                    IComponent(Component_Type::CT_TransformComponent, Owner, "Transform"), localPosition(pos),
                    localRotation(rot), localScale(scal)
 {
+	//position = pos;
+	//rotation = rot;
+	//scale = scal;
 	Owner->Transform = this;
 }
 
@@ -40,6 +43,14 @@ Transform::~Transform()
 }
 
 bool Transform::Initialize()
+{
+  UpdateTransformations();
+	
+  return true;
+}
+
+//Use if you need the transformations to be updated IMMEDIATELY and not at the start of the next frame.
+void Transform::UpdateTransformations()
 {
 	if (Owner->Parent != nullptr)
 	{
@@ -54,24 +65,10 @@ bool Transform::Initialize()
 		rotation = localRotation;
 		scale = localScale;
 	}
-	
-  return true;
 }
 
 void Transform::Update(float dt)
 {
-	if (Owner->Parent != nullptr)
-	{
-		UpdatePosition(Owner->Parent->Transform);
-		UpdateRotation(Owner->Parent->Transform);
-		UpdateScale(Owner->Parent->Transform);
-	}
-	else
-	{
-		position = localPosition;
-		rotation = localRotation;
-		scale = localScale;
-	}
 
 }
 
@@ -210,7 +207,7 @@ void Transform::SetScale(const Vector2D scal)
 
 void Transform::UpdatePosition(Transform* trans)
 {
-	if (Owner->InheritPosition)
+	if (Owner->InheritPosition && Owner->Parent != nullptr)
 	{
 		Vector3D positionAdd = trans->GetWorldPosition();
 		float parentAngle = trans->GetWorldRotation().z;
@@ -243,7 +240,7 @@ void Transform::UpdatePosition(Transform* trans)
 }
 void Transform::UpdateScale(Transform* trans)
 {
-	if (Owner->InheritScale)
+	if (Owner->InheritScale  && Owner->Parent != nullptr)
 	{
 		Vector3D parentScale = trans->GetWorldScale();
 		scale.x = localScale.x * parentScale.x;
@@ -258,7 +255,7 @@ void Transform::UpdateScale(Transform* trans)
 }
 void Transform::UpdateRotation(Transform* trans)
 {
-	if (Owner->InheritRotation)
+	if (Owner->InheritRotation  && Owner->Parent != nullptr)
 	{
 		rotation = localRotation + trans->GetWorldRotation();
 	}

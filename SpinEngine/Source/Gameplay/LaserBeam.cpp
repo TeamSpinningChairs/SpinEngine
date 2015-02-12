@@ -19,7 +19,7 @@ myPlayer(player), myParent(parent), flightTimer(0), flying(false), flySpeed(spee
 bool LaserBeam::Initialize()
 {
   InitializeCollisionCallback();
-  hidePosition = myParent->GetTransform()->GetWorldPosition();
+  hidePosition = myParent->GetTransform()->GetPosition();
 
   tileMapDetection = reinterpret_cast<TileMapDetection*>(myParent->GetComponent(CT_TileMapDetector));
   rigid = reinterpret_cast<RigidBody*>(myParent->GetComponent(CT_Body));
@@ -59,7 +59,7 @@ void LaserBeam::Release()
 
 }
 
-//Set us active, initialize any variables correctlyGetTransform()->GetWorldPosition()
+//Set us active, initialize any variables correctlyGetTransform()->GetPosition()
 //Theta is our intended rotation in radians
 void LaserBeam::Launch(Vector3D pos, float theta, Vector2D velocity)
 {
@@ -67,11 +67,11 @@ void LaserBeam::Launch(Vector3D pos, float theta, Vector2D velocity)
  rigid->SetActive(true);
 
   //Set our position and rotation in preparation for launch
-  myParent->GetTransform()->GetWorldPosition() = pos;
+  myParent->GetTransform()->GetPosition() = pos;
   rigid->position.x = pos.x;
   rigid->position.y = pos.y;
 
-  myParent->GetTransform()->GetWorldRotation().z = theta;
+  myParent->GetTransform()->GetRotation().z = theta;
 
   rigid->setVelocity(velocity);
 }
@@ -94,7 +94,7 @@ void LaserBeam::OnCollision(GameObject collObj)
 //Reset any variables we have, go back to the hidden position, and return ourselves to the array of accessible lasers
 void LaserBeam::HideAndReturn()
 {
-  myParent->GetTransform()->GetWorldPosition() = hidePosition;
+  myParent->GetTransform()->GetPosition() = hidePosition;
   rigid->position = Vector2D(hidePosition.x,hidePosition.y);
   flying = false;
   flightTimer = 0;

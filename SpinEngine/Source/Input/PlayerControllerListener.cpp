@@ -205,7 +205,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
   case BUTTONS_X:
       if (GivenInput->KeyPressed)
       {
-          GlobalSystem->SendActivate(this->player->GetTransform()->GetWorldPosition());
+          GlobalSystem->SendActivate(this->player->GetTransform()->GetPosition());
       }
 
 		break;
@@ -239,7 +239,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
   }
 
   case BUTTONS_LEFT_SHOULDER:
-      //this->ParentObject->GetTransform()->GetWorldRotation().z += 2 * GivenInput->time;
+      //this->ParentObject->GetTransform()->GetRotation().z += 2 * GivenInput->time;
     break;
     
   case BUTTONS_BACK:
@@ -367,12 +367,12 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
 
     
   case DPAD_UP:
-    //this->ParentObject->GetTransform()->GetWorldPosition().y += 15 * GivenInput->time;
+    //this->ParentObject->GetTransform()->GetPosition().y += 15 * GivenInput->time;
     break;
     
   case DPAD_DOWN:
 		//PlayerBody->velocity.y -= 2.5f * GivenInput->time;
-    //this->ParentObject->GetTransform()->GetWorldPosition().y -= 15 * GivenInput->time;
+    //this->ParentObject->GetTransform()->GetPosition().y -= 15 * GivenInput->time;
     break;
     
   case LEFT_STICK:

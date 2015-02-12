@@ -23,8 +23,8 @@ CreditsDisplay::CreditsDisplay(GameObject Parent) : IComponent(Component_Type::C
 {
   Timer = 0.0f;
   CreditsScreenObj = GlobalFactory->CreateGameObject("credits", "Menu_Credits.png", Vector3D(0, 0, 0));
-  CreditsScreenObj->GetTransform()->GetWorldScale().x *= 18;
-  CreditsScreenObj->GetTransform()->GetWorldScale().y *= 30;
+  CreditsScreenObj->GetTransform()->GetScale().x *= 18;
+  CreditsScreenObj->GetTransform()->GetScale().y *= 30;
 
   CameraObject = GlobalFactory->CreateGameObject("credits", "Menu_Credits.png", Vector3D(0, 16, 0));
   CameraObject->SetInVisible();
