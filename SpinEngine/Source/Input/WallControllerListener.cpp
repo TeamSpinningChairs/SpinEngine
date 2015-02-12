@@ -87,11 +87,11 @@ void WallControllerListener::OnMessageRecieved(Message * SentMessage)
     if ((GivenInput->LeftStickState == STICK_TRIGGERED || GivenInput->LeftStickState == STICK_DOWN))
     {
 		  //PlayerBody->getPosition() += (Vector2D(GivenInput->leftStick.first, GivenInput->leftStick.second) * 5);
-		  this->player->GetTransform()->GetWorldPosition() += (Vector3D(GivenInput->leftStick.first, GivenInput->leftStick.second, 0) * (8 * GivenInput->time));
+		  this->player->GetTransform()->GetPosition() += (Vector3D(GivenInput->leftStick.first, GivenInput->leftStick.second, 0) * (8 * GivenInput->time));
     
       if (GivenInput->RightTriggerState == TRIGGER_TRIGGERED  && *ControlType == 0)
       {
-        Vector3D Target = (player->GetTransform()->GetWorldPosition() + (Vector3D(GivenInput->leftStick.first, GivenInput->leftStick.second, 0) * 20));
+        Vector3D Target = (player->GetTransform()->GetPosition() + (Vector3D(GivenInput->leftStick.first, GivenInput->leftStick.second, 0) * 20));
 
         WallControl->LaunchTentacle(Target);
       }    
@@ -99,7 +99,7 @@ void WallControllerListener::OnMessageRecieved(Message * SentMessage)
 
     else if ((GivenInput->LeftStickState == STICK_NEUTRAL && GivenInput->RightTriggerState == TRIGGER_TRIGGERED) && *ControlType == 0)
     {
-      Vector3D Target = (player->GetTransform()->GetWorldPosition() + Vector3D(20, 0, 0));
+      Vector3D Target = (player->GetTransform()->GetPosition() + Vector3D(20, 0, 0));
 
       WallControl->LaunchTentacle(Target);
     }
@@ -107,7 +107,7 @@ void WallControllerListener::OnMessageRecieved(Message * SentMessage)
     // Novelty Fire all at once with right stick
     if ((GivenInput->RightStickState == STICK_TRIGGERED || GivenInput->RightStickState == STICK_DOWN) && *ControlType == 1)
     {
-      Vector3D Target = (player->GetTransform()->GetWorldPosition() + (Vector3D(GivenInput->rightStick.first, GivenInput->rightStick.second, 0).Normalize() * 20));
+      Vector3D Target = (player->GetTransform()->GetPosition() + (Vector3D(GivenInput->rightStick.first, GivenInput->rightStick.second, 0).Normalize() * 20));
 
       WallControl->LaunchTentacle(Target);
     }
@@ -115,14 +115,14 @@ void WallControllerListener::OnMessageRecieved(Message * SentMessage)
     // Aim with left stick, fire with right trigger
     if ((GivenInput->RightStickState == STICK_DOWN && GivenInput->RightTriggerState == TRIGGER_TRIGGERED) && *ControlType == 2)
     {
-      Vector3D Target = (player->GetTransform()->GetWorldPosition() + (Vector3D(GivenInput->rightStick.first, GivenInput->rightStick.second, 0).Normalize() * 20));
+      Vector3D Target = (player->GetTransform()->GetPosition() + (Vector3D(GivenInput->rightStick.first, GivenInput->rightStick.second, 0).Normalize() * 20));
 
       WallControl->LaunchTentacle(Target);
     }
     
     else if ((GivenInput->RightStickState == STICK_NEUTRAL && GivenInput->RightTriggerState == TRIGGER_TRIGGERED) && *ControlType == 2)
     {
-      Vector3D Target = (player->GetTransform()->GetWorldPosition() + Vector3D(20,0,0));
+      Vector3D Target = (player->GetTransform()->GetPosition() + Vector3D(20,0,0));
 
       WallControl->LaunchTentacle(Target);
     }
@@ -130,7 +130,7 @@ void WallControllerListener::OnMessageRecieved(Message * SentMessage)
     // fire with flick left stick
 	  if (GivenInput->RightStickState == STICK_TRIGGERED && *ControlType == 3)
     {
-      Vector3D Target = (player->GetTransform()->GetWorldPosition() + (Vector3D(GivenInput->rightStick.first, GivenInput->rightStick.second, 0).Normalize() * 20));
+      Vector3D Target = (player->GetTransform()->GetPosition() + (Vector3D(GivenInput->rightStick.first, GivenInput->rightStick.second, 0).Normalize() * 20));
 
       WallControl->LaunchTentacle(Target);
     }

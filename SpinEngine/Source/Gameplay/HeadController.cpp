@@ -24,7 +24,7 @@ void HeadController::Update(float dt)
 {
   //if (ENGINE->m_Input->IsButtonDown(ControllerNumber, BUTTONS::DPAD_RIGHT))
   //{
-  //  this->Owner->GetTransform()->GetWorldRotation().z += 1.25 * dt;
+  //  this->Owner->GetTransform()->GetRotation().z += 1.25 * dt;
   //}
 
 

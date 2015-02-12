@@ -30,7 +30,7 @@ bool DestroyOnWall::Initialize()
 void DestroyOnWall::Update(float dt)
 {
 	// destroy self when behind the wall
-	if (Owner->GetTransform()->GetWorldPosition().x <= DeathWall->GetTransform()->GetWorldPosition().x)
+	if (Owner->GetTransform()->GetPosition().x <= DeathWall->GetTransform()->GetPosition().x)
 	{
     reinterpret_cast<PlayerController*>(Owner->GetComponent(CT_Player_Controller))->KillPlayer();
      //Henrykillplayerfunction();

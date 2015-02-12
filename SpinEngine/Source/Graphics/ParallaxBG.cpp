@@ -22,7 +22,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "Settings.h"
 
 ParallaxBG::ParallaxBG(GameObject parent) : parent_(parent), pos_(*parent->GetTransform()),
-IComponent(CT_ParallaxBG, parent), prevXPos_(parent->GetTransform()->GetWorldPosition().x)
+IComponent(CT_ParallaxBG, parent), prevXPos_(parent->GetTransform()->GetPosition().x)
 {
   float *temp = NULL;
   GlobalSettings->GetFloatValue("___ BACKGROUND SETTINGS ___", temp, false);
@@ -73,21 +73,21 @@ IComponent(CT_ParallaxBG, parent), prevXPos_(parent->GetTransform()->GetWorldPos
 
   mem_ = MemoryManager::Allocate_GameObj();
   fore2 = new (mem_) IEntity(0U, pos_.GetPosition(), Vector3D(), Vector3D(32.0f, 40.0f, 1.0f));
-  fore2->GetTransform()->GetWorldPosition().x += 64.0f;
+  fore2->GetTransform()->GetPosition().x += 64.0f;
 
   mem_ = MemoryManager::Allocate_GameObj();
   mid1 = new (mem_) IEntity(0U, pos_.GetPosition(), Vector3D(), Vector3D(32.0f, 40.0f, 1.0f));
   
   mem_ = MemoryManager::Allocate_GameObj();
   mid2 = new (mem_) IEntity(0U, pos_.GetPosition(), Vector3D(), Vector3D(32.0f, 40.0f, 1.0f));
-  mid2->GetTransform()->GetWorldPosition().x += 64.0f;
+  mid2->GetTransform()->GetPosition().x += 64.0f;
 
   mem_ = MemoryManager::Allocate_GameObj();
   back1 = new (mem_) IEntity(0U, pos_.GetPosition(), Vector3D(), Vector3D(32.0f, 40.0f, 1.0f));
   
   mem_ = MemoryManager::Allocate_GameObj();
   back2 = new (mem_) IEntity(0U, pos_.GetPosition(), Vector3D(), Vector3D(32.0f, 40.0f, 1.0f));
-  back2->GetTransform()->GetWorldPosition().x += 64.0f;
+  back2->GetTransform()->GetPosition().x += 64.0f;
 
   //Create all six sprite renderers (two copies of each)
   sp_back1 = new SpriteRenderer(back1, GlobalFactory->GetDevice(), d3dColors::White, "idle");
@@ -171,20 +171,20 @@ ParallaxBG::~ParallaxBG()
 
 bool ParallaxBG::Initialize()
 {
-  //fore1->GetTransform()->GetWorldPosition().x = fore1->GetTransform()->GetWorldPosition().x + (horizDiff * (*foregroundSpeed_));
-  fore1->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f; //magic number for our prototype resolution, make it account for resolution later
-  //fore2->GetTransform()->GetWorldPosition().x = fore2->GetTransform()->GetWorldPosition().x + (horizDiff * (*foregroundSpeed_));
-  fore2->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
+  //fore1->GetTransform()->GetPosition().x = fore1->GetTransform()->GetPosition().x + (horizDiff * (*foregroundSpeed_));
+  fore1->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f; //magic number for our prototype resolution, make it account for resolution later
+  //fore2->GetTransform()->GetPosition().x = fore2->GetTransform()->GetPosition().x + (horizDiff * (*foregroundSpeed_));
+  fore2->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
 
- // mid1->GetTransform()->GetWorldPosition().x = mid1->GetTransform()->GetWorldPosition().x + (horizDiff * (*midgroundSpeed_));
-  mid1->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
- // mid2->GetTransform()->GetWorldPosition().x = mid2->GetTransform()->GetWorldPosition().x + (horizDiff * (*midgroundSpeed_));
-  mid2->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
+ // mid1->GetTransform()->GetPosition().x = mid1->GetTransform()->GetPosition().x + (horizDiff * (*midgroundSpeed_));
+  mid1->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
+ // mid2->GetTransform()->GetPosition().x = mid2->GetTransform()->GetPosition().x + (horizDiff * (*midgroundSpeed_));
+  mid2->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
 
- // back1->GetTransform()->GetWorldPosition().x = back1->GetTransform()->GetWorldPosition().x + (horizDiff * (*backgroundSpeed_));
-  back1->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 12.5f;
- // back2->GetTransform()->GetWorldPosition().x = back2->GetTransform()->GetWorldPosition().x + (horizDiff * (*backgroundSpeed_));
-  back2->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 12.5f;
+ // back1->GetTransform()->GetPosition().x = back1->GetTransform()->GetPosition().x + (horizDiff * (*backgroundSpeed_));
+  back1->GetTransform()->GetPosition().y = pos_.GetPosition().y + 12.5f;
+ // back2->GetTransform()->GetPosition().x = back2->GetTransform()->GetPosition().x + (horizDiff * (*backgroundSpeed_));
+  back2->GetTransform()->GetPosition().y = pos_.GetPosition().y + 12.5f;
   return true;
 }
 
@@ -205,31 +205,31 @@ void ParallaxBG::Update(float dt)
 
   //Here: Instead of separate velocities, multiply the position of each by the one before. I.E. mid goes half the distance of fore, and back goes 1/8 the distance of mid.
   //Calculate distance between last and current position for the foreground, work with that.
-  //float prevLayerStartPos = fore1->GetTransform()->GetWorldPosition().x; //1 is the layer prior to 2, and 2 is the layer prior to 3
+  //float prevLayerStartPos = fore1->GetTransform()->GetPosition().x; //1 is the layer prior to 2, and 2 is the layer prior to 3
 
-  //fore1->GetTransform()->GetWorldPosition().x = fore1->GetTransform()->GetWorldPosition().x + (horizDiff * (*foregroundSpeed_));
-  //fore1->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f; //magic number for our prototype resolution, make it account for resolution later
-  //fore2->GetTransform()->GetWorldPosition().x = fore2->GetTransform()->GetWorldPosition().x + (horizDiff * (*foregroundSpeed_));
- // fore2->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
+  //fore1->GetTransform()->GetPosition().x = fore1->GetTransform()->GetPosition().x + (horizDiff * (*foregroundSpeed_));
+  //fore1->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f; //magic number for our prototype resolution, make it account for resolution later
+  //fore2->GetTransform()->GetPosition().x = fore2->GetTransform()->GetPosition().x + (horizDiff * (*foregroundSpeed_));
+ // fore2->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
 
-  //horizDiff = fore1->GetTransform()->GetWorldPosition().x - prevLayerStartPos;
-  //float prevLayerStartPos = mid1->GetTransform()->GetWorldPosition().x;
+  //horizDiff = fore1->GetTransform()->GetPosition().x - prevLayerStartPos;
+  //float prevLayerStartPos = mid1->GetTransform()->GetPosition().x;
 
   //We subtract the value of (horizDiff * midgroundSpeed) because our "parallaxing" on the front layer is just holding it still.
   //horizDiff is a negative number, so instead of making the background scroll more slowly towards us, we actually
   //push it away slightly.
   //This won't work if you want the camera tied to the player(s)
-  mid1->GetTransform()->GetWorldPosition().x = mid1->GetTransform()->GetWorldPosition().x - (horizDiff * (*midgroundSpeed_)); 
-  //mid1->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
-  mid2->GetTransform()->GetWorldPosition().x = mid2->GetTransform()->GetWorldPosition().x - (horizDiff * (*midgroundSpeed_));
-  //mid2->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
+  mid1->GetTransform()->GetPosition().x = mid1->GetTransform()->GetPosition().x - (horizDiff * (*midgroundSpeed_)); 
+  //mid1->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
+  mid2->GetTransform()->GetPosition().x = mid2->GetTransform()->GetPosition().x - (horizDiff * (*midgroundSpeed_));
+  //mid2->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
 
-  //horizDiff = mid1->GetTransform()->GetWorldPosition().x - prevLayerStartPos;
+  //horizDiff = mid1->GetTransform()->GetPosition().x - prevLayerStartPos;
   
-  back1->GetTransform()->GetWorldPosition().x = back1->GetTransform()->GetWorldPosition().x - (horizDiff * (*backgroundSpeed_));
- // back1->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
-  back2->GetTransform()->GetWorldPosition().x = back2->GetTransform()->GetWorldPosition().x - (horizDiff * (*backgroundSpeed_));
-  //back2->GetTransform()->GetWorldPosition().y = pos_.GetPosition().y + 16.5f;
+  back1->GetTransform()->GetPosition().x = back1->GetTransform()->GetPosition().x - (horizDiff * (*backgroundSpeed_));
+ // back1->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
+  back2->GetTransform()->GetPosition().x = back2->GetTransform()->GetPosition().x - (horizDiff * (*backgroundSpeed_));
+  //back2->GetTransform()->GetPosition().y = pos_.GetPosition().y + 16.5f;
   
 
   prevXPos_ = pos_.GetPosition().x;
@@ -243,8 +243,8 @@ void ParallaxBG::Release()
 void ParallaxBG::CheckForWrap(GameObject bg)
 {
   //Coordinates of camera are at bottom-left of the screen.
-  if (pos_.GetPosition().x - bg->GetTransform()->GetWorldPosition().x > 66.0f) //Background is out of sight by 2 tiles
-    bg->GetTransform()->GetWorldPosition().x += 128.0f;
-  else if (pos_.GetPosition().x - bg->GetTransform()->GetWorldPosition().x < -66.0f)
-      bg->GetTransform()->GetWorldPosition().x -= 128.0f;
+  if (pos_.GetPosition().x - bg->GetTransform()->GetPosition().x > 66.0f) //Background is out of sight by 2 tiles
+    bg->GetTransform()->GetPosition().x += 128.0f;
+  else if (pos_.GetPosition().x - bg->GetTransform()->GetPosition().x < -66.0f)
+      bg->GetTransform()->GetPosition().x -= 128.0f;
 }

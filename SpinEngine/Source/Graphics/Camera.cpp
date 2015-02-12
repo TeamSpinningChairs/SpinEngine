@@ -46,11 +46,11 @@ width(800), height(600), background_color(d3dColors::Black), followingWall(false
 {
   if (Owner)
   {
-    position.x = Owner->GetTransform()->GetWorldPosition().x;
-    position.y = Owner->GetTransform()->GetWorldPosition().y - 4.0f;
-    position.z = Owner->GetTransform()->GetWorldPosition().z - PERSPECTIVE_CAMERA_DISTANCE; //28 is close on the x-axis
+    position.x = Owner->GetTransform()->GetPosition().x;
+    position.y = Owner->GetTransform()->GetPosition().y - 4.0f;
+    position.z = Owner->GetTransform()->GetPosition().z - PERSPECTIVE_CAMERA_DISTANCE; //28 is close on the x-axis
 
-    rotation = Owner->GetTransform()->GetWorldRotation();
+    rotation = Owner->GetTransform()->GetRotation();
   }
 
   for (int i = 0; i < 4; ++i)
@@ -103,10 +103,10 @@ void Camera::GetViewMatrix(D3DXMATRIX& viewMatrix)
   //If the camera has an owner then follow it on X and Y
   if (Owner)
   {
-    position.x = Owner->GetTransform()->GetWorldPosition().x;
-    //position.y = Owner->GetTransform()->GetWorldPosition().y;
+    position.x = Owner->GetTransform()->GetPosition().x;
+    //position.y = Owner->GetTransform()->GetPosition().y;
     //AlignToNearestPixel();
-    rotation = Owner->GetTransform()->GetWorldRotation();
+    rotation = Owner->GetTransform()->GetRotation();
 
     if (followingWall)
     {
@@ -292,8 +292,8 @@ void Camera::WallCameraMovement()
     if (playerPositions[i] == nullptr)
       continue;
 
-    if (playerPositions[i]->GetWorldPosition().x - position.x > longestDistanceToPlayer)
-      longestDistanceToPlayer = playerPositions[i]->GetWorldPosition().x - position.x;
+    if (playerPositions[i]->GetPosition().x - position.x > longestDistanceToPlayer)
+      longestDistanceToPlayer = playerPositions[i]->GetPosition().x - position.x;
   }
 
   //Adjust zoom based on player distance

@@ -19,7 +19,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "TileMapData.h"
 
 TileMapDetection::TileMapDetection(IEntity *owner, TileMapData &tilemap, GameObjectUmap &objects) :
-tilemap_(tilemap), pos_(owner->GetTransform()->GetWorldPosition()), gameObjects_(objects), lastTileID(0), lastTileIndex(0),
+tilemap_(tilemap), pos_(owner->GetTransform()->GetPosition()), gameObjects_(objects), lastTileID(0), lastTileIndex(0),
 lastObjectIndex(0), IComponent(Component_Type::CT_TileMapDetector, Owner)
 {
 

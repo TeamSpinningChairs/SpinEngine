@@ -2,7 +2,7 @@
 #include "FlashAnimator.h"
 
 FlashAnimator::FlashAnimator(GameObject parent, GameObject anchor, std::string animationname) : IComponent(CT_CoolRoilingParticle, parent),
-anchorPos(&anchor->GetTransform()->GetWorldPosition()), myPos(&parent->GetTransform()->GetWorldPosition())
+anchorPos(&anchor->GetTransform()->GetPosition()), myPos(&parent->GetTransform()->GetPosition())
 {
   //Get our animation info from ObjectData (also have ObjectData load and parse the animation data into an easily readable form)
 }

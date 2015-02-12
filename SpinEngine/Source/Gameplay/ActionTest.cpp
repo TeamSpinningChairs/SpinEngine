@@ -12,8 +12,8 @@ ActionTest::ActionTest(IEntity * Parent) : IComponent(Component_Type::CT_ACTIONT
 bool ActionTest::Initialize()
 {
 	
-	val = Owner->GetTransform()->GetWorldPosition();
-	val2 = Owner->GetTransform()->GetWorldScale();
+	val = Owner->GetTransform()->GetPosition();
+	val2 = Owner->GetTransform()->GetScale();
 	
 	Vector3D endval = Vector3D(val.x - 6, val.y + 5, val.z);
 	Vector3D endval2 = Vector3D(val.x - 4, val.y - 3 , val.z);

@@ -33,7 +33,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #define HOPPABLE_PLATFORM 9
 
 TileMapCollision::TileMapCollision(IEntity *owner, TileMapData &tilemap) :
-IComponent(Component_Type::CT_TileMapCollider, owner), pos_(owner->GetTransform()->GetWorldPosition()), tilemap_(&tilemap),
+IComponent(Component_Type::CT_TileMapCollider, owner), pos_(owner->GetTransform()->GetPosition()), tilemap_(&tilemap),
 rigid_(*reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))),
 vel_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->velocity),
 acc_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->acceleration),
@@ -46,7 +46,7 @@ transform_(*reinterpret_cast<Transform *>(owner->GetComponent(CT_TransformCompon
 }
 
 TileMapCollision::TileMapCollision(IEntity *owner) :
-IComponent(Component_Type::CT_TileMapCollider, owner), pos_(owner->GetTransform()->GetWorldPosition()), tilemap_(nullptr),
+IComponent(Component_Type::CT_TileMapCollider, owner), pos_(owner->GetTransform()->GetPosition()), tilemap_(nullptr),
 rigid_(*reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))),
 vel_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->velocity),
 acc_(reinterpret_cast<RigidBody *>(owner->GetComponent(CT_Body))->acceleration),

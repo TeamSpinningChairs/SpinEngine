@@ -27,10 +27,10 @@ ExtendBlock::ExtendBlock(GameObject Parent) : IComponent(Component_Type::CT_EXTE
     for (int i = 0; i < SPAWN_TOTAL; ++i)
     {
         CreateDirections[i] = false;
-        CurrentBlockPosition[i] = this->Owner->GetTransform()->GetWorldPosition();
+        CurrentBlockPosition[i] = this->Owner->GetTransform()->GetPosition();
 
         //CreateDirections.push_back(false);
-        //CurrentBlockPosition.push_back(this->Owner->GetTransform()->GetWorldPosition());
+        //CurrentBlockPosition.push_back(this->Owner->GetTransform()->GetPosition());
     }
 
     CreateTimer = 0.25f;
