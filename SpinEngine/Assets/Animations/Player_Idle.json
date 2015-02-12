@@ -1,5 +1,5 @@
 {
-  	"statename": "idle"
+	"statename": "idle"
   "texturepath": "Assets\Textures\Player_Idle.png"
   "texturename": "Player_Idle.png"
   "start_i": 0
