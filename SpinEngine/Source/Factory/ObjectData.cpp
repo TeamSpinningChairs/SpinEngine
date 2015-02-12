@@ -92,7 +92,7 @@ ObjectData::~ObjectData()
 {
   for (unsigned i = 0; i < sprites_.size(); ++i)
   {
-    sprites_[i].texture_->Release();
+    SPIN_ENGINE_SAFE_RELEASE(sprites_[i].texture_);
   }
 }
 
