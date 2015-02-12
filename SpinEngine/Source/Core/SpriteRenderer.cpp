@@ -430,3 +430,13 @@ void SpriteRenderer::UpdateMatrices()
 
   world = Scale * Rx * Ry * Rz * Translation;
 }
+
+void SpriteRenderer::SetColor(const Vector4D vec)
+{
+  color = D3DXCOLOR(vec.x, vec.y, vec.z, vec.w);
+}
+
+void SpriteRenderer::SetColor(const D3DXCOLOR new_color)
+{
+  color = new_color;
+}
