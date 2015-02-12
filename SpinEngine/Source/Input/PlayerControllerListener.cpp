@@ -137,8 +137,9 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
     // Throw Head Prototype
     if (GivenInput->RightTriggerState == TRIGGER_TRIGGERED)
     {
-      GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "Claw-Open.png", this->PlayerTransform->GetPosition() + Vector3D(2 * PlayerTransform->GetScale().x, 0, 0));
-
+      GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "Head_Idle.png", this->PlayerTransform->GetPosition() + Vector3D(2 * PlayerTransform->GetScale().x, 0, 0));
+      //newObject->Initialize();
+      
       //Box collider and rigidbody
       AABB *box = new AABB(newObject);
       box->SetHalfSize(0.2f, 0.9f);
@@ -164,6 +165,7 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
       head->Initialize();
 
       body->velocity.Set(10 * PlayerTransform->GetScale().x, 10);
+      
     }
 
 
@@ -381,3 +383,5 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
   }
 
 }
+
+void Throw();

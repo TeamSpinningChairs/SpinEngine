@@ -1,0 +1,9 @@
+{
+  "statename": "idle"
+  "texturepath": "Assets\Textures\Head_Idle.png"
+  "texturename": "Head_Idle.png"
+  "start_i": 0
+  "end_i": 15
+  "totalframes": 16
+  "timeperframe": 0.125
+}

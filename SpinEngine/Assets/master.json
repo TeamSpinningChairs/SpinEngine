@@ -121,9 +121,6 @@
           "path": "Assets\Animations\Laser.json"
         }
         {
-          "path": "Assets\Animations\Text_To_Screen.json"
-        }
-        {
           "path": "Assets\Animations\RoilingParticle.json"
         }
         {
@@ -132,6 +129,13 @@
         {
           "path": "Assets\Animations\SCPrison.json"
         }
+		{
+          "path": "Assets\Animations\Head_Hop.json"
+        }
+        {
+          "path": "Assets\Animations\Head_Idle.json"
+        }
+		
     }
   #########################################################
   "levels": {
