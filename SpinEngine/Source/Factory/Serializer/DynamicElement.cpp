@@ -312,23 +312,3 @@ void DynamicElement::PrepareForNewType(void)
     delete data.val_membersPtr;
   }
 }
-
-
-std::string DynamicElement::QueryChildName(DynamicElement *child)
-{
-#define QUERYCHILDNAME
-  if (type != TYPE_OBJECT)
-    return std::string("");
-  if (!data.val_membersPtr)
-    return std::string("");
-  if (data.val_membersPtr->empty()) //@me, otherwise wouldn't recognize unnameds
-    return std::string("");
-
-  for (auto i : *(data.val_membersPtr))
-  {
-    if (i.second == child)
-    {
-      return i.first;
-    }
-  }
-}

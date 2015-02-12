@@ -144,11 +144,26 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	Type GetType(void) const;
 
-  //I assume this is a Josh thing. Josh, I move the implementation to DynamicElement.cpp
-  //Also, nice job with stuff, Josh.
-  //I don't expect you to read this, but enjoy the feeling of surprise and accomplishment if you do.
-  std::string QueryChildName(DynamicElement *child);
+  //I was gonna move this to have implementation in the .cpp, buuuuut something broke and I probably
+  //should have assumed you put it in here for a reason. So, hello if you read this.
+  std::string QueryChildName(DynamicElement *child)
+  {
+#define QUERYCHILDNAME
+    if (type != TYPE_OBJECT)
+      return std::string("");
+    if (!data.val_membersPtr)
+      return std::string("");
+    if (data.val_membersPtr->empty()) //@me, otherwise wouldn't recognize unnameds
+      return std::string("");
 
+    for (auto i : *(data.val_membersPtr))
+    {
+      if (i.second == child)
+      {
+        return i.first;
+      }
+    }
+  }
 	union
 		{
 			float val_float;

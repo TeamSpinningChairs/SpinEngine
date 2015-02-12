@@ -181,8 +181,11 @@ void ObjectData::LoadParticleEmitterData(std::string &filepath, unsigned &emitte
   DynamicElement *setting; //A reused pointer set towards individual particle settings
 
   //Create a particle emitter and add it to our array of particle emitters
-  particleEmitters_.emplace_back();
-  ParticleEmitter* pe = &particleEmitters_.back();
+  //This got hacky because, apparently, ParticleEmitter is big enough to cause stack overflow. (...???)
+  ParticleEmitter *pe = new ParticleEmitter();
+  particleEmitters_.push_back(*pe);
+  delete pe;
+  pe = &particleEmitters_.back();
   //Also add the name to our map of IDs
   particleEmitterIDs_[particleName] = emittercount++;  
 
