@@ -19,6 +19,11 @@ ZilchDefineType(Sprite, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindMethodAs(ZGetTextureName, "GetName");
+	ZilchBindMethod(PauseAt);
+	ZilchBindMethod(SetFrame);
+	ZilchBindFieldGetSetAs(m_timePerFrame, "TimePerFrame");
+	ZilchBindFieldGetSetAs(paused, "AnimationActive");
+	ZilchBindMethod(SetStateName);
 }
 
 Sprite::Sprite(IDirect3DTexture9 *texture, std::string textureName, UINT start_i,
@@ -252,4 +257,10 @@ void Sprite::SetFrame(unsigned int frame)
   m_currentFrame = frame;
   m_current_row = m_currentFrame / m_columns; // Spritesheet row
   m_current_column = m_currentFrame % (m_columns); //Spritesheet column
+}
+
+
+void Sprite::SetStateName(Zilch::String name)
+{
+	m_stateName = std::string(name.c_str());
 }

@@ -88,7 +88,7 @@ bool ParticleEmitter::Initialize()
     v_buffer->Unlock();
   }
 
-  Vector3D initPos = Owner->GetTransform()->GetPosition();
+  Vector3D initPos = Owner->GetTransform()->GetWorldPosition();
   initPos.x += x_diff_from_owner;
   initPos.y += y_diff_from_owner;
 
@@ -162,7 +162,7 @@ void ParticleEmitter::Render(IDirect3DDevice9* device)
     if (particles[i].active)
     {
       alive_particles++;
-      Vector3D pos = Owner->GetTransform()->GetPosition();
+      Vector3D pos = Owner->GetTransform()->GetWorldPosition();
       pos.x += x_diff_from_owner;
       pos.y += y_diff_from_owner;
 

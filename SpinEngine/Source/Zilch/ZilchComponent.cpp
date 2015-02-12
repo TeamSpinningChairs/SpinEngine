@@ -71,7 +71,6 @@ using namespace Zilch;
 	  auto fields = ThisHandle.Type->InstanceFields.values();
 	  while (!fields.empty())
 	  {
-
 		  Field* field = fields.front();
 		  Serializer::DataNode* value = data->FindElement(data, field->Name.c_str());
 		  fields.popFront();

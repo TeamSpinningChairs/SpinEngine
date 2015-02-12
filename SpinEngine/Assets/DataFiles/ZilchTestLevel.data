@@ -18,11 +18,20 @@ Level =
             },
             CameraFollow = 
             {
+				bool Active = true,
+				bool IsOwner:Boolean = true,
+				string TargetName:String = "Player1",
+				float Zoom = 23,
+				float CameraSpeed = 0.014,
             },
             ZilchController = 
             {
+				int KeyboardLeft = 35,
             },
 			TileMapCollision = 
+			{
+			},
+			SpriteChanger = 
 			{
 			},
         },
@@ -30,8 +39,27 @@ Level =
         {
             Named = 
             {
-                string Name = "Core",
+                string Name = "Core1",
             },
+			Rotator = 
+			{
+			},
+        },
+	Cog = 
+        {
+            Named = 
+            {
+                string Name = "CoreChild",
+            },
+			Parent = 
+			{
+				string ParentName = "Core1",
+				bool InheritPosition = true,
+				bool InheritRotation = false,
+				bool InheritScale = true,
+				bool Pivot = true,
+				Vec3 Position = [0, 3, 0],
+			},
         },
     Cog = 
         {

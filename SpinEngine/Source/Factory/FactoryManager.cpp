@@ -807,7 +807,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
         // scale the door to the correct size;
         newObject->GetTransform()->GetScale().x = 2;
         newObject->GetTransform()->GetScale().y = 5;
-        newObject->GetTransform()->GetPosition().y -= 4;
+        newObject->GetTransform()->GetWorldPosition().y -= 4;
 
         AABB *box = new AABB(newObject);
         box->SetHalfSize(2, 5);
@@ -843,7 +843,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
         // scale the door to the correct size;
         newObject->GetTransform()->GetScale().x = 2;
         newObject->GetTransform()->GetScale().y = 5;
-        newObject->GetTransform()->GetPosition().y -= 4;
+        newObject->GetTransform()->GetWorldPosition().y -= 4;
 
         AABB *box = new AABB(newObject);
         box->SetHalfSize(2, 5);
@@ -863,7 +863,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
         newObject->AddGameComponent(CT_SWITCH, SwitchComp);
 
         body->position.y += 5;
-        newObject->GetTransform()->GetPosition().y += 5;
+        newObject->GetTransform()->GetWorldPosition().y += 5;
     }
 
 
@@ -1233,7 +1233,7 @@ void FactoryManager::CreatePlayer()
     for (int i = 0; i < 4; ++i)
     {
         GameObject mem_ = MemoryManager::Allocate_GameObj();
-        GameObject obj = new (mem_)IEntity(m_TotalObjectCount++, PlayerSpawn->GetTransform()->GetPosition());
+        GameObject obj = new (mem_)IEntity(m_TotalObjectCount++, PlayerSpawn->GetTransform()->GetWorldPosition());
 		obj->SetName("Player");
         m_GameObjectList.push_back(obj);
         m_CurrentObjectCount++;

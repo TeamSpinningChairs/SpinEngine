@@ -184,19 +184,19 @@ void PlayerController::Update(float dt)
     if (Platform != NULL)
     {
 
-      float PlayerCheckX = abs(Owner->GetTransform()->GetPosition().x - Platform->GetTransform()->GetPosition().x);
-      float PlayerCheckY = abs(Owner->GetTransform()->GetPosition().y - Platform->GetTransform()->GetPosition().y);
+      float PlayerCheckX = abs(Owner->GetTransform()->GetWorldPosition().x - Platform->GetTransform()->GetWorldPosition().x);
+      float PlayerCheckY = abs(Owner->GetTransform()->GetWorldPosition().y - Platform->GetTransform()->GetWorldPosition().y);
        
 
       if(PlayerCheckX < 1.0 && PlayerCheckY < 2.0)
       {
         // calculate how far the platform has moved
-        float XDiff = Platform->GetTransform()->GetPosition().x - PreviousPlatformPosition.x;
-        float YDiff = Platform->GetTransform()->GetPosition().y - PreviousPlatformPosition.y;
+        float XDiff = Platform->GetTransform()->GetWorldPosition().x - PreviousPlatformPosition.x;
+        float YDiff = Platform->GetTransform()->GetWorldPosition().y - PreviousPlatformPosition.y;
 
 
         playerBody->position.x += XDiff;
-        Owner->GetTransform()->GetPosition().x += XDiff;
+        Owner->GetTransform()->GetWorldPosition().x += XDiff;
 
         float PlatformYVel = ((RigidBody*)Platform->GetComponent(CT_Body))->velocity.y;
         float PlatformXVel = ((RigidBody*)Platform->GetComponent(CT_Body))->velocity.x;
@@ -206,10 +206,10 @@ void PlayerController::Update(float dt)
         if(YDiff <= 0)
         {
           playerBody->position.y += YDiff;
-          Owner->GetTransform()->GetPosition().y += YDiff;
+          Owner->GetTransform()->GetWorldPosition().y += YDiff;
         }
           // move the player with the platform
-        PreviousPlatformPosition = Platform->GetTransform()->GetPosition();
+        PreviousPlatformPosition = Platform->GetTransform()->GetWorldPosition();
         
       }
         
@@ -328,7 +328,7 @@ void PlayerController::OnCollision(GameObject otherObject)
         myJumpState = JS_PLATFORM;
         jumpTimer = 0;
         Platform = otherObject;
-        PreviousPlatformPosition = otherObject->GetTransform()->GetPosition();
+        PreviousPlatformPosition = otherObject->GetTransform()->GetWorldPosition();
         jumpButtonReleased = false;
         fuelRegenTimer = 0.0f;
     }
@@ -361,8 +361,8 @@ void PlayerController::OnCollision(GameObject otherObject)
     //playerBody->position.x = MathF::Round(playerBody->position.x * PIXELS_PER_UNIT) / PIXELS_PER_UNIT;
    // playerBody->position.y = MathF::Round(playerBody->position.y * PIXELS_PER_UNIT) / PIXELS_PER_UNIT;
     
-    //Owner->GetTransform()->GetPosition().x = playerBody->position.x;
-   // Owner->GetTransform()->GetPosition().y = playerBody->position.y;
+    //Owner->GetTransform()->GetWorldPosition().x = playerBody->position.x;
+   // Owner->GetTransform()->GetWorldPosition().y = playerBody->position.y;
 
   }
 
@@ -422,7 +422,7 @@ void PlayerController::OnCollision(GameObject otherObject)
     if (!GetLaser(&toLaunch))
      return;
 
-    Vector3D launchPosition = parent->GetTransform()->GetPosition();
+    Vector3D launchPosition = parent->GetTransform()->GetWorldPosition();
     launchPosition.y += 0.8f; //Magic number, make the laser spawn in their head
 
     Vector2D vel(MathF::ApproxCos(theta) * *laserSpeed, MathF::ApproxSin(theta) * *laserSpeed);
@@ -446,8 +446,8 @@ void PlayerController::OnCollision(GameObject otherObject)
     //Fire the laser. (From this point on, the beam will take care of everything,
     //including resetting itself.)
     if (isFacingRight)
-      toLaunch->Launch(parent->GetTransform()->GetPosition(), 0.0f, Vector2D(*laserSpeed,0.f));
+      toLaunch->Launch(parent->GetTransform()->GetWorldPosition(), 0.0f, Vector2D(*laserSpeed,0.f));
     else
-      toLaunch->Launch(parent->GetTransform()->GetPosition(), PI, Vector2D(-(*laserSpeed),0.f)); //0 is default rotation, PI is rotated 180 deg (one radian)
+      toLaunch->Launch(parent->GetTransform()->GetWorldPosition(), PI, Vector2D(-(*laserSpeed),0.f)); //0 is default rotation, PI is rotated 180 deg (one radian)
 
   }

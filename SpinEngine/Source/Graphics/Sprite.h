@@ -61,6 +61,7 @@ public:
   void Set_Paused(bool p);
   void PauseAt(unsigned int frame);
   void SetFrame(unsigned int frame);
+  void SetStateName(Zilch::String);
 
 private:
 

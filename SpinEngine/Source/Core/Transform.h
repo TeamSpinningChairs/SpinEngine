@@ -36,6 +36,9 @@ public:
   Vector3D& GetPosition();
   Vector3D& GetRotation();
   Vector3D& GetScale();
+  Vector3D& GetWorldPosition();
+  Vector3D& GetWorldRotation();
+  Vector3D& GetWorldScale();
 
   //Setters
   void SetPosition(const Vector3D pos);
@@ -59,7 +62,13 @@ public:
   void SetScaleZ(float z);
   void SetScale(float x, float y, float z);
 
+  void UpdatePosition(Transform* trans);
+  void UpdateScale(Transform* trans);
+  void UpdateRotation(Transform* trans);
 
+  Vector3D localPosition = Vector3D();
+  Vector3D localRotation = Vector3D();
+  Vector3D localScale = Vector3D();
 private:
   Vector3D position = Vector3D();
   Vector3D scale = Vector3D();

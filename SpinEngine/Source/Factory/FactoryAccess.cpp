@@ -22,7 +22,8 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 ZilchDefineType(FactoryAccess, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
-
+	ZilchBindMethodAs(ZCreateSprite, "CreateSprite");
+	ZilchBindMethodAs(ZCreateGameObject, "CreateGameObject");
 }
 
 //We actually set this in Engine.cpp (during engine init), but we need to initialize here.
@@ -84,6 +85,15 @@ GraphicsManager *FactoryAccess::GetGraphicsManager()
   return factory_.m_pGraphicsManager;
 }
 
+IEntity* FactoryAccess::ZCreateGameObject(Zilch::String name = "GameObject", Zilch::String spritename = "DefaultTile.png",
+	Vector3D pos = Vector3D(), Vector4D color = Vector4D(255, 255, 255, 255), bool isUI = false)
+{
+		//COLOR DOES NOT WORK!
+		//color.x, color.y, color.z, color.w);
+	
+	return CreateGameObject(name.c_str(), spritename.c_str(), pos, d3dColors::White, isUI);
+}
+
 IEntity *FactoryAccess::CreateGameObject(std::string name, std::string spritename, Vector3D pos, D3DCOLOR color, bool is_UI)
 {
   IEntity *mem_obj = reinterpret_cast<GameObject>( MemoryManager::Allocate_GameObj() );
@@ -97,7 +107,7 @@ IEntity *FactoryAccess::CreateGameObject(std::string name, std::string spritenam
   if (is_UI)
   {
     factory_.m_pGraphicsManager->AddUISpriteRend(spRend);
-    obj->GetTransform()->GetPosition().z = -9.f; //Everything below 0 is "in front" of everything above 0
+    obj->GetTransform()->GetWorldPosition().z = -9.f; //Everything below 0 is "in front" of everything above 0
   }
   else
     factory_.m_pGraphicsManager->AddSpriteRend(spRend); 
@@ -152,8 +162,8 @@ GameObject FactoryAccess::CheckTargets(Vector3D TargetPoint)
       continue;
     }
 
-    float X1 = factory_.m_Targets[i]->GetTransform()->GetPosition().x;
-    float Y1 = factory_.m_Targets[i]->GetTransform()->GetPosition().y;
+    float X1 = factory_.m_Targets[i]->GetTransform()->GetWorldPosition().x;
+    float Y1 = factory_.m_Targets[i]->GetTransform()->GetWorldPosition().y;
 
     float X2 = TargetPoint.x;
     float Y2 = TargetPoint.y;

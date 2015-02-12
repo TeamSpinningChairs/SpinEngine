@@ -43,6 +43,7 @@ public:
 
   void RemoveTileObject(EntityId id);
   
+  IEntity* ZCreateGameObject(Zilch::String name, Zilch::String spritename, Vector3D pos, Vector4D color, bool isUI);
   IEntity *CreateGameObject(std::string name, std::string spritename, Vector3D pos, D3DCOLOR color = d3dColors::White, bool is_UI = false);
   
   GameObject CheckTargets(Vector3D);

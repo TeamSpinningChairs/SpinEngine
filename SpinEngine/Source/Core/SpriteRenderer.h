@@ -55,7 +55,7 @@ public:
 
   //Getters
   SpriteCollection* GetSpriteCollection();
-  const Vector3D &GetPosition();
+  const Vector3D &GetWorldPosition();
 
   //Setters
   void AddSprite(std::string textureName, UINT start_i,UINT end_i, unsigned int total_frames, 

@@ -42,7 +42,7 @@
                  "gid":18,
                  "height":0,
                  "id":36,
-                 "name":"Core",
+                 "name":"Core1",
                  "properties":
                     {
                      "DataFile":"ZilchTestLevel"
@@ -51,8 +51,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":63272,
-                 "y":2672
+                 "x":63072,
+                 "y":2640
                 }, 
                 {
                  "gid":9,
@@ -123,6 +123,22 @@
                  "width":0,
                  "x":64764,
                  "y":2902.6666666667
+                }, 
+                {
+                 "gid":18,
+                 "height":0,
+                 "id":80,
+                 "name":"CoreChild",
+                 "properties":
+                    {
+                     "DataFile":"ZilchTestLevel"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":0,
+                 "y":1
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -143,7 +159,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":76,
+ "nextobjectid":81,
  "orientation":"orthogonal",
  "properties":
     {

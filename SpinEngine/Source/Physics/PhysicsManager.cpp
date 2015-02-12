@@ -72,8 +72,8 @@ void PhysicsManager::ColliderCheck()
         continue;
       }
 
-      Vector3D posA = a->GetOwner()->GetTransform()->GetPosition();
-      Vector3D posB = b->GetOwner()->GetTransform()->GetPosition();
+      Vector3D posA = a->GetOwner()->GetTransform()->GetWorldPosition();
+      Vector3D posB = b->GetOwner()->GetTransform()->GetWorldPosition();
 
       if (a->Id == Primitive::pCircle && b->Id == Primitive::pCircle)
       {      

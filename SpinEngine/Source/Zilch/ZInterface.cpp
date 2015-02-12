@@ -46,7 +46,7 @@
 		//ZilchBindStaticFieldGetAs(ObjectSys, "ObjectSystem");
 		//ZilchBindStaticFieldGetAs(WindowSys, "WindowSystem");
 		//ZilchBindStaticFieldGetAs(Physics, "Physics");
-		//ZilchBindStaticFieldGet(ResourceSystem);
+		ZilchBindStaticFieldGetAs(Factory, "Factory");
 		ZilchBindStaticMethod(TogglePaused);
 		ZilchBindStaticMethod(IsPaused);
 		ZilchBindStaticMethod(SetPaused);

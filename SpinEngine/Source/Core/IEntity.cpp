@@ -29,12 +29,26 @@ ZilchDefineType(IEntity, SpinningZilch)
 	ZilchBindMethod(Destroy);
 	ZilchBindFieldGetSetAs(IsVisible, "Visible");
 	ZilchBindFieldGetSet(Actions);
+	
+	ZilchBindFieldGetSet(InheritRotation);
+	ZilchBindFieldGetSet(InheritPosition);
+	ZilchBindFieldGetSet(InheritScale);
+	ZilchBindFieldGetSet(Pivot);
+	ZilchBindFieldGet(Parent);
+
+	ZilchBindMethod(AddChild);
+	ZilchBindMethod(RemoveChild);
+	ZilchBindMethod(FindChildByName);
+	ZilchBindMethod(RemoveChildByName);
+
 	ZilchBindMethodAs(ZGetName, "GetName");
 
 	ZilchBindFieldGetSet(Transform);
 	ZilchBindFieldGetSet(RigidBody);
-	ZilchBindFieldGetSet(SpriteRenderer);
+	ZilchBindFieldGetSetAs(SpriteRenderer, "Sprite");
 	ZilchBindFieldGetSet(Primitive);
+	ZilchBindMethodAs(ZAddGameComponent, "AddComponent");
+	
 
 }
 
@@ -72,6 +86,51 @@ IEntity::~IEntity()
 		Actions = nullptr;
 	}
   CleanupComponents();
+}
+
+void IEntity::AddChild(IEntity* child)
+{
+	Children.push_back(child);
+	child->Parent = this;
+}
+IEntity* IEntity::FindChildByName(Zilch::String name)
+{
+	for (auto i : Children)
+	{
+		if (i->name.compare(name.c_str()) != 0)
+		{
+			return i;
+		}
+	}
+	return nullptr;
+}
+void IEntity::RemoveChild(IEntity* child)
+{
+
+	for (unsigned i = 0; i < Children.size(); ++i)
+	{
+		if (Children[i] == child)
+		{
+			child->Parent = nullptr;
+			Children[i] = nullptr;
+			Children.shrink_to_fit();
+		}
+		
+	}
+	
+}
+void IEntity::RemoveChildByName(Zilch::String name)
+{
+	for (unsigned i = 0; i < Children.size(); ++i)
+	{
+		if (Children[i]->name.compare(name.c_str()) == 0)
+		{
+			Children[i]->Parent = nullptr;
+			Children[i] = nullptr;
+			Children.shrink_to_fit();
+		}
+
+	}
 }
 
 Zilch::String IEntity::ZGetName()
@@ -120,6 +179,11 @@ Zilch::Handle IEntity::GetZilchComponent(Zilch::String type)
 bool IEntity::IsObjectActive()
 {
   return IsActive;
+}
+
+void IEntity::ZAddGameComponent(int type, Component comp)
+{
+	AddGameComponent(Component_Type(type), comp);
 }
 
 void IEntity::AddGameComponent(Component_Type type,Component comp)

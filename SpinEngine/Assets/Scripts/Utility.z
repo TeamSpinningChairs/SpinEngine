@@ -1,4 +1,12 @@
+class Utility
+{
+	[Static]
+	function CreateGameObject(name:String, spritename:String,  pos:Vector3D, color:Vector4D, isUI:Boolean) : IEntity
+	{
+		return ZInterface.Factory.CreateGameObject(name, spritename, pos, color, isUI);
+	}
 
+}
 
 enum Keys
 {

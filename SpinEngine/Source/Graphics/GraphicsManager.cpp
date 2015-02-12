@@ -568,7 +568,7 @@ void GraphicsManager::Render()
         RigidBody* rigidBody = reinterpret_cast<RigidBody*>(spriteCollection[i]->GetOwner()->GetComponent(CT_Body));
         if (rigidBody && spriteCollection[i]->GetOwner()->GetComponent(CT_Player_Controller))
         {
-          Vector3D vec = rigidBody->GetOwner()->GetTransform()->GetPosition();
+          Vector3D vec = rigidBody->GetOwner()->GetTransform()->GetWorldPosition();
 
           D3DVIEWPORT9 pViewport;
           m_pDevice3D->GetViewport(&pViewport);
@@ -636,15 +636,15 @@ bool GraphicsManager::IsInBounds(SpriteRenderer *rend)
 {
     //if ( strcmp(rend->GetOwner()->GetName(), "WallImage") != 0 )
     //{
-        if (abs(rend->GetPosition().x - GetMainCamera()->GetPosition().x) > 24.0f)
+        if (abs(rend->GetWorldPosition().x - GetMainCamera()->GetPosition().x) > 24.0f)
             return false;
-        if (abs(rend->GetPosition().y - GetMainCamera()->GetPosition().y) > 18.0f)
+        if (abs(rend->GetWorldPosition().y - GetMainCamera()->GetPosition().y) > 18.0f)
             return false;
 
         return true;
     //}
     //return true;
-  //rend->GetPosition().x
+  //rend->GetWorldPosition().x
 }
 
 void GraphicsManager::Shutdown()
@@ -871,15 +871,15 @@ void GraphicsManager::setWireframeTransform(Transform* trans)
   //Scale, rotation and translation matrices
   D3DXMATRIX Scale, Rx, Ry, Rz, Translation;
 
-  Vector3D rot = trans->GetRotation();
+  Vector3D rot = trans->GetWorldRotation();
   D3DXMatrixRotationX(&Rx, rot.x);
   D3DXMatrixRotationY(&Ry, rot.y);
   D3DXMatrixRotationZ(&Rz, rot.z);
 
-  Vector3D scal = trans->GetScale();
+  Vector3D scal = trans->GetWorldScale();
   D3DXMatrixScaling(&Scale, scal.x, scal.y, scal.z);
 
-  Vector3D& tempTanslate = trans->GetPosition();
+  Vector3D& tempTanslate = trans->GetWorldPosition();
   D3DXMatrixTranslation(&Translation, tempTanslate.x, tempTanslate.y, tempTanslate.z);
 
   debug_draw_wireframe_world = Scale * Rx * Ry * Rz * Translation;
@@ -890,15 +890,15 @@ void GraphicsManager::setBoxCollWireframeTransform(Transform* trans, Vector2D ha
   //Scale, rotation and translation matrices
   D3DXMATRIX Scale, Rx, Ry, Rz, Translation;
 
-  Vector3D rot = trans->GetRotation();
+  Vector3D rot = trans->GetWorldRotation();
   D3DXMatrixRotationX(&Rx, rot.x);
   D3DXMatrixRotationY(&Ry, rot.y);
   D3DXMatrixRotationZ(&Rz, rot.z);
 
-  Vector3D scal = trans->GetScale();
+  Vector3D scal = trans->GetWorldScale();
   D3DXMatrixScaling(&Scale, halfSize.x / scal.x, halfSize.y / scal.y, scal.z);
 
-  Vector3D& tempTanslate = trans->GetPosition();
+  Vector3D& tempTanslate = trans->GetWorldPosition();
   D3DXMatrixTranslation(&Translation, tempTanslate.x, tempTanslate.y, tempTanslate.z);
 
   debug_draw_wireframe_world = Scale * Rx * Ry * Rz * Translation;
@@ -909,15 +909,15 @@ void GraphicsManager::setCircleCollWireframeTransform(Transform* trans, float ra
   //Scale, rotation and translation matrices
   D3DXMATRIX Scale, Rx, Ry, Rz, Translation;
 
-  Vector3D rot = trans->GetRotation();
+  Vector3D rot = trans->GetWorldRotation();
   D3DXMatrixRotationX(&Rx, rot.x);
   D3DXMatrixRotationY(&Ry, rot.y);
   D3DXMatrixRotationZ(&Rz, rot.z);
 
-  Vector3D scal = trans->GetScale();
+  Vector3D scal = trans->GetWorldScale();
   D3DXMatrixScaling(&Scale, radius * 2.0f, radius * 2.0f / scal.y, scal.z);
 
-  Vector3D& tempTanslate = trans->GetPosition();
+  Vector3D& tempTanslate = trans->GetWorldPosition();
   D3DXMatrixTranslation(&Translation, tempTanslate.x, tempTanslate.y, tempTanslate.z);
 
   debug_draw_wireframe_world = Scale * Rx * Ry * Rz * Translation;
