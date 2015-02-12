@@ -17,7 +17,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 
 DoorComponent::DoorComponent(GameObject Parent) : IComponent(Component_Type::CT_DOOR, Parent), CollisionDelegate(Parent)
 {
-    StartingPoint = Parent->GetTransform()->GetPosition();
+    StartingPoint = Parent->GetTransform()->GetWorldPosition();
     DoorSwitch = NULL;
     DoorBody = NULL;
     doorTriggered = false;
@@ -48,28 +48,28 @@ void DoorComponent::Update(float dt)
     // if the door is active, move it up the height of the door.
     if (DoorSwitch->GetSwitchStatus() == true)
     {
-        float distance = Owner->GetTransform()->GetPosition().y - StartingPoint.y;
+        float distance = Owner->GetTransform()->GetWorldPosition().y - StartingPoint.y;
         
         if (distance >= DOOR_HEIGHT)
         {
-            Owner->GetTransform()->GetPosition().y = StartingPoint.y + DOOR_HEIGHT;
+            Owner->GetTransform()->GetWorldPosition().y = StartingPoint.y + DOOR_HEIGHT;
             DoorBody->position.y = StartingPoint.y + DOOR_HEIGHT;
             this->DoorSwitch->ToggleActive();
             return;
         }
         
-        Owner->GetTransform()->GetPosition().y += 4.0 * dt; 
+        Owner->GetTransform()->GetWorldPosition().y += 4.0 * dt; 
         DoorBody->position.y += 4.0 * dt;
     }
 
     // if the door is not active, move back down to the origin
     else
     {
-        float distance = Owner->GetTransform()->GetPosition().y - StartingPoint.y;
+        float distance = Owner->GetTransform()->GetWorldPosition().y - StartingPoint.y;
 
         if (distance <= 0)
         {
-            Owner->GetTransform()->GetPosition().y = StartingPoint.y;
+            Owner->GetTransform()->GetWorldPosition().y = StartingPoint.y;
             DoorBody->position.y = StartingPoint.y;
             doorTriggered = false;
 
@@ -77,7 +77,7 @@ void DoorComponent::Update(float dt)
 
         else
         {
-            Owner->GetTransform()->GetPosition().y -= 3.0 * dt;
+            Owner->GetTransform()->GetWorldPosition().y -= 3.0 * dt;
             DoorBody->position.y -= 3.0 * dt;
         }
     }

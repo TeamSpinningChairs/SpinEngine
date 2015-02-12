@@ -31,7 +31,7 @@ faded_out(false), splashscreenObj(NULL), splashRend(NULL)
   splashscreenObj->AddGameComponent(CT_SpriteRenderer, splashRend);
   GlobalFactory->GetGraphicsManager()->AddSpriteRend(splashRend);
   GlobalFactory->AddGameObject(splashscreenObj);
-  splashscreenObj->GetTransform()->GetScale().y *= 2.0f;
+  splashscreenObj->GetTransform()->GetWorldScale().y *= 2.0f;
 
   current = 0.0f;
   pre_intro = 0.5f;

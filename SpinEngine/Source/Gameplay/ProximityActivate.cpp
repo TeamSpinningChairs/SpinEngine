@@ -43,8 +43,8 @@ void ProximityTriggerListener::OnMessageRecieved(Message * SentMessage)
         ProximityActivateMessage * GivenInput = reinterpret_cast<ProximityActivateMessage *>(SentMessage);
 
         // calculate the distance between the player and the parent object and see if it is in range if it is toggle the switch
-        float TempX = Parent->GetTransform()->GetPosition().x - GivenInput->Position.x;
-        float TempY = Parent->GetTransform()->GetPosition().y -  GivenInput->Position.y;
+        float TempX = Parent->GetTransform()->GetWorldPosition().x - GivenInput->Position.x;
+        float TempY = Parent->GetTransform()->GetWorldPosition().y -  GivenInput->Position.y;
 
         float Totaldistance = sqrt((TempX * TempX) + (TempY * TempY));
 
@@ -52,22 +52,22 @@ void ProximityTriggerListener::OnMessageRecieved(Message * SentMessage)
         
         if(GivenInput->CheckDir == AD_Left)
         {
-          distance = Parent->GetTransform()->GetPosition().x - GivenInput->Position.x;
+          distance = Parent->GetTransform()->GetWorldPosition().x - GivenInput->Position.x;
         }
 
         else if(GivenInput->CheckDir == AD_Right)
         {
-          distance = GivenInput->Position.x - Parent->GetTransform()->GetPosition().x;
+          distance = GivenInput->Position.x - Parent->GetTransform()->GetWorldPosition().x;
         }
 
         else if(GivenInput->CheckDir == AD_Down)
         {
-          distance = Parent->GetTransform()->GetPosition().y - GivenInput->Position.y;
+          distance = Parent->GetTransform()->GetWorldPosition().y - GivenInput->Position.y;
         }
 
         else if(GivenInput->CheckDir == AD_UP)
         {
-          distance = GivenInput->Position.y - Parent->GetTransform()->GetPosition().y;
+          distance = GivenInput->Position.y - Parent->GetTransform()->GetWorldPosition().y;
         }
         
         if (distance < 2.0f && Totaldistance < 2.0f)

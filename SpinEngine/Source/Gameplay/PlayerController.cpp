@@ -81,8 +81,8 @@ lastFrameDT(1.0f / 60.0f), fuelRegenTimer(0), jumpButtonReleased(false)
   for (int i = 0; i < MAX_LASER_COUNT; ++i)
   {
     IEntity *laserObj = GlobalFactory->CreateGameObject("Laser", "Laser.png", outofsight);
-    laserObj->GetTransform()->GetScale().x = 0.3f;
-    laserObj->GetTransform()->GetScale().y = 0.1f;
+    laserObj->GetTransform()->GetWorldScale().x = 0.3f;
+    laserObj->GetTransform()->GetWorldScale().y = 0.1f;
     //Create shape and rigidbody
     //@Ask Judy if you're doing this right, you forget what SetStatic does and what to do with SetHalfSize so that the collision box is small enough
     AABB *coll = new AABB(laserObj);

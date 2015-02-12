@@ -60,7 +60,7 @@ bool WallController::Initialize()
   // fill in the array for dynamic hands, that will target the player, or platforms, or in a random direction;
   for (int i = 0; i < DYNAMIC_HANDCOUNT + RESERVED_HANDS; i++)
   {
-    GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw-Open.png", this->Owner->GetTransform()->GetPosition());
+    GameObject hand = GlobalFactory->CreateGameObject("hand", "Claw-Open.png", this->Owner->GetTransform()->GetWorldPosition());
 
     SpriteRend Handrend = reinterpret_cast<SpriteRend>(hand->GetComponent(CT_SpriteRenderer));
     //Handrend->GetSpriteColor() = d3dColors::Red;
@@ -94,11 +94,11 @@ bool WallController::Initialize()
 
     DHand->Initialize();
 
-    hand->GetTransform()->GetScale() *= .85;
+    hand->GetTransform()->GetWorldScale() *= .85;
   }
 
-  //PrisonPart = GlobalFactory->CreateGameObject("Prison", "SCPrison.png", this->Owner->GetTransform()->GetPosition());
-  //PrisonPart->GetTransform()->GetScale() *= 5;
+  //PrisonPart = GlobalFactory->CreateGameObject("Prison", "SCPrison.png", this->Owner->GetTransform()->GetWorldPosition());
+  //PrisonPart->GetTransform()->GetWorldScale() *= 5;
 
  return true;
 }
@@ -111,11 +111,11 @@ bool WallController::Initialize()
 /*************************************************************************/
 void WallController::Update(float dt)
 {
-  //PrisonPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition();
+  //PrisonPart->GetTransform()->GetWorldPosition() = this->Owner->GetTransform()->GetWorldPosition();
   if (BodyPart != NULL && PrisonPart != NULL)
   {
-    BodyPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(2,0,8);
-    PrisonPart->GetTransform()->GetPosition() = this->Owner->GetTransform()->GetPosition() - Vector3D(2, 0, 8);
+    BodyPart->GetTransform()->GetWorldPosition() = this->Owner->GetTransform()->GetWorldPosition() - Vector3D(2,0,8);
+    PrisonPart->GetTransform()->GetWorldPosition() = this->Owner->GetTransform()->GetWorldPosition() - Vector3D(2, 0, 8);
   }
 
   //movevalue *= -1;
@@ -152,7 +152,7 @@ void WallController::Release()
 /*************************************************************************/
 void WallController::LaunchTentacle(Vector3D Direction)
 {
-  if (Direction.x < Owner->GetTransform()->GetPosition().x)
+  if (Direction.x < Owner->GetTransform()->GetWorldPosition().x)
   {
     return;
   }

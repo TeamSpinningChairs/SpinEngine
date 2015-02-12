@@ -53,7 +53,7 @@ DynamicHand::DynamicHand(GameObject Parent, GameObject Wall) : IComponent(Compon
 	CapturedObj = NULL;
 	ActiveLinks = 0;
   currentState = HAND_INACTIVE;
-  OwnerPosition = WallOwner->GetTransform()->GetPosition();
+  OwnerPosition = WallOwner->GetTransform()->GetWorldPosition();
 
   for (int i = 0; i < LINK_COUNT; ++i)
   {
@@ -100,17 +100,17 @@ void DynamicHand::Re_Initialize(GameObject newTarget)
 	WavePeriodScalar = (2 * PI) / TotalDistance;
 
 	// set the starting point of the hand to be the current position of the wall
-	StartingPoint = this->WallOwner->GetTransform()->GetPosition();
+	StartingPoint = this->WallOwner->GetTransform()->GetWorldPosition();
 
 	// set the inital x position to be the center of the wall.
-	xPosition = this->WallOwner->GetTransform()->GetPosition().x;
+	xPosition = this->WallOwner->GetTransform()->GetWorldPosition().x;
 
 	 // create a vector to calculate the angle from the wall to the target
 	Vector2D Temp;
 
 	// Vector2D = target - origin
-	Temp.x = newTarget->GetTransform()->GetPosition().x - WallOwner->GetTransform()->GetPosition().x;
-	Temp.y = newTarget->GetTransform()->GetPosition().y - WallOwner->GetTransform()->GetPosition().y;
+	Temp.x = newTarget->GetTransform()->GetWorldPosition().x - WallOwner->GetTransform()->GetWorldPosition().x;
+	Temp.y = newTarget->GetTransform()->GetWorldPosition().y - WallOwner->GetTransform()->GetWorldPosition().y;
 
 	angle = atan(Temp.y / Temp.x);
 	 
@@ -155,17 +155,17 @@ void DynamicHand::Re_Initialize(Vector3D TargetPosition)
 	WavePeriodScalar = (2 * PI) / TotalDistance;
 
 	// set the starting point of the hand to be the current position of the wall
-	StartingPoint = this->WallOwner->GetTransform()->GetPosition();
+	StartingPoint = this->WallOwner->GetTransform()->GetWorldPosition();
 
 	// set the inital x position to be the center of the wall.
-	xPosition = this->WallOwner->GetTransform()->GetPosition().x;
+	xPosition = this->WallOwner->GetTransform()->GetWorldPosition().x;
 
 	// create a vector to calculate the angle from the wall to the target
 	Vector2D Temp;
 
 	// Vector2D = target - origin
-	Temp.x = TargetPosition.x - WallOwner->GetTransform()->GetPosition().x;
-	Temp.y = TargetPosition.y - WallOwner->GetTransform()->GetPosition().y;
+	Temp.x = TargetPosition.x - WallOwner->GetTransform()->GetWorldPosition().x;
+	Temp.y = TargetPosition.y - WallOwner->GetTransform()->GetWorldPosition().y;
 
 	angle = atan(Temp.y / Temp.x);
 
@@ -203,12 +203,12 @@ void DynamicHand::Update(float dt)
 	// if the hand is not active, make it invisible, and translate it with the wall
   if (this->HandActive == false)
 	{
-		Owner->GetTransform()->GetPosition() = this->WallOwner->GetTransform()->GetPosition();
+		Owner->GetTransform()->GetWorldPosition() = this->WallOwner->GetTransform()->GetWorldPosition();
     Owner->SetInVisible();
 
     if (HandBody)
     {
-      *(HandBody->getPosition()) += Vector2D(WallOwner->GetTransform()->GetPosition().x, WallOwner->GetTransform()->GetPosition().y);
+      *(HandBody->getPosition()) += Vector2D(WallOwner->GetTransform()->GetWorldPosition().x, WallOwner->GetTransform()->GetWorldPosition().y);
     }
     return;
 	}
@@ -243,19 +243,19 @@ void DynamicHand::Update(float dt)
         CapturedObj = Target;
 
 				currentState = HAND_RETURNING;
-				Owner->GetTransform()->GetRotation().z = angle;
+				Owner->GetTransform()->GetWorldRotation().z = angle;
         StraightenLink();
 			}
 		}
 
     else if (CapturedObj == NULL)
     {
-      CapturedObj = GlobalFactory->CheckTargets(this->Owner->GetTransform()->GetPosition());
+      CapturedObj = GlobalFactory->CheckTargets(this->Owner->GetTransform()->GetWorldPosition());
 
       if (CapturedObj)
       {
         currentState = HAND_RETURNING;
-        Owner->GetTransform()->GetRotation().z = angle;
+        Owner->GetTransform()->GetWorldRotation().z = angle;
         StraightenLink();
       }
     }
@@ -266,7 +266,7 @@ void DynamicHand::Update(float dt)
 		if (Distance >= ChaseRange || this->TimeActive > this->HandDuration)
 		{
  			currentState = HAND_RETURNING;
-			Owner->GetTransform()->GetRotation().z = angle;
+			Owner->GetTransform()->GetWorldRotation().z = angle;
       StraightenLink();
 		}
 	}
@@ -276,8 +276,8 @@ void DynamicHand::Update(float dt)
 	{
 		Vector2D Direction;
 
-		Direction.x = WallOwner->GetTransform()->GetPosition().x - Owner->GetTransform()->GetPosition().x;
-		Direction.y = WallOwner->GetTransform()->GetPosition().y - Owner->GetTransform()->GetPosition().y;
+		Direction.x = WallOwner->GetTransform()->GetWorldPosition().x - Owner->GetTransform()->GetWorldPosition().x;
+		Direction.y = WallOwner->GetTransform()->GetWorldPosition().y - Owner->GetTransform()->GetWorldPosition().y;
 	
 		// normalize the direction
 		Direction = Direction.Normalize();
@@ -286,13 +286,13 @@ void DynamicHand::Update(float dt)
     {
       if (WallComponent != NULL)
       {
-        Owner->GetTransform()->GetPosition().x += Direction.x * (.85 * WallComponent->GetMoveSpeed() * dt);
-        Owner->GetTransform()->GetPosition().y += Direction.y * (.85 * WallComponent->GetMoveSpeed() * dt);
+        Owner->GetTransform()->GetWorldPosition().x += Direction.x * (.85 * WallComponent->GetMoveSpeed() * dt);
+        Owner->GetTransform()->GetWorldPosition().y += Direction.y * (.85 * WallComponent->GetMoveSpeed() * dt);
       }
       else
       {
-        Owner->GetTransform()->GetPosition().x += Direction.x * (.85 * 5 * dt);
-        Owner->GetTransform()->GetPosition().y += Direction.y * (.85 * 5 * dt);
+        Owner->GetTransform()->GetWorldPosition().x += Direction.x * (.85 * 5 * dt);
+        Owner->GetTransform()->GetWorldPosition().y += Direction.y * (.85 * 5 * dt);
 
         if (HandBody)
         {
@@ -305,13 +305,13 @@ void DynamicHand::Update(float dt)
     {
       if (WallComponent != NULL)
       {
-        Owner->GetTransform()->GetPosition().x += Direction.x * (1.65 * WallComponent->GetMoveSpeed() * dt);
-        Owner->GetTransform()->GetPosition().y += Direction.y * (1.65 * WallComponent->GetMoveSpeed() * dt);
+        Owner->GetTransform()->GetWorldPosition().x += Direction.x * (1.65 * WallComponent->GetMoveSpeed() * dt);
+        Owner->GetTransform()->GetWorldPosition().y += Direction.y * (1.65 * WallComponent->GetMoveSpeed() * dt);
       }
       else
       {
-        Owner->GetTransform()->GetPosition().x += Direction.x * (9 * dt);
-        Owner->GetTransform()->GetPosition().y += Direction.y * (9 * dt);
+        Owner->GetTransform()->GetWorldPosition().x += Direction.x * (9 * dt);
+        Owner->GetTransform()->GetWorldPosition().y += Direction.y * (9 * dt);
 
         if (HandBody)
         {
@@ -322,12 +322,12 @@ void DynamicHand::Update(float dt)
     
     if (CapturedObj)
 		{
-			CapturedObj->GetTransform()->GetPosition() = Owner->GetTransform()->GetPosition();
+			CapturedObj->GetTransform()->GetWorldPosition() = Owner->GetTransform()->GetWorldPosition();
 
       if (CapturedObj->GetComponent(CT_Body) != NULL)
       {
-          reinterpret_cast<RigidBody *>(CapturedObj->GetComponent(CT_Body))->position.x = Owner->GetTransform()->GetPosition().x;
-          reinterpret_cast<RigidBody *>(CapturedObj->GetComponent(CT_Body))->position.y = Owner->GetTransform()->GetPosition().y;
+          reinterpret_cast<RigidBody *>(CapturedObj->GetComponent(CT_Body))->position.x = Owner->GetTransform()->GetWorldPosition().x;
+          reinterpret_cast<RigidBody *>(CapturedObj->GetComponent(CT_Body))->position.y = Owner->GetTransform()->GetWorldPosition().y;
       }
       
 		}
@@ -338,7 +338,7 @@ void DynamicHand::Update(float dt)
 		// check if distance from the wall if close enough set to inactive set chase target to null 
 		float ReturnDistance = CalculateDistance(WallOwner);
 
-    if (ReturnDistance < RETURN_DISTANCE || (Owner->GetTransform()->GetPosition().x < this->WallOwner->GetTransform()->GetPosition().x))
+    if (ReturnDistance < RETURN_DISTANCE || (Owner->GetTransform()->GetWorldPosition().x < this->WallOwner->GetTransform()->GetWorldPosition().x))
 		{
 			HandReturn();
 		} // end of wall return check		
@@ -373,7 +373,7 @@ void DynamicHand::DynamicHandMovement()
 	float RotationAngle = atan(Slope);
 
 	// rotate the hand so it faces the correct directon
-	Owner->GetTransform()->GetRotation().z = RotationAngle + angle;
+	Owner->GetTransform()->GetWorldRotation().z = RotationAngle + angle;
 
   for (int i = 0; i < LINK_COUNT; i++)
   {
@@ -381,14 +381,14 @@ void DynamicHand::DynamicHandMovement()
     {
       Vector2D Direction;
 
-      Direction.x = WallOwner->GetTransform()->GetPosition().x - OwnerPosition.x;
-      Direction.y = WallOwner->GetTransform()->GetPosition().y - OwnerPosition.y;
+      Direction.x = WallOwner->GetTransform()->GetWorldPosition().x - OwnerPosition.x;
+      Direction.y = WallOwner->GetTransform()->GetWorldPosition().y - OwnerPosition.y;
 
       // normalize the direction
       //Direction.Normalize();
 
-      Links[i]->GetTransform()->GetPosition().x += Direction.x;
-      Links[i]->GetTransform()->GetPosition().y += Direction.y;
+      Links[i]->GetTransform()->GetWorldPosition().x += Direction.x;
+      Links[i]->GetTransform()->GetWorldPosition().y += Direction.y;
 
       // check if the link is near the wall
       float distance = CalculateDistance(WallOwner, Links[i]);
@@ -398,7 +398,7 @@ void DynamicHand::DynamicHandMovement()
 	// create the first link of the hand.
 	if (ActiveLinks == 0 || LinkTimer > TimeBetweenLinks)
 	{
-		CreateLink(Owner->GetTransform()->GetPosition() - Vector3D(0,0,1), RotationAngle + angle);
+		CreateLink(Owner->GetTransform()->GetWorldPosition() - Vector3D(0,0,1), RotationAngle + angle);
     
 		if (ActiveLinks != 0)
 		{
@@ -406,22 +406,22 @@ void DynamicHand::DynamicHandMovement()
 		}
 	}
 
-  OwnerPosition = WallOwner->GetTransform()->GetPosition();
+  OwnerPosition = WallOwner->GetTransform()->GetWorldPosition();
 
-	xPosition -= WallOwner->GetTransform()->GetPosition().x;
-	yposition -= WallOwner->GetTransform()->GetPosition().y;
+	xPosition -= WallOwner->GetTransform()->GetWorldPosition().x;
+	yposition -= WallOwner->GetTransform()->GetWorldPosition().y;
 
 	newPosition.x = ((xPosition * cos(angle)) - (yposition * sin(angle)));
 
 	newPosition.y = ((xPosition * sin(angle)) + (yposition * cos(angle))); 
 
-	newPosition.z = Owner->GetTransform()->GetPosition().z;
+	newPosition.z = Owner->GetTransform()->GetWorldPosition().z;
 
-	newPosition.x += WallOwner->GetTransform()->GetPosition().x;
-	newPosition.y += WallOwner->GetTransform()->GetPosition().y;
+	newPosition.x += WallOwner->GetTransform()->GetWorldPosition().x;
+	newPosition.y += WallOwner->GetTransform()->GetWorldPosition().y;
 
 	// move the hand to the correct position
-	Owner->GetTransform()->GetPosition() = newPosition;
+	Owner->GetTransform()->GetWorldPosition() = newPosition;
 
   if (HandBody != NULL)
   {
@@ -515,8 +515,8 @@ bool DynamicHand::GetHandActive(void)
 /*************************************************************************/
 float DynamicHand::CalculateDistance(Vector3D TargetPoint)
 {
-	float X1 = Owner->GetTransform()->GetPosition().x;
-	float Y1 = Owner->GetTransform()->GetPosition().y;
+	float X1 = Owner->GetTransform()->GetWorldPosition().x;
+	float Y1 = Owner->GetTransform()->GetWorldPosition().y;
 
 	float X2 = TargetPoint.x;
 	float Y2 = TargetPoint.y;
@@ -532,11 +532,11 @@ float DynamicHand::CalculateDistance(Vector3D TargetPoint)
 
 float DynamicHand::CalculateDistance(GameObject TargetObject)
 {
-	float X1 = Owner->GetTransform()->GetPosition().x;
-	float Y1 = Owner->GetTransform()->GetPosition().y;
+	float X1 = Owner->GetTransform()->GetWorldPosition().x;
+	float Y1 = Owner->GetTransform()->GetWorldPosition().y;
 
-	float X2 = TargetObject->GetTransform()->GetPosition().x;
-	float Y2 = TargetObject->GetTransform()->GetPosition().y;
+	float X2 = TargetObject->GetTransform()->GetWorldPosition().x;
+	float Y2 = TargetObject->GetTransform()->GetWorldPosition().y;
 
 	float XDistance = X2 - X1;
 
@@ -549,11 +549,11 @@ float DynamicHand::CalculateDistance(GameObject TargetObject)
 
 float DynamicHand::CalculateDistance(GameObject TargetObject, GameObject StartObj)
 {
-	float X1 = StartObj->GetTransform()->GetPosition().x;
-	float Y1 = StartObj->GetTransform()->GetPosition().y;
+	float X1 = StartObj->GetTransform()->GetWorldPosition().x;
+	float Y1 = StartObj->GetTransform()->GetWorldPosition().y;
 
-	float X2 = TargetObject->GetTransform()->GetPosition().x;
-	float Y2 = TargetObject->GetTransform()->GetPosition().y;
+	float X2 = TargetObject->GetTransform()->GetWorldPosition().x;
+	float Y2 = TargetObject->GetTransform()->GetWorldPosition().y;
 
 	float XDistance = X2 - X1;
 
@@ -596,7 +596,7 @@ void DynamicHand::CheckforTile(void)
 	if (TileCheck)
 	{
 		currentState = HAND_RETURNING;
-		Owner->GetTransform()->GetRotation().z = angle;
+		Owner->GetTransform()->GetWorldRotation().z = angle;
 		HitObject = true;
 
 		//remove the tile from the tile map, and connect it to the hand
@@ -609,7 +609,7 @@ void DynamicHand::CheckforTile(void)
 		{
 			if (Links[i] != NULL)
 			{
-				Links[i]->GetTransform()->GetRotation().z = angle;
+				Links[i]->GetTransform()->GetWorldRotation().z = angle;
 			}
 		}
 	}
@@ -627,9 +627,9 @@ void DynamicHand::CreateLink(Vector3D position, float angle)
 	{
 		//Links[ActiveLinks] = GlobalFactory->CreateGameObject("Link", "Link.png", position);
 		Links[ActiveLinks] = GlobalFactory->CreateGameObject("Link", "Segment.png", position);
-		Links[ActiveLinks]->GetTransform()->GetRotation().z = angle;
-    Links[ActiveLinks]->GetTransform()->GetScale().y *= .5;
-    Links[ActiveLinks]->GetTransform()->GetScale().x *= 1.20;
+		Links[ActiveLinks]->GetTransform()->GetWorldRotation().z = angle;
+    Links[ActiveLinks]->GetTransform()->GetWorldScale().y *= .5;
+    Links[ActiveLinks]->GetTransform()->GetWorldScale().x *= 1.20;
 		++ActiveLinks;
 	}
 }
@@ -648,14 +648,14 @@ void DynamicHand::LinkReturn(float dt)
 		{
 			Vector2D Direction;
 
-			Direction.x = WallOwner->GetTransform()->GetPosition().x - Links[i]->GetTransform()->GetPosition().x;
-			Direction.y = WallOwner->GetTransform()->GetPosition().y - Links[i]->GetTransform()->GetPosition().y;
+			Direction.x = WallOwner->GetTransform()->GetWorldPosition().x - Links[i]->GetTransform()->GetWorldPosition().x;
+			Direction.y = WallOwner->GetTransform()->GetWorldPosition().y - Links[i]->GetTransform()->GetWorldPosition().y;
 
 			// normalize the direction
 			Direction.Normalize();
 
-      Links[i]->GetTransform()->GetPosition().x += Direction.x * (ReturnSpeed * dt);
-			Links[i]->GetTransform()->GetPosition().y += Direction.y * (ReturnSpeed * dt);
+      Links[i]->GetTransform()->GetWorldPosition().x += Direction.x * (ReturnSpeed * dt);
+			Links[i]->GetTransform()->GetWorldPosition().y += Direction.y * (ReturnSpeed * dt);
 
 			// check if the link is near the wall
 			float distance = CalculateDistance(WallOwner, Links[i]);
@@ -680,9 +680,9 @@ void DynamicHand::HandReturn()
 {
 	currentState = HAND_INACTIVE;
 
-	Owner->GetTransform()->GetRotation().z = 0.0f;
+	Owner->GetTransform()->GetWorldRotation().z = 0.0f;
 
-	Owner->GetTransform()->GetPosition() = WallOwner->GetTransform()->GetPosition();
+	Owner->GetTransform()->GetWorldPosition() = WallOwner->GetTransform()->GetWorldPosition();
 
 	for (int i = 0; i < LINK_COUNT; i++)
 	{
@@ -717,9 +717,9 @@ void DynamicHand::HandReturn()
             reinterpret_cast<WallController *>(WallOwner->GetComponent(CT_WALL_CONTROLLER))->WallActive = true;
             CapturedObj->SetInVisible();
 
-            //GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "SCBody.png", this->Owner->GetTransform()->GetPosition(), d3dColors::White, true);
+            //GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "SCBody.png", this->Owner->GetTransform()->GetWorldPosition(), d3dColors::White, true);
 
-            //newObject->GetTransform()->GetScale() *= 5;
+            //newObject->GetTransform()->GetWorldScale() *= 5;
 
             ////add a rigid body
             //AABB *box = new AABB(newObject);
@@ -770,17 +770,17 @@ void DynamicHand::StraightenLink()
     {
         if (Links[i] != NULL)
         {
-            Links[i]->GetTransform()->GetRotation().z = Owner->GetTransform()->GetRotation().z;
+            Links[i]->GetTransform()->GetWorldRotation().z = Owner->GetTransform()->GetWorldRotation().z;
 
             continue;
 
             // need to figure out how to line the links up properly
             float LinkDistance = CalculateDistance(Links[i]);
 
-            Links[i]->GetTransform()->GetPosition() = Owner->GetTransform()->GetPosition();
+            Links[i]->GetTransform()->GetWorldPosition() = Owner->GetTransform()->GetWorldPosition();
             
-            Links[i]->GetTransform()->GetPosition().x -= LinkDistance;
-            Links[i]->GetTransform()->GetPosition().y -= LinkDistance;
+            Links[i]->GetTransform()->GetWorldPosition().x -= LinkDistance;
+            Links[i]->GetTransform()->GetWorldPosition().y -= LinkDistance;
         }
     }
 }
@@ -791,7 +791,7 @@ void DynamicHand::OnCollision(GameObject otherObject)
   //printf("hit something\n");
 
     //currentState = HAND_RETURNING;
-    //Owner->GetTransform()->GetRotation().z = angle;
+    //Owner->GetTransform()->GetWorldRotation().z = angle;
     //StraightenLink();
     //
     //this->CapturedObj = otherObject;

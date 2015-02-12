@@ -649,7 +649,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       std::string scalestr;
       custom->GetStringVal(&scalestr);
       float sc = std::stof(scalestr);
-      newObject->GetTransform()->GetScale() *= sc;
+      newObject->GetTransform()->GetWorldScale() *= sc;
     }
     
     //Player (Includes input, tilemap collision, box collider, rigidbody)
@@ -807,8 +807,8 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       m_Targets.push_back(newObject);
 
         // scale the door to the correct size;
-        newObject->GetTransform()->GetScale().x = 2;
-        newObject->GetTransform()->GetScale().y = 5;
+        newObject->GetTransform()->GetWorldScale().x = 2;
+        newObject->GetTransform()->GetWorldScale().y = 5;
         newObject->GetTransform()->GetWorldPosition().y -= 4;
 
         AABB *box = new AABB(newObject);
@@ -843,8 +843,8 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
     if (properties->GetObjectMember(&custom, "HeavyDoor"))
     {
         // scale the door to the correct size;
-        newObject->GetTransform()->GetScale().x = 2;
-        newObject->GetTransform()->GetScale().y = 5;
+        newObject->GetTransform()->GetWorldScale().x = 2;
+        newObject->GetTransform()->GetWorldScale().y = 5;
         newObject->GetTransform()->GetWorldPosition().y -= 4;
 
         AABB *box = new AABB(newObject);
@@ -938,7 +938,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       newObject->AddGameComponent(CT_MENUCONTROLLER, TestMenu);
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->AddSprite(defaults.CreateSprite(16));
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->ChangeState("cursor");
-      newObject->GetTransform()->GetScale() *= 1.2f;
+      newObject->GetTransform()->GetWorldScale() *= 1.2f;
     }
                            
     if (properties->GetObjectMember(&custom, "MenuButton"))
@@ -950,7 +950,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
         MenuButtons * Testbutton = new MenuButtons(newObject, lvlname);
       newObject->AddGameComponent(CT_MENUBUTTON, Testbutton);
 
-      newObject->GetTransform()->GetScale() *= 3.0f;
+      newObject->GetTransform()->GetWorldScale() *= 3.0f;
     }
 
     if (properties->GetObjectMember(&custom, "OnCollideGoToLevel"))
@@ -1017,8 +1017,8 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       Sprite *mmb = defaults.CreateSprite(defaults.GetIDFromSpriteName("MainMenuBackground.png"));
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->AddSprite(mmb);
       reinterpret_cast<SpriteRenderer*>(newObject->GetComponent(CT_SpriteRenderer))->ChangeState("mainmenubg");
-      newObject->GetTransform()->GetScale().x *= 2.06f; //Correct the aspect ratio
-      newObject->GetTransform()->GetScale() *= 13.0f; //Scale it way up (it's a tiny rectangle)
+      newObject->GetTransform()->GetWorldScale().x *= 2.06f; //Correct the aspect ratio
+      newObject->GetTransform()->GetWorldScale() *= 13.0f; //Scale it way up (it's a tiny rectangle)
     }
 
     if (properties->GetObjectMember(&custom, "KillPlayer"))

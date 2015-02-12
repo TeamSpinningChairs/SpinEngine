@@ -432,15 +432,15 @@ bool MenuController::Initialize()
         GlobalSystem->RegisterListener(MESSAGE_MENU, Menu_Listen);
 
         HowtoPlayScreen = GlobalFactory->CreateGameObject("HowTo", "HowToPlayScreen.png", ENGINE->m_Graphics->GetMainCamera()->GetPosition(), d3dColors::White, true);
-        HowtoPlayScreen->GetTransform()->GetScale().x *= 8;
-        HowtoPlayScreen->GetTransform()->GetScale().y *= 8;
-        HowtoPlayScreen->GetTransform()->GetPosition().z = 1;
+        HowtoPlayScreen->GetTransform()->GetWorldScale().x *= 8;
+        HowtoPlayScreen->GetTransform()->GetWorldScale().y *= 8;
+        HowtoPlayScreen->GetTransform()->GetWorldPosition().z = 1;
         HowtoPlayScreen->SetInVisible();
 
         HowToPlayComponent * test = new HowToPlayComponent(HowtoPlayScreen);
         HowtoPlayScreen->AddGameComponent(CT_HOWTOPLAY, test);
 
-        QuitConfirm = GlobalFactory->CreateGameObject("QuitConfirmation", "Claw-Open.png", this->Owner->GetTransform()->GetPosition(), d3dColors::White, true);
+        QuitConfirm = GlobalFactory->CreateGameObject("QuitConfirmation", "Claw-Open.png", this->Owner->GetTransform()->GetWorldPosition(), d3dColors::White, true);
         Confirmation = new ConfirmDestroy(QuitConfirm, this);
         QuitConfirm->AddGameComponent(CT_CONFIRMDESTROY, Confirmation);
         Confirmation->Initialize();
@@ -467,8 +467,8 @@ void MenuController::ActivateButton()
   // special case for how to play
   else if(Button->Level == "HOWTOPLAY")
   {
-    HowtoPlayScreen->GetTransform()->GetPosition() = ENGINE->m_Graphics->GetMainCamera()->GetPosition();
-    HowtoPlayScreen->GetTransform()->GetPosition().z = 3;
+    HowtoPlayScreen->GetTransform()->GetWorldPosition() = ENGINE->m_Graphics->GetMainCamera()->GetPosition();
+    HowtoPlayScreen->GetTransform()->GetWorldPosition().z = 3;
     HowtoPlayScreen->SetVisible();
     HideMenu();
     HowToPlayActive = true;
@@ -520,8 +520,8 @@ void MenuController:: MoveUp(void)
 
     if(Buttons.size() != 0)
   {
-    this->Owner->GetTransform()->GetPosition() = Buttons[currentMenuSelection]->GetTransform()->GetPosition();
-    this->Owner->GetTransform()->GetPosition().x -= 3;
+    this->Owner->GetTransform()->GetWorldPosition() = Buttons[currentMenuSelection]->GetTransform()->GetWorldPosition();
+    this->Owner->GetTransform()->GetWorldPosition().x -= 3;
   }
 
 }
@@ -540,8 +540,8 @@ void MenuController::MoveDown(void)
   
   if(Buttons.size() != 0)
   {
-    this->Owner->GetTransform()->GetPosition() = Buttons[currentMenuSelection]->GetTransform()->GetPosition();
-    this->Owner->GetTransform()->GetPosition().x -= 3;
+    this->Owner->GetTransform()->GetWorldPosition() = Buttons[currentMenuSelection]->GetTransform()->GetWorldPosition();
+    this->Owner->GetTransform()->GetWorldPosition().x -= 3;
   }
 
 }
@@ -582,7 +582,7 @@ void MenuController::SortButtons()
       // loop through the array and compare each value from the starting
       for(unsigned j = (i + 1); j < Buttons.size(); j++)
       {
-        if(Buttons[j]->GetTransform()->GetPosition().y > Buttons[CurrentSmallest]->GetTransform()->GetPosition().y)
+        if(Buttons[j]->GetTransform()->GetWorldPosition().y > Buttons[CurrentSmallest]->GetTransform()->GetWorldPosition().y)
         {
           CurrentSmallest = j;
         }
@@ -609,8 +609,8 @@ void MenuController::SortButtons()
 
   if(Buttons.size() != 0)
   {
-    this->Owner->GetTransform()->GetPosition() = Buttons[currentMenuSelection]->GetTransform()->GetPosition();
-    this->Owner->GetTransform()->GetPosition().x -= 3;
+    this->Owner->GetTransform()->GetWorldPosition() = Buttons[currentMenuSelection]->GetTransform()->GetWorldPosition();
+    this->Owner->GetTransform()->GetWorldPosition().x -= 3;
   }
 }
 
@@ -626,7 +626,7 @@ void MenuController::SortButtonsHorizontal()
         // loop through the array and compare each value from the starting
         for (unsigned j = (i + 1); j < Buttons.size(); j++)
         {
-            if (Buttons[j]->GetTransform()->GetPosition().x > Buttons[CurrentSmallest]->GetTransform()->GetPosition().x)
+            if (Buttons[j]->GetTransform()->GetWorldPosition().x > Buttons[CurrentSmallest]->GetTransform()->GetWorldPosition().x)
             {
                 CurrentSmallest = j;
             }
@@ -653,8 +653,8 @@ void MenuController::SortButtonsHorizontal()
 
     if (Buttons.size() != 0)
     {
-        this->Owner->GetTransform()->GetPosition() = Buttons[currentMenuSelection]->GetTransform()->GetPosition();
-        this->Owner->GetTransform()->GetPosition().y += 3;
+        this->Owner->GetTransform()->GetWorldPosition() = Buttons[currentMenuSelection]->GetTransform()->GetWorldPosition();
+        this->Owner->GetTransform()->GetWorldPosition().y += 3;
     }
 }
 
@@ -720,16 +720,16 @@ void MenuController::UpdatePosition(Vector3D newPos)
       // array is sorted by smallest to largest
       for (unsigned i = 0; i < Buttons.size(); i++)
       {
-        Buttons[i]->GetTransform()->GetPosition().x = newPos.x;
-        Buttons[i]->GetTransform()->GetPosition().y = newPos.y - (2 * i);
+        Buttons[i]->GetTransform()->GetWorldPosition().x = newPos.x;
+        Buttons[i]->GetTransform()->GetWorldPosition().y = newPos.y - (2 * i);
       }
 
       //SortButtons();
 
     if(Buttons.size() != 0)
     {
-      this->Owner->GetTransform()->GetPosition() = Buttons[currentMenuSelection]->GetTransform()->GetPosition();
-      this->Owner->GetTransform()->GetPosition().x -= 3;
+      this->Owner->GetTransform()->GetWorldPosition() = Buttons[currentMenuSelection]->GetTransform()->GetWorldPosition();
+      this->Owner->GetTransform()->GetWorldPosition().x -= 3;
     }
   
 }

@@ -65,7 +65,7 @@ void WallTarget::Update(float dt)
 		return;
 	
 	//actuall calculate distance 
-	float distance = this->Owner->GetTransform()->GetPosition().x - this->Wall->Position.x;
+	float distance = this->Owner->GetTransform()->GetWorldPosition().x - this->Wall->Position.x;
 
 	if(distance)
 	{

@@ -73,10 +73,10 @@ DoorType2Comp::DoorType2Comp(GameObject Parent, int CloseDirection) : IComponent
 // creates the door trigger
 bool DoorType2Comp::Initialize()
 {
-    GameObject Trigger = GlobalFactory->CreateGameObject("Trigger", "Claw-Open.png", this->Owner->GetTransform()->GetPosition());
+    GameObject Trigger = GlobalFactory->CreateGameObject("Trigger", "Claw-Open.png", this->Owner->GetTransform()->GetWorldPosition());
 
-    Trigger->GetTransform()->GetScale().x = 2;
-    Trigger->GetTransform()->GetScale().y = 5;
+    Trigger->GetTransform()->GetWorldScale().x = 2;
+    Trigger->GetTransform()->GetWorldScale().y = 5;
 
     AABB *box = new AABB(Trigger);
     box->SetHalfSize(2, 5);
@@ -95,14 +95,14 @@ bool DoorType2Comp::Initialize()
     if (DoorCloseDirection == DOORCLOSE_LEFT)
     {
         // offset trigger position to the left
-        Trigger->GetTransform()->GetPosition().x -= (Owner->GetTransform()->GetScale().x + 1);
+        Trigger->GetTransform()->GetWorldPosition().x -= (Owner->GetTransform()->GetWorldScale().x + 1);
     }
     else
     {
-        Trigger->GetTransform()->GetPosition().x += (Owner->GetTransform()->GetScale().x + 1);
+        Trigger->GetTransform()->GetWorldPosition().x += (Owner->GetTransform()->GetWorldScale().x + 1);
     }
 
-    Trigger->GetTransform()->GetPosition().y -= (Owner->GetTransform()->GetScale().y);
+    Trigger->GetTransform()->GetWorldPosition().y -= (Owner->GetTransform()->GetWorldScale().y);
     return true;
 }
 
@@ -118,7 +118,7 @@ void DoorType2Comp::Update(float dt)
       }
 
         reinterpret_cast<RigidBody *>(this->Owner->GetComponent(CT_Body))->position.y -= 25 * dt;
-        this->Owner->GetTransform()->GetPosition().y -= 25 * dt;
+        this->Owner->GetTransform()->GetWorldPosition().y -= 25 * dt;
         movedistace += (25 * dt);
         WallMessage WallMSG(Wall_MESSAGE_TYPES::DEACTIVATE);
 

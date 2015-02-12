@@ -40,8 +40,8 @@ void PlayerTriggerListener::OnMessageRecieved(Message * SentMessage)
         PlayerActivateMessage * GivenInput = reinterpret_cast<PlayerActivateMessage *>(SentMessage);
 
         // calculate the distance between the player and the parent object and see if it is in range if it is toggle the switch
-        float TempX = Parent->GetTransform()->GetPosition().x - GivenInput->PlayerPosition.x;
-        float TempY = Parent->GetTransform()->GetPosition().y -  GivenInput->PlayerPosition.y;
+        float TempX = Parent->GetTransform()->GetWorldPosition().x - GivenInput->PlayerPosition.x;
+        float TempY = Parent->GetTransform()->GetWorldPosition().y -  GivenInput->PlayerPosition.y;
 
         float distance = sqrt((TempX * TempX) + (TempY * TempY));
 

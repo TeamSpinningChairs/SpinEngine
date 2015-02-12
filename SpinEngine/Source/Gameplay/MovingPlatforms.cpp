@@ -40,7 +40,7 @@ MovingPlatform::MovingPlatform(GameObject parent, int type, float distance, floa
     PreviousVel = 0.0f;
     Switch = NULL;
     PaceDownThenUp = false;
-    PreviousPosition = Owner->GetTransform()->GetPosition();
+    PreviousPosition = Owner->GetTransform()->GetWorldPosition();
 }
 
 // initializes stuff
@@ -67,8 +67,8 @@ bool MovingPlatform::Initialize()
   
 
 	// set the starting point of the object so we can remember how far we've moved
-	this->StartingPoint.x = this->Owner->GetTransform()->GetPosition().x;
-	this->StartingPoint.y = this->Owner->GetTransform()->GetPosition().y;
+	this->StartingPoint.x = this->Owner->GetTransform()->GetWorldPosition().x;
+	this->StartingPoint.y = this->Owner->GetTransform()->GetWorldPosition().y;
 	
   //Now whenever we collide with something, OnCollision will be called
   InitializeCollisionCallback();
@@ -91,8 +91,8 @@ void MovingPlatform::Update(float dt)
         this->PlatformBody->velocity.y = 0;
         this->PlatformBody->SetStatic();
 
-        //SnapToCellX(PlatformBody->GetOwner()->GetTransform()->GetPosition().x, PlatformBody->position.x);
-        //SnapToCellY(PlatformBody->GetOwner()->GetTransform()->GetPosition().y, PlatformBody->position.y);
+        //SnapToCellX(PlatformBody->GetOwner()->GetTransform()->GetWorldPosition().x, PlatformBody->position.x);
+        //SnapToCellY(PlatformBody->GetOwner()->GetTransform()->GetWorldPosition().y, PlatformBody->position.y);
         return;
     }
  
@@ -147,7 +147,7 @@ void MovingPlatform::Update(float dt)
         this->PlatformBody->velocity.y = 0.0f;
         this->PlatformBody->velocity.x = this->MoveSpeed;
 
-			float distance = this->Owner->GetTransform()->GetPosition().x - this->StartingPoint.x;
+			float distance = this->Owner->GetTransform()->GetWorldPosition().x - this->StartingPoint.x;
 
 			if (distance > this->PaceDistance && this->MovingRight == true)
 			{
@@ -185,7 +185,7 @@ void MovingPlatform::Update(float dt)
         this->PlatformBody->velocity.x = 0.0f;
         this->PlatformBody->velocity.y = this->MoveSpeed;
 
-        float distance = this->Owner->GetTransform()->GetPosition().y - this->StartingPoint.y;
+        float distance = this->Owner->GetTransform()->GetWorldPosition().y - this->StartingPoint.y;
 
         if(this->PaceDownThenUp == false)
         {

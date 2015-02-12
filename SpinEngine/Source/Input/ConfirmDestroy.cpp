@@ -39,9 +39,9 @@ bool ConfirmDestroy::Initialize()
         this->Buttons.push_back(GlobalFactory->CreateGameObject("YesButton", "Menu_Yes.png", Vector3D(0, -2, 0), d3dColors::White, true));
         Header = GlobalFactory->CreateGameObject("ConfirmPrompt", "Menu_Prompt.png", Vector3D(0, 2, 0), d3dColors::White, true);
 
-        Header->GetTransform()->GetScale() *= 2;
-        Buttons[0]->GetTransform()->GetScale() *= 2;
-        Buttons[1]->GetTransform()->GetScale() *= 2;
+        Header->GetTransform()->GetWorldScale() *= 2;
+        Buttons[0]->GetTransform()->GetWorldScale() *= 2;
+        Buttons[1]->GetTransform()->GetWorldScale() *= 2;
 
         HowToPlayComponent * MenuUpdate1 = new HowToPlayComponent(Buttons[0]);
         Buttons[0]->AddGameComponent(CT_HOWTOPLAY, MenuUpdate1);
@@ -55,7 +55,7 @@ bool ConfirmDestroy::Initialize()
 
         if (Buttons.size() != 0)
         {
-            this->Owner->GetTransform()->GetPosition() = (Buttons[CurrentChoice]->GetTransform()->GetPosition() - Vector3D(3, 0, 0));
+            this->Owner->GetTransform()->GetWorldPosition() = (Buttons[CurrentChoice]->GetTransform()->GetWorldPosition() - Vector3D(3, 0, 0));
         }
 
         HideConfirmation();
@@ -86,23 +86,23 @@ void ConfirmDestroy::MoveSelector()
         CurrentChoice = 0;
     }
 
-    this->Owner->GetTransform()->GetPosition() = (Buttons[CurrentChoice]->GetTransform()->GetPosition() - Vector3D(3, 0, 0));
+    this->Owner->GetTransform()->GetWorldPosition() = (Buttons[CurrentChoice]->GetTransform()->GetWorldPosition() - Vector3D(3, 0, 0));
 }
 
 void ConfirmDestroy::UpdatePosition()
 {
     Vector3D newPos = ENGINE->m_Graphics->GetMainCamera()->GetPosition();
 
-    Header->GetTransform()->GetPosition().x = newPos.x;
-    Header->GetTransform()->GetPosition().y = newPos.y + 2;
+    Header->GetTransform()->GetWorldPosition().x = newPos.x;
+    Header->GetTransform()->GetWorldPosition().y = newPos.y + 2;
 
     for (unsigned i = 0; i < Buttons.size(); i++)
     {
-        Buttons[i]->GetTransform()->GetPosition().x = newPos.x;
-        Buttons[i]->GetTransform()->GetPosition().y = newPos.y - (2 * i);
+        Buttons[i]->GetTransform()->GetWorldPosition().x = newPos.x;
+        Buttons[i]->GetTransform()->GetWorldPosition().y = newPos.y - (2 * i);
     }
 
-    this->Owner->GetTransform()->GetPosition() = (Buttons[CurrentChoice]->GetTransform()->GetPosition() - Vector3D(3, 0, 0));
+    this->Owner->GetTransform()->GetWorldPosition() = (Buttons[CurrentChoice]->GetTransform()->GetWorldPosition() - Vector3D(3, 0, 0));
 }
 
 void ConfirmDestroy::HideConfirmation()

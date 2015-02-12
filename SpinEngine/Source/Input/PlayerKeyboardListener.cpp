@@ -165,7 +165,7 @@ void PlayerKeyboardListener::OnMessageRecieved(Message * SentMessage)
     case 'E':
 	    if (GivenInput->KeyStatus == KEY_TRIGGERED)
 	    {
-          GlobalSystem->SendActivate(this->player->GetTransform()->GetPosition());
+          GlobalSystem->SendActivate(this->player->GetTransform()->GetWorldPosition());
 	    }
 	    break;
 
@@ -186,13 +186,13 @@ void PlayerKeyboardListener::OnMessageRecieved(Message * SentMessage)
             IEntity *splashscreenObj;
             SpriteRenderer* splashRend;
 
-            splashscreenObj = new IEntity(GlobalFactory->GetGameObjectCount(), player->GetTransform()->GetPosition(), Vector3D());
+            splashscreenObj = new IEntity(GlobalFactory->GetGameObjectCount(), player->GetTransform()->GetWorldPosition(), Vector3D());
             splashRend = new SpriteRenderer(splashscreenObj, GlobalFactory->GetDevice(), d3dColors::White);
             splashRend->AddSprite("Assets\\Textures\\Text_To_Screen2.png", 0.0, 127, 128, 1.0002f, "idle", true);
             splashscreenObj->AddGameComponent(CT_SpriteRenderer, splashRend);
             GlobalFactory->GetGraphicsManager()->AddSpriteRend(splashRend);
             GlobalFactory->AddGameObject(splashscreenObj);
-            //splashscreenObj->GetTransform()->GetScale().x *= 1024;
+            //splashscreenObj->GetTransform()->GetWorldScale().x *= 1024;
             //splashRend->GetCurrentSprite()->PauseAt('A');
             */
             
@@ -312,7 +312,7 @@ void PlayerKeyboardListener::OnMessageRecieved(Message * SentMessage)
   case VK_SPACE:
     	if (GivenInput->KeyStatus == KEY_TRIGGERED)
 	    {
-          GlobalSystem->SendActivate(this->player->GetTransform()->GetPosition());
+          GlobalSystem->SendActivate(this->player->GetTransform()->GetWorldPosition());
 	    }
       //Holding spacebar: SHOOT LASERS
       if (GivenInput->KeyStatus == KEY_DOWN)
@@ -326,14 +326,14 @@ void PlayerKeyboardListener::OnMessageRecieved(Message * SentMessage)
   case VK_CONTROL:
       if (GivenInput->KeyStatus == KEY_TRIGGERED)
       {
-          GlobalSystem->SendActivate(this->player->GetTransform()->GetPosition());
+          GlobalSystem->SendActivate(this->player->GetTransform()->GetWorldPosition());
       }
       break;
 
   case VK_RETURN:
     if (GivenInput->KeyStatus == KEY_TRIGGERED)
     {
-      GlobalSystem->SendActivate(this->player->GetTransform()->GetPosition());
+      GlobalSystem->SendActivate(this->player->GetTransform()->GetWorldPosition());
     }
     break;
     //((SoundEmitter*)player->GetComponent(CT_SoundEmitter))->SetVolume(0.1f, "music_escape");
