@@ -108,6 +108,7 @@ bool SpriteRenderer::Initialize()
 
   //(We run through this once before we start the update loop, for the benefit of
   //any stationary objects, which won't have their matrices updated again.)
+  Owner->Transform->UpdateRotation(Owner->Transform);
   UpdateMatrices();
   
   return true;
@@ -315,6 +316,7 @@ void SpriteRenderer::UpdateTileSprite()
     {
       reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0.0f;
     }
+	Owner->Transform->UpdateRotation(Owner->Transform);
     UpdateMatrices();
     return;
   }
@@ -360,7 +362,7 @@ void SpriteRenderer::UpdateTileSprite()
     {
       reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
     }
-
+	Owner->Transform->UpdateRotation(Owner->Transform);
     UpdateMatrices();
     return;
   }
@@ -386,6 +388,7 @@ void SpriteRenderer::UpdateTileSprite()
   {
     reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0;
   }
+  Owner->Transform->UpdateRotation(Owner->Transform);
   UpdateMatrices();
   return;
 

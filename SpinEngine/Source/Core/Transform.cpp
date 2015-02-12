@@ -32,6 +32,9 @@ Transform::Transform(IEntity* Owner, Vector3D pos, Vector3D rot, Vector3D scal) 
                    IComponent(Component_Type::CT_TransformComponent, Owner, "Transform"), localPosition(pos),
                    localRotation(rot), localScale(scal)
 {
+	//position = pos;
+	//rotation = rot;
+	//scale = scal;
 	Owner->Transform = this;
 }
 
@@ -210,7 +213,7 @@ void Transform::SetScale(const Vector2D scal)
 
 void Transform::UpdatePosition(Transform* trans)
 {
-	if (Owner->InheritPosition)
+	if (Owner->InheritPosition && Owner->Parent != nullptr)
 	{
 		Vector3D positionAdd = trans->GetWorldPosition();
 		float parentAngle = trans->GetWorldRotation().z;
@@ -243,7 +246,7 @@ void Transform::UpdatePosition(Transform* trans)
 }
 void Transform::UpdateScale(Transform* trans)
 {
-	if (Owner->InheritScale)
+	if (Owner->InheritScale  && Owner->Parent != nullptr)
 	{
 		Vector3D parentScale = trans->GetWorldScale();
 		scale.x = localScale.x * parentScale.x;
@@ -258,7 +261,7 @@ void Transform::UpdateScale(Transform* trans)
 }
 void Transform::UpdateRotation(Transform* trans)
 {
-	if (Owner->InheritRotation)
+	if (Owner->InheritRotation  && Owner->Parent != nullptr)
 	{
 		rotation = localRotation + trans->GetWorldRotation();
 	}
