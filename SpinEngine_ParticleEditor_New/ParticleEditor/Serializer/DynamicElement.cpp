@@ -11,15 +11,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 
 */
 /****************************************************************************/
-#include "Precompiled.h"
-#include "Factory\Serializer\DynamicElement.h"
-
-
-
-ZilchDefineType(DynamicElement, SpinningZilch)
-{
-	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
-}
+#include "DynamicElement.h"
 
 DynamicElement::DynamicElement(void) : type(TYPE_NULL), unnamedmemberIndex(0)
 {
@@ -310,25 +302,5 @@ void DynamicElement::PrepareForNewType(void)
 
     //Delete map
     delete data.val_membersPtr;
-  }
-}
-
-
-std::string DynamicElement::QueryChildName(DynamicElement *child)
-{
-#define QUERYCHILDNAME
-  if (type != TYPE_OBJECT)
-    return std::string("");
-  if (!data.val_membersPtr)
-    return std::string("");
-  if (data.val_membersPtr->empty()) //@me, otherwise wouldn't recognize unnameds
-    return std::string("");
-
-  for (auto i : *(data.val_membersPtr))
-  {
-    if (i.second == child)
-    {
-      return i.first;
-    }
   }
 }

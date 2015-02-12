@@ -13,12 +13,15 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 /****************************************************************************/
 #pragma once
 
-#include "Precompiled.h" //map, vector, string
+#include <vector>
+#include <string>
+#include <stack>
+#include <list>
+#include <map>
 
 class DynamicElement
 {
 public:
-	ZilchDeclareBaseType(DynamicElement, Zilch::TypeCopyMode::ReferenceType);
 	enum Type
 	{
 		TYPE_NULL,
@@ -144,11 +147,24 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	Type GetType(void) const;
 
-  //I assume this is a Josh thing. Josh, I move the implementation to DynamicElement.cpp
-  //Also, nice job with stuff, Josh.
-  //I don't expect you to read this, but enjoy the feeling of surprise and accomplishment if you do.
-  std::string QueryChildName(DynamicElement *child);
+  std::string QueryChildName(DynamicElement *child)
+	{
+    #define QUERYCHILDNAME
+		if(type != TYPE_OBJECT)
+			return std::string("");
+		if(!data.val_membersPtr)
+			return std::string("");
+    if(data.val_membersPtr->empty()) //@me, otherwise wouldn't recognize unnameds
+      return std::string("");
 
+		for(auto i : *(data.val_membersPtr))
+		{
+			if(i.second == child)
+			{
+				return i.first;
+			}
+		}
+	}
 	union
 		{
 			float val_float;
