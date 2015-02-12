@@ -21,7 +21,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 
 #define MAX_COMPONENTS_PER_PAGE 500
 #define MAX_SYSTEMS_PER_PAGE 2
-#define MAX_GAMEOBJECT_PER_PAGE 1000
+#define MAX_GAMEOBJECT_PER_PAGE 800
 
 typedef std::unordered_map<Component_Type, ObjectAllocator*> ComponentAllocator;
 typedef std::unordered_map<SystemType, ObjectAllocator*> SystemAllocator;

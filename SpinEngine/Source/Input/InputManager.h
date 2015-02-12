@@ -36,6 +36,21 @@ class InputManager : public ISystem
     bool IsKeyDown(int keyNumber);
     bool IsKeyPressed(int KeyNumber);
     bool IsKeyReleased(int KeyNumber);
+    
+    bool IsButtonDown(int Controller, int button);
+    bool IsButtonPressed(int Controller, int button);
+    bool IsButtonReleased(int Controller, int button);
+
+    bool isStickPressed(int Controller, int Stick);
+    bool isStickDown(int Controller, int Stick);
+    bool isStickReleased(int Controller, int Stick);
+    
+    bool isTriggerPressed(int Controller, int Stick);
+    bool isTriggerDown(int Controller, int Stick);
+    bool isTriggerReleased(int Controller, int Stick);
+
+    Vector2D GetStickPosition(int Controller, int Stick);
+
     float ControllerCheckTimer;
 
     //When the GSM loads a level, it calls these

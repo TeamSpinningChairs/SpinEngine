@@ -38,10 +38,10 @@
 	"Midground Speed": 0.500000
 	"Background Speed": 0.707000
 
-	"___ WALL CONTROLLER SETTINGS ___": 1.111111
-	"Wall Control Type": 2
-  
 	"___ CAMERA SETTINGS ___": 1.111111
-	"Camera Zoom Factor": 24.063
-  "Pixels Per Unit": 24.0
+	"Camera Zoom Factor": 24.063000
+	"Pixels Per Unit": 24.000000
+
+	"___ WALL CONTROLLER SETTINGS ___": 1.111111
+	"Wall Control Type": 3
 }

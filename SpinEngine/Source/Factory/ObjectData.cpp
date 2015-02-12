@@ -178,141 +178,149 @@ void ObjectData::LoadParticleEmitterData(std::string &filepath, unsigned &emitte
 {
   JSONLoader loader;
   loader.LoadArchive(filepath.c_str());
-  DynamicElement *pe;
-  ParticleEmitter *nPE;
-  //I put this in a scope because this function was causing stack overflow.
-  //This might be unnecessary since I made nPE go on the heap for the duration of this function.
-  {
-    int emitType;
-    if (!loader.Root().GetObjectMember(&pe, "emit_type"))
-      MessageBox(NULL, "Error getting emitter type of particle emitter.", NULL, NULL);
-    pe->GetIntVal(&emitType);
+  DynamicElement *setting; //A reused pointer set towards individual particle settings
 
-    int blendType;
-    if (!loader.Root().GetObjectMember(&pe, "blend_type"))
-      MessageBox(NULL, "Error getting blend type of particle emitter.", NULL, NULL);
-    pe->GetIntVal(&blendType);
+  //Create a particle emitter and add it to our array of particle emitters
+  //This got hacky because, apparently, ParticleEmitter is big enough to cause stack overflow. (...???)
+  ParticleEmitter *pe = new ParticleEmitter();
+  particleEmitters_.push_back(*pe);
+  delete pe;
+  pe = &particleEmitters_.back();
+  //Also add the name to our map of IDs
+  particleEmitterIDs_[particleName] = emittercount++;  
 
-    int particleCount;
-    if (!loader.Root().GetObjectMember(&pe, "particle_count"))
-      MessageBox(NULL, "Error getting particle count of particle emitter.", NULL, NULL);
-    pe->GetIntVal(&particleCount);
+  //Go through and get everything on the long and intimidating list of settings:
+  if (!loader.Root().GetObjectMember(&setting, "emit_type"))
+    MessageBox(NULL, "Error getting emitter type of particle emitter.", NULL, NULL);
+  setting->GetIntVal(reinterpret_cast<int*>(&pe->emit_type));
 
-    std::string texName;
-    if (!loader.Root().GetObjectMember(&pe, "texture_name"))
-      MessageBox(NULL, "Error getting texture name of particle emitter.", NULL, NULL);
-    pe->GetStringVal(&texName);
+  if (!loader.Root().GetObjectMember(&setting, "blend_type"))
+    MessageBox(NULL, "Error getting blend type of particle emitter.", NULL, NULL);
+  setting->GetIntVal(reinterpret_cast<int*>(&pe->blend_type));
 
-    //@@@Apparently start and endColor are structs with four floats in them? What and how is this supposed to get serialized as an int?
-    int startColor; //should be unsigned (this becomes a D3DXCOLOR), but won't matter if it's an int during the pipeline
-    if (!loader.Root().GetObjectMember(&pe, "my_color"))
-      MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
-    pe->GetIntVal(&startColor);
-    // D3DXCOLOR stColor;
-    //memcpy(&stColor, &startColor, sizeof(D3DXCOLOR));
-    int endColor;
-    if (!loader.Root().GetObjectMember(&pe, "my_color_end"))
-      MessageBox(NULL, "Error getting end color of particle emitter.", NULL, NULL);
-    pe->GetIntVal(&endColor);
+  if (!loader.Root().GetObjectMember(&setting, "particle_count"))
+    MessageBox(NULL, "Error getting particle count of particle emitter.", NULL, NULL);
+  setting->GetIntVal(reinterpret_cast<int*>(&pe->particle_count));
 
-    //Now we've got everything required for the constructor, buuuuut there are kinda like twenty other parameters.
-    //Let's get those too!
-    nPE = new ParticleEmitter(nullptr, static_cast<emitter_types>(emitType),
-      static_cast<blend_types>(blendType), static_cast<unsigned>(particleCount), texName);//@@ADD COLORS
-  }
+  if (!loader.Root().GetObjectMember(&setting, "texture_name"))
+    MessageBox(NULL, "Error getting texture name of particle emitter.", NULL, NULL);
+  setting->GetStringVal(&pe->texture_name);
 
-  if (!loader.Root().GetObjectMember(&pe, "scale"))
+  if (!loader.Root().GetObjectMember(&setting, "my_color_r"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.r);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_g"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.g);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_b"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.b);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_a"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.a);
+
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_r"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.r);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_g"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.g);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_b"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.b);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_a"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.a);
+
+  if (!loader.Root().GetObjectMember(&setting, "scale"))
     MessageBox(NULL, "Error getting scale of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->scale);
-  if (!loader.Root().GetObjectMember(&pe, "end_scale"))
+  setting->GetFloatVal(&pe->scale);
+  if (!loader.Root().GetObjectMember(&setting, "end_scale"))
     MessageBox(NULL, "Error getting end scale of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->end_scale);
+  setting->GetFloatVal(&pe->end_scale);
 
-  if (!loader.Root().GetObjectMember(&pe, "angle_1"))
+  if (!loader.Root().GetObjectMember(&setting, "angle_1"))
     MessageBox(NULL, "Error getting angle 1 of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->angle_1);
-  if (!loader.Root().GetObjectMember(&pe, "angle_2"))
+  setting->GetFloatVal(&pe->angle_1);
+  if (!loader.Root().GetObjectMember(&setting, "angle_2"))
     MessageBox(NULL, "Error getting angle 2 of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->angle_2);
+  setting->GetFloatVal(&pe->angle_2);
 
-  if (!loader.Root().GetObjectMember(&pe, "speed_1"))
+  if (!loader.Root().GetObjectMember(&setting, "speed_1"))
     MessageBox(NULL, "Error getting speed 1 of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->speed_1);
-  if (!loader.Root().GetObjectMember(&pe, "speed_2"))
+  setting->GetFloatVal(&pe->speed_1);
+  if (!loader.Root().GetObjectMember(&setting, "speed_2"))
     MessageBox(NULL, "Error getting speed 2 of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->speed_2);
+  setting->GetFloatVal(&pe->speed_2);
 
-  if (!loader.Root().GetObjectMember(&pe, "acceleration_1"))
+  if (!loader.Root().GetObjectMember(&setting, "acceleration_1"))
     MessageBox(NULL, "Error getting acceleration 1 of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->acceleration_1);
-  if (!loader.Root().GetObjectMember(&pe, "acceleration_2"))
+  setting->GetFloatVal(&pe->acceleration_1);
+  if (!loader.Root().GetObjectMember(&setting, "acceleration_2"))
     MessageBox(NULL, "Error getting acceleration 2 of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->acceleration_2);
+  setting->GetFloatVal(&pe->acceleration_2);
 
-  if (!loader.Root().GetObjectMember(&pe, "PE_lifespan"))
+  if (!loader.Root().GetObjectMember(&setting, "PE_lifespan"))
     MessageBox(NULL, "Error getting lifespan of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->PE_lifespan);
+  setting->GetFloatVal(&pe->PE_lifespan);
 
-  if (!loader.Root().GetObjectMember(&pe, "start_delay"))
+  if (!loader.Root().GetObjectMember(&setting, "start_delay"))
     MessageBox(NULL, "Error getting start delay of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->start_delay);
+  setting->GetFloatVal(&pe->start_delay);
 
-  if (!loader.Root().GetObjectMember(&pe, "particle_lifetime"))
+  if (!loader.Root().GetObjectMember(&setting, "particle_lifetime"))
     MessageBox(NULL, "Error getting particle lifetime of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->particle_lifetime);
+  setting->GetFloatVal(&pe->particle_lifetime);
 
-  if (!loader.Root().GetObjectMember(&pe, "lifetime_invariant"))
+  if (!loader.Root().GetObjectMember(&setting, "lifetime_invariant"))
     MessageBox(NULL, "Error getting lifetime invariant of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->lifetime_invariant);
+  setting->GetFloatVal(&pe->lifetime_invariant);
 
-  if (!loader.Root().GetObjectMember(&pe, "spin"))
+  if (!loader.Root().GetObjectMember(&setting, "spin"))
     MessageBox(NULL, "Error getting spin of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->spin);
+  setting->GetFloatVal(&pe->spin);
 
-  if (!loader.Root().GetObjectMember(&pe, "spin_variance"))
+  if (!loader.Root().GetObjectMember(&setting, "spin_variance"))
     MessageBox(NULL, "Error getting spin variance of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->spin_variance);
+  setting->GetFloatVal(&pe->spin_variance);
 
-  if (!loader.Root().GetObjectMember(&pe, "gravity"))
+  if (!loader.Root().GetObjectMember(&setting, "gravity"))
     MessageBox(NULL, "Error getting gravity of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->gravity);
+  setting->GetFloatVal(&pe->gravity);
 
-  int blendc;
-  if (!loader.Root().GetObjectMember(&pe, "blend_colors"))
+  if (!loader.Root().GetObjectMember(&setting, "blend_colors"))
     MessageBox(NULL, "Error getting blend_colors of particle emitter.", NULL, NULL);
-  pe->GetIntVal(&blendc);
-  if (blendc)
-    nPE->blend_colors = true;
+  setting->GetBoolVal(&pe->blend_colors);
 
-  //"x_diff_from_owner": 0
-  //"y_diff_from_owner" : 0
+  if (!loader.Root().GetObjectMember(&setting, "x_diff_from_owner"))
+    MessageBox(NULL, "Error getting blend_colors of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->x_diff_from_owner);
+  if (!loader.Root().GetObjectMember(&setting, "y_diff_from_owner"))
+    MessageBox(NULL, "Error getting blend_colors of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->y_diff_from_owner);
 
   int sourceFactor;
-  if (!loader.Root().GetObjectMember(&pe, "source_factor"))
+  if (!loader.Root().GetObjectMember(&setting, "source_factor"))
     MessageBox(NULL, "Error getting source factor of particle emitter.", NULL, NULL);
-  pe->GetIntVal(&sourceFactor);
-  nPE->source_factor = static_cast<blend_factor_types>(sourceFactor);
+  setting->GetIntVal(&sourceFactor);
+  pe->source_factor = static_cast<blend_factor_types>(sourceFactor);
 
-  if (!loader.Root().GetObjectMember(&pe, "width"))
+  if (!loader.Root().GetObjectMember(&setting, "width"))
     MessageBox(NULL, "Error getting width of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->width);
+  setting->GetFloatVal(&pe->width);
 
-  if (!loader.Root().GetObjectMember(&pe, "height"))
+  if (!loader.Root().GetObjectMember(&setting, "height"))
     MessageBox(NULL, "Error getting height of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->height);
+  setting->GetFloatVal(&pe->height);
 
-  if (!loader.Root().GetObjectMember(&pe, "radius"))
+  if (!loader.Root().GetObjectMember(&setting, "radius"))
     MessageBox(NULL, "Error getting radius of particle emitter.", NULL, NULL);
-  pe->GetFloatVal(&nPE->radius);
+  setting->GetFloatVal(&pe->radius);
 
-  //FINALLY: reate a particle emitter and add it to our array of particle emitters
- // ParticleEmitter newPart = ParticleEmitter()
-  //If there's a texture, call ChangeTexture
-  particleEmitters_.push_back(*nPE);
-  particleEmitterIDs_[particleName] = emittercount++;
+  //Initialize our particle emitter (this will load and create the texture, if any)
+  pe->Initialize();
 
   loader.UnloadArchive();
-  delete nPE;
 }
 
 

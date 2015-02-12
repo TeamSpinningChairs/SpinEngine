@@ -31,7 +31,7 @@ ParticleEmitter::ParticleEmitter(GameObject owner, emitter_types type, blend_typ
   device = GlobalFactory->GetDevice();
   if (!owner)
   {
-    //I disabled this, since ObjectData keeps several of these without itself being a GameObject
+    //I disabled this, since ObjectData keeps several of these without valid owners
     //MessageBox(NULL, "ERROR: Particle Emitter does not have an Game Object assigned!", "Particle Emitter Error", NULL);
   }
 
@@ -88,14 +88,18 @@ bool ParticleEmitter::Initialize()
     v_buffer->Unlock();
   }
 
-  Vector3D initPos = Owner->GetTransform()->GetPosition();
-  initPos.x += x_diff_from_owner;
-  initPos.y += y_diff_from_owner;
-
-  for (unsigned int i = 0; i < particle_count; ++i)
+  if (Owner) //This case is solely to exclude the original particle emitters in ObjectData, which get manually initialized during engine startup
   {
-    particles[i].reset_particle(initPos, angle_1, angle_2, speed_1, speed_2, acceleration_1, acceleration_2);
+    Vector3D initPos = Owner->GetTransform()->GetPosition();
+    initPos.x += x_diff_from_owner;
+    initPos.y += y_diff_from_owner;
+    for (unsigned int i = 0; i < particle_count; ++i)
+    {
+      particles[i].reset_particle(initPos, angle_1, angle_2, speed_1, speed_2, acceleration_1, acceleration_2);
+    }
   }
+
+  
 
   return true;
 }
@@ -234,4 +238,10 @@ void ParticleEmitter::change_texture(std::string new_name)
   texture_name = new_name;
   SPIN_ENGINE_SAFE_RELEASE(texture);
   D3DXCreateTextureFromFile(device, ("Assets\\Textures\\" + texture_name).c_str(), &texture);
+}
+
+ParticleEmitter::ParticleEmitter() : IComponent(CT_ParticleEmitter), texture(NULL)
+{
+  device = GlobalFactory->GetDevice();
+  //Default constructor means that all our values will be set as they're loaded, in ObjectData
 }

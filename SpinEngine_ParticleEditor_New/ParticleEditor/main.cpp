@@ -18,6 +18,8 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "Graphics/ParticleEmitter.h"
 #include <AntTweakBar.h>
 #include <fstream>
+#include "Serializer/JSONSaver.h"
+#include "Serializer/JSONLoader.h"
 
 using std::fstream;
 using std::ios;
@@ -67,7 +69,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 DWORD starting_point , timey;
 std::string save_load_file_name = "particle_emitter";
-fstream file_json, file_zilch;
+fstream file_zilch;
 
 // this is the main message handler for the program
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -144,6 +146,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
   // Change TweakBar color and use dark text
   TwDefine(" TweakBar color='128 224 160' text=dark ");
 
+  TwAddVarCB(bar, "file name", TW_TYPE_STDSTRING, SetFileNameCB, GetFileNamegCB, &save_load_file_name, "file name");
+  TwAddButton(bar, "Serialize", SaveParticleFile, NULL, " label='Serialize File' ");
+  TwAddButton(bar, "Load", LoadParticleFile, NULL, " label='Load File' ");
+
   TwAddVarRW(bar, "particle_lifetime", TW_TYPE_FLOAT, &pe->particle_lifetime, " step=0.01 label='particle_lifetime' ");
   TwAddVarRW(bar, "lifetime invariant", TW_TYPE_FLOAT, &pe->lifetime_invariant, " step=0.01 label='lifetime invariant' ");
 
@@ -202,10 +208,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
   TwAddVarRW(bar, "Square height", TW_TYPE_FLOAT, &pe->height, " step=0.01 label='Square height' ");
 
   TwAddVarRW(bar, "Circle radius", TW_TYPE_FLOAT, &pe->radius, " step=0.01 label='Circle radius' ");
-
-  TwAddVarCB(bar, "file name", TW_TYPE_STDSTRING, SetFileNameCB, GetFileNamegCB, &save_load_file_name, "file name");
-  TwAddButton(bar, "Serialize", SaveParticleFile, NULL, " label='Serialize File' ");
-  TwAddButton(bar, "Load", LoadParticleFile, NULL, " label='Load File' ");
   //################################
 
   // enter the main loop:
@@ -412,7 +414,6 @@ void TW_CALL SaveParticleFile(void * clientData)
 {
   ParticleEmitter* pe = reinterpret_cast<ParticleEmitter*>(object.GetComponent(CT_ParticleEmitter));
 
-  file_json.open((save_load_file_name + ".json").c_str(), std::fstream::out | std::fstream::trunc);
   file_zilch.open((save_load_file_name + ".data").c_str(), std::fstream::out | std::fstream::trunc);
   
   //If zilch file is open then save it as a .data file
@@ -463,55 +464,231 @@ void TW_CALL SaveParticleFile(void * clientData)
     //MessageBox(NULL, "Settings saved succesfully to .data file", NULL, NULL);
   }
   
-  //If json file is open then save it as a .json file
-  if( file_json.is_open() )
+  //Open an instance of the JSON serializer and serialize all particle data to JSON
+  //(Better than << to a filestream, since the serializer will add decimal points on numbers like 3.0f. The serializer's more compatible with, er, itself.)
+  JSONSaver file_json;
+  if( file_json.LoadArchive((save_load_file_name + ".json").c_str()) )
   {
-    file_json << "{\n";
-    
-    file_json << "\t\"current_PE_lifespan\": " << pe->current_PE_lifespan << "\n";
-    file_json << "\t\"PE_lifespan\": " << pe->PE_lifespan << "\n";
+    file_json.BeginObject(nullptr);
 
-    file_json << "\t\"scale\": " << pe->scale << "\n";
-    file_json << "\t\"end_scale\": " << pe->end_scale << "\n";
+    file_json.Field("current_PE_lifespan", pe->current_PE_lifespan);
+    file_json.Field("PE_lifespan", pe->PE_lifespan);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"start_delay\": " << pe->start_delay << "\n";
+    file_json.Field("scale", pe->scale);
+    file_json.Field("end_scale", pe->end_scale);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"particle_lifetime\": " << pe->particle_lifetime << "\n";
-    file_json << "\t\"lifetime_invariant\": " << pe->lifetime_invariant << "\n";
+    file_json.Field("start_delay", pe->start_delay);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"angle_1\": " << pe->angle_1 << "\n"; file_json << "\t\"angle_2\": " << pe->angle_2 << "\n";
-    file_json << "\t\"speed_1\": " << pe->speed_1 << "\n"; file_json << "\t\"speed_2\": " << pe->speed_2 << "\n";
-    file_json << "\t\"acceleration_1\": " << pe->acceleration_1 << "\n"; file_json << "\t\"acceleration_2\": " << pe->acceleration_2 << "\n";
-    file_json << "\t\"spin\": " << pe->spin << "\n"; file_json << "\t\"spin_variance\": " << pe->spin_variance << "\n";
+    file_json.Field("particle_lifetime", pe->particle_lifetime);
+    file_json.Field("lifetime_invariant", pe->lifetime_invariant);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"gravity\": " << pe->gravity << "\n";
+    file_json.Field("angle_1", pe->angle_1);
+    file_json.Field("angle_2", pe->angle_2);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"my_color\": " << pe->my_color << "\n";
-    file_json << "\t\"my_color_end\": " << pe->my_color_end << "\n";
-    file_json << "\t\"blend_colors\": " << pe->blend_colors << "\n";
+    file_json.Field("speed_1", pe->speed_1);
+    file_json.Field("speed_2", pe->speed_2);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"particle_count\": " << pe->particle_count << "\n";
+    file_json.Field("acceleration_1", pe->acceleration_1);
+    file_json.Field("acceleration_2", pe->acceleration_2);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"x_diff_from_owner\": " << pe->x_diff_from_owner << "\n"; 
-    file_json << "\t\"y_diff_from_owner\": " << pe->y_diff_from_owner << "\n";
+    file_json.Field("spin", pe->spin);
+    file_json.Field("spin_variance", pe->spin_variance);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"emit_type\": " << pe->emit_type << "\n";
-    file_json << "\t\"blend_type\": " << pe->blend_type << "\n";
-    file_json << "\t\"source_factor\": " << pe->source_factor << "\n";
-    file_json << "\t\"blend_type\": " << pe->blend_type << "\n";
+    file_json.Field("gravity", pe->gravity);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"width\": " << pe->width << "\n"; file_json << "\t\"height\": " << pe->height << "\n";
-    file_json << "\t\"radius\": " << pe->radius << "\n";
+    //We split the D3DXCOLORs into their constituent floats.
+    file_json.Field("my_color_r", pe->my_color.r);
+    file_json.Field("my_color_g", pe->my_color.g);
+    file_json.Field("my_color_b", pe->my_color.b);
+    file_json.Field("my_color_a", pe->my_color.a);
+    file_json.Field("my_color_end_r", pe->my_color_end.r);
+    file_json.Field("my_color_end_g", pe->my_color_end.g);
+    file_json.Field("my_color_end_b", pe->my_color_end.b);
+    file_json.Field("my_color_end_a", pe->my_color_end.a);
+    file_json.Field("blend_colors", pe->blend_colors);
+    file_json.FieldEmptyLine();
 
-    file_json << "\t\"texture_name\": \"" << pe->texture_name << "\"\n";
+    int pCount = static_cast<int>(pe->particle_count);
+    file_json.Field("particle_count", pCount);
+    file_json.FieldEmptyLine();
 
-    file_json << "}";
+    file_json.Field("x_diff_from_owner", pe->x_diff_from_owner);
+    file_json.Field("y_diff_from_owner", pe->y_diff_from_owner);
+    file_json.FieldEmptyLine();
 
-    file_json.close();
+
+    int eType = static_cast<int>(pe->emit_type);
+    file_json.Field("emit_type", eType);
+
+    int blType = static_cast<int>(pe->blend_type);
+    file_json.Field("blend_type", blType);
+
+    int sFactor = static_cast<int>(pe->source_factor);
+    file_json.Field("source_factor", sFactor);
+    file_json.FieldEmptyLine();
+
+
+    file_json.Field("width", pe->width);
+    file_json.Field("height", pe->height);
+    file_json.Field("radius", pe->radius);
+    file_json.FieldEmptyLine();
+
+    file_json.Field("texture_name", pe->texture_name);
+    file_json.FieldEmptyLine();
+
+    file_json.EndObject();
+    file_json.UnloadArchive();
   }
 }
 
 void TW_CALL LoadParticleFile(void * clientData)
 {
+  JSONLoader loader;
+  loader.LoadArchive((save_load_file_name + ".json").c_str());
+  DynamicElement *setting; //A reused pointer towards individual particle settings
+  ParticleEmitter* pe = reinterpret_cast<ParticleEmitter*>(object.GetComponent(CT_ParticleEmitter));
 
+  //Go through and get everything on the long and intimidating list of settings:
+  if (!loader.Root().GetObjectMember(&setting, "emit_type"))
+    MessageBox(NULL, "Error getting emitter type of particle emitter.", NULL, NULL);
+  setting->GetIntVal(reinterpret_cast<int*>(&pe->emit_type));
+
+  if (!loader.Root().GetObjectMember(&setting, "blend_type"))
+    MessageBox(NULL, "Error getting blend type of particle emitter.", NULL, NULL);
+  setting->GetIntVal(reinterpret_cast<int*>(&pe->blend_type));
+
+  if (!loader.Root().GetObjectMember(&setting, "particle_count"))
+    MessageBox(NULL, "Error getting particle count of particle emitter.", NULL, NULL);
+  setting->GetIntVal(reinterpret_cast<int*>(&pe->particle_count));
+
+  if (!loader.Root().GetObjectMember(&setting, "texture_name"))
+    MessageBox(NULL, "Error getting texture name of particle emitter.", NULL, NULL);
+  setting->GetStringVal(&pe->texture_name);
+
+  if (!loader.Root().GetObjectMember(&setting, "my_color_r"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.r);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_g"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.g);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_b"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.b);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_a"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color.a);
+
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_r"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.r);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_g"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.g);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_b"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.b);
+  if (!loader.Root().GetObjectMember(&setting, "my_color_end_a"))
+    MessageBox(NULL, "Error getting start color of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->my_color_end.a);
+  
+  if (!loader.Root().GetObjectMember(&setting, "scale"))
+    MessageBox(NULL, "Error getting scale of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->scale);
+  if (!loader.Root().GetObjectMember(&setting, "end_scale"))
+    MessageBox(NULL, "Error getting end scale of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->end_scale);
+
+  if (!loader.Root().GetObjectMember(&setting, "angle_1"))
+    MessageBox(NULL, "Error getting angle 1 of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->angle_1);
+  if (!loader.Root().GetObjectMember(&setting, "angle_2"))
+    MessageBox(NULL, "Error getting angle 2 of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->angle_2);
+
+  if (!loader.Root().GetObjectMember(&setting, "speed_1"))
+    MessageBox(NULL, "Error getting speed 1 of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->speed_1);
+  if (!loader.Root().GetObjectMember(&setting, "speed_2"))
+    MessageBox(NULL, "Error getting speed 2 of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->speed_2);
+
+  if (!loader.Root().GetObjectMember(&setting, "acceleration_1"))
+    MessageBox(NULL, "Error getting acceleration 1 of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->acceleration_1);
+  if (!loader.Root().GetObjectMember(&setting, "acceleration_2"))
+    MessageBox(NULL, "Error getting acceleration 2 of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->acceleration_2);
+
+  if (!loader.Root().GetObjectMember(&setting, "PE_lifespan"))
+    MessageBox(NULL, "Error getting lifespan of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->PE_lifespan);
+
+  if (!loader.Root().GetObjectMember(&setting, "start_delay"))
+    MessageBox(NULL, "Error getting start delay of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->start_delay);
+
+  if (!loader.Root().GetObjectMember(&setting, "particle_lifetime"))
+    MessageBox(NULL, "Error getting particle lifetime of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->particle_lifetime);
+
+  if (!loader.Root().GetObjectMember(&setting, "lifetime_invariant"))
+    MessageBox(NULL, "Error getting lifetime invariant of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->lifetime_invariant);
+
+  if (!loader.Root().GetObjectMember(&setting, "spin"))
+    MessageBox(NULL, "Error getting spin of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->spin);
+
+  if (!loader.Root().GetObjectMember(&setting, "spin_variance"))
+    MessageBox(NULL, "Error getting spin variance of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->spin_variance);
+
+  if (!loader.Root().GetObjectMember(&setting, "gravity"))
+    MessageBox(NULL, "Error getting gravity of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->gravity);
+
+  if (!loader.Root().GetObjectMember(&setting, "blend_colors"))
+    MessageBox(NULL, "Error getting blend_colors of particle emitter.", NULL, NULL);
+  setting->GetBoolVal(&pe->blend_colors);
+
+  if (!loader.Root().GetObjectMember(&setting, "x_diff_from_owner"))
+    MessageBox(NULL, "Error getting blend_colors of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->x_diff_from_owner);
+  if (!loader.Root().GetObjectMember(&setting, "y_diff_from_owner"))
+    MessageBox(NULL, "Error getting blend_colors of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->y_diff_from_owner);
+
+  int sourceFactor;
+  if (!loader.Root().GetObjectMember(&setting, "source_factor"))
+    MessageBox(NULL, "Error getting source factor of particle emitter.", NULL, NULL);
+  setting->GetIntVal(&sourceFactor);
+  pe->source_factor = static_cast<blend_factor_types>(sourceFactor);
+
+  if (!loader.Root().GetObjectMember(&setting, "width"))
+    MessageBox(NULL, "Error getting width of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->width);
+
+  if (!loader.Root().GetObjectMember(&setting, "height"))
+    MessageBox(NULL, "Error getting height of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->height);
+
+  if (!loader.Root().GetObjectMember(&setting, "radius"))
+    MessageBox(NULL, "Error getting radius of particle emitter.", NULL, NULL);
+  setting->GetFloatVal(&pe->radius);
+
+  //Reinitialize. This will create a new texture.
+  //It'll also cause a memory leak since we don't deallocate the previous texture,
+  //but we're the only ones who'll ever use this, so don't worry about it.
+  pe->Initialize();
+
+  loader.UnloadArchive();
 }
