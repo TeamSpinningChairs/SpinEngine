@@ -44,6 +44,14 @@ Transform::~Transform()
 
 bool Transform::Initialize()
 {
+  UpdateTransformations();
+	
+  return true;
+}
+
+//Use if you need the transformations to be updated IMMEDIATELY and not at the start of the next frame.
+void Transform::UpdateTransformations()
+{
 	if (Owner->Parent != nullptr)
 	{
 		Transform* parentPos = Owner->Parent->Transform;
@@ -57,24 +65,10 @@ bool Transform::Initialize()
 		rotation = localRotation;
 		scale = localScale;
 	}
-	
-  return true;
 }
 
 void Transform::Update(float dt)
 {
-	if (Owner->Parent != nullptr)
-	{
-		UpdatePosition(Owner->Parent->Transform);
-		UpdateRotation(Owner->Parent->Transform);
-		UpdateScale(Owner->Parent->Transform);
-	}
-	else
-	{
-		position = localPosition;
-		rotation = localRotation;
-		scale = localScale;
-	}
 
 }
 

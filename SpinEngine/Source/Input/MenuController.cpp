@@ -523,7 +523,7 @@ void MenuController:: MoveUp(void)
     this->Owner->GetTransform()->GetPosition() = Buttons[currentMenuSelection]->GetTransform()->GetPosition();
     this->Owner->GetTransform()->GetPosition().x -= 3;
   }
-
+	Owner->Transform->UpdateTransformations();
 }
 
 void MenuController::MoveDown(void)
@@ -543,6 +543,7 @@ void MenuController::MoveDown(void)
     this->Owner->GetTransform()->GetPosition() = Buttons[currentMenuSelection]->GetTransform()->GetPosition();
     this->Owner->GetTransform()->GetPosition().x -= 3;
   }
+  Owner->Transform->UpdateTransformations();
 
 }
 

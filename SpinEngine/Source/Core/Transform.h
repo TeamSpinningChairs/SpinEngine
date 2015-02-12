@@ -31,7 +31,7 @@ public:
   void Serialize (DynamicElement* props, Serializer::DataNode* data) {}
   void Release() override;
   
-
+  void UpdateTransformations();
   //Getters
   Vector3D& GetWorldPosition();
   Vector3D& GetWorldRotation();
