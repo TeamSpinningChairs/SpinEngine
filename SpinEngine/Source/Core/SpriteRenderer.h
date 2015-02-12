@@ -71,9 +71,9 @@ public:
   void ChangeState(std::string new_State_Name);
   void Release();
   Sprite* GetCurrentSprite(void); 
-
-
   D3DCOLOR& GetSpriteColor();
+  void SetColor(const Vector4D vec = Vector4D(1.0f,1.0f,1.0f,1.0f) );
+  void SetColor(const D3DXCOLOR new_color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f) );
 
 
   void UpdateTileSprite();
