@@ -26,6 +26,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include "WallController.h"
 #include "HeadlessChickenAI.h"
 #include "HeadController.h"
+#include "SpriteRenderer.h"
 
 /*************************************************************************/
 /*!
@@ -138,8 +139,11 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
     if (GivenInput->RightTriggerState == TRIGGER_TRIGGERED)
     {
       GameObject newObject = GlobalFactory->CreateGameObject("Trigger", "Head_Idle.png", this->PlayerTransform->GetPosition() + Vector3D(2 * PlayerTransform->GetScale().x, 0, 0));
-      //newObject->Initialize();
       
+      SpriteRend HeadSprite = reinterpret_cast<SpriteRend>(newObject->GetComponent(CT_SpriteRenderer));
+
+      HeadSprite->AddSprite(GlobalFactory->CreateSprite("Head_Hop.png"));
+
       //Box collider and rigidbody
       AABB *box = new AABB(newObject);
       box->SetHalfSize(0.2f, 0.9f);
@@ -165,7 +169,6 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
       head->Initialize();
 
       body->velocity.Set(10 * PlayerTransform->GetScale().x, 10);
-      
     }
 
 
@@ -247,7 +250,8 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
     break;
     
   case BUTTONS_START:
-     if(gGameStateCurr == GS_LEVEL)
+    if (GivenInput->KeyPressed == true)
+    if(gGameStateCurr == GS_LEVEL)
     {
       if (gGameStatePaused)
       {

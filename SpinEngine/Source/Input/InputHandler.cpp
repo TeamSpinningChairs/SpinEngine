@@ -554,18 +554,28 @@ void InputHandler::NormalizeSticks(void)
       float RightX = Current_States[i].Gamepad.sThumbRX;
       float RightY = Current_States[i].Gamepad.sThumbRY;
 
-
 	    //determine how far the controllers are pushed
 	    float magnitudeLeft = sqrt(LeftX*LeftX + LeftY*LeftY);
 
       float magnitudeRight = sqrt(RightX*RightX + RightY*RightY);
 
-	    //determine the direction the sticks are pushed
-	    float normalizedLX = LeftX / magnitudeLeft;
-	    float normalizedLY = LeftY / magnitudeLeft;
+      float normalizedLX = 0.0f;
+      float normalizedLY = 0.0f;
 
-      float normalizedRX = RightX / magnitudeRight;
-      float normalizedRY = RightY / magnitudeRight;
+      float normalizedRX = 0.0f;
+      float normalizedRY = 0.0f;
+
+      if (magnitudeLeft != 0)
+      {
+        normalizedLX = LeftX / magnitudeLeft;
+        normalizedLY = LeftY / magnitudeLeft;
+      }
+
+      if (magnitudeRight != 0)
+      {
+        normalizedRX = RightX / magnitudeRight;
+        normalizedRY = RightY / magnitudeRight;
+      }
 
 	    float normalizedMagnitudeLeft = 0.0f;
       float normalizedMagnitudeRight = 0.0f;
@@ -613,14 +623,11 @@ void InputHandler::NormalizeSticks(void)
           magnitudeRight = 0.0f;
           normalizedMagnitudeRight = 0.0f;
       }
-
-      float test = normalizedLX * normalizedMagnitudeLeft;
-
       
       // store the normalized stick values in the stick present structs. 
       SticksPresent[i].LeftStick.first = normalizedLX * normalizedMagnitudeLeft;
       SticksPresent[i].LeftStick.second = normalizedLY * normalizedMagnitudeLeft;
-      
+
       SticksPresent[i].RightStick.first = normalizedRX * normalizedMagnitudeRight;
       SticksPresent[i].RightStick.second = normalizedRY * normalizedMagnitudeRight;
 
@@ -732,30 +739,30 @@ bool InputHandler::StickTriggered(int ControllerNum, int Check)
 {
     if (Check == CONTROLLER_DIR::LEFT)
     {
-        if (SticksPresent[ControllerNum].LeftStick.first && !SticksPast[ControllerNum].LeftStick.first)
+        if(SticksPresent[ControllerNum].LeftStick != std::pair<float, float>(0.0, 0.0) && SticksPast[ControllerNum].LeftStick == std::pair<float, float>(0.0, 0.0))
         {
             return true;
         }
 
-        else if (SticksPresent[ControllerNum].LeftStick.second && !SticksPast[ControllerNum].LeftStick.second)
-        {
-            return true;
-        }
+        //else if (SticksPresent[ControllerNum].LeftStick.second && !SticksPast[ControllerNum].LeftStick.second)
+        //{
+        //    return true;
+        //}
 
         return false;
     }
 
     else if (Check == CONTROLLER_DIR::RIGHT)
     {
-        if (SticksPresent[ControllerNum].RightStick.first && !SticksPast[ControllerNum].RightStick.first)
-        {
-            return true;
-        }
+      if (SticksPresent[ControllerNum].RightStick != std::pair<float, float>(0.0, 0.0) && SticksPast[ControllerNum].RightStick == std::pair<float, float>(0.0, 0.0))
+      {
+        return true;
+      }
 
-        else if (SticksPresent[ControllerNum].RightStick.second && !SticksPast[ControllerNum].RightStick.second)
-        {
-            return true;
-        }
+        //else if (SticksPresent[ControllerNum].RightStick.second && !SticksPast[ControllerNum].RightStick.second)
+        //{
+        //    return true;
+        //}
 
         return false;
     }
@@ -919,7 +926,7 @@ bool InputHandler::TriggerReleased(int ControllerNum, int Check)
 /*************************************************************************/
 bool InputHandler::TriggerDown(int ControllerNum, int Check)
 {
-  if (this->Active_Controllers[ControllerNum] != true)
+  if (CheckControllerActive(ControllerNum) == false)
     false;
 
     if (Check == CONTROLLER_DIR::LEFT)
@@ -1048,5 +1055,17 @@ Vector2D InputHandler::GetStickVector(int ControllerNum, int Check)
   else
   {
     return Vector2D(SticksPresent[ControllerNum].RightStick.first, SticksPresent[ControllerNum].RightStick.second);
+  }
+}
+
+bool InputHandler::CheckControllerActive(int ControllerNum)
+{
+  if (ControllerNum < XUSER_MAX_COUNT)
+  {
+    return this->Active_Controllers[ControllerNum];
+  }
+  else
+  {
+    return false;
   }
 }

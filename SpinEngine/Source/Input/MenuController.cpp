@@ -202,6 +202,11 @@ void MenuGamepadListener::OnMessageRecieved(Message * SentMessage)
 
     if (ParentObj->QuitActive == true)
     {
+      if (GivenInput->LeftStickState == STICK_STATE::STICK_TRIGGERED)
+      {
+        this->ParentObj->Confirmation->ExecuteOrder();
+      }
+
         switch(GivenInput->TriggeredKey)
         {
       
@@ -245,6 +250,21 @@ void MenuGamepadListener::OnMessageRecieved(Message * SentMessage)
     
       return;
     }
+
+    if (GivenInput->LeftStickState == STICK_TRIGGERED)
+    {
+      if (GivenInput->leftStick.first > 0)
+      {
+        this->ParentObj->MoveUp();
+      }
+
+      else
+      {
+        this->ParentObj->MoveDown();
+      }
+    }
+
+
   switch(GivenInput->TriggeredKey)
   {
       
@@ -265,9 +285,9 @@ void MenuGamepadListener::OnMessageRecieved(Message * SentMessage)
     break;
 
   case BUTTONS_START:
-    if(GivenInput->KeyPressed)
+    if (GivenInput->KeyPressed)
     {
-      this->ParentObj->ActivateButton();
+      //this->ParentObj->ActivateButton();
     }
     break;
     

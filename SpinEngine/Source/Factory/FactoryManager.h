@@ -76,8 +76,10 @@ private:
 
   GraphicsManager *m_pGraphicsManager;
   //counters that will not ever decrease:
+
   unsigned int m_TotalObjectCount;
   unsigned int m_DeletedObjectCount;
+
   //This goes up and down all the time, though!
   unsigned int m_CurrentObjectCount;
 
@@ -109,5 +111,4 @@ private:
   //Helpers for PopulateLevel
   void CreateBasicTile(int tileID, int position, int mapWidth, int halfTileWidth);
   void FactoryManager::CreateGameObject(DynamicElement *object);
-
 };

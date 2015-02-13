@@ -117,8 +117,6 @@ bool InputManager::IsAnyKeyTriggered()
   return m_Keyboard->IsAnyKeyTriggered();
 }
 
-
-
 void InputManager::InitializeAnyPlayback(std::string levelname)
 {
   m_Controller->InitializeAnyPlayback(levelname);
@@ -185,4 +183,9 @@ bool InputManager::isTriggerReleased(int Controller, int trigger)
 Vector2D  InputManager::GetStickPosition(int Controller, int Stick)
 {
   return m_Controller->GetStickVector(Controller, Stick);
+}
+
+bool InputManager::isControllerActive(int Controller)
+{
+  return m_Controller->CheckControllerActive(Controller);
 }

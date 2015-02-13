@@ -1,9 +1,9 @@
 {
-  "statename": "idle"
+  "statename": "Moving"
   "texturepath": "Assets\Textures\Head_Hop.png"
   "texturename": "Head_Hop.png"
   "start_i": 0
   "end_i": 15
   "totalframes": 16
-  "timeperframe": 0.125
+  "timeperframe": 0.0425
 }

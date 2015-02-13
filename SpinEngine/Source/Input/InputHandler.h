@@ -156,6 +156,8 @@ public:
   bool TriggerReleased(int ControllerNum, int Check);
   bool TriggerDown(int ControllerNum, int Check);
 
+  bool CheckControllerActive(int ControllerNum);
+
   Vector2D GetStickVector(int ControllerNum, int Check);
 
   //When the GSM loads a level, it calls these

@@ -662,7 +662,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       RigidBody *body = new RigidBody(newObject, reinterpret_cast<Primitive*>(box));
       body->set(5.0f);
       //Make the body not collide with other bodies
-      body->isGhost = true;
+      //body->isGhost = true;
       //body->useGravity = false;
       body->restitution = 0;
       newObject->AddGameComponent(CT_Body, body);
