@@ -10,6 +10,7 @@
 #include "Wall.h"
 #include "NewMessageSystem.h"
 #include "FactoryAccess.h"
+#include "SpriteRenderer.h"
 
 class HeadController : public IComponent //, public CollisionDelegate
 {
@@ -25,10 +26,10 @@ public:
 
   void Release();
 
-  
-
 private:
 
+  TileMapCollision * HeadCollision;
+  SpriteRend HeadSprite;
   RigidBody * HeadBody;
   int ControllerNumber;
   GameObject parent;

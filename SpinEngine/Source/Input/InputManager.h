@@ -49,6 +49,8 @@ class InputManager : public ISystem
     bool isTriggerDown(int Controller, int Stick);
     bool isTriggerReleased(int Controller, int Stick);
 
+    bool isControllerActive(int Controller);
+
     Vector2D GetStickPosition(int Controller, int Stick);
 
     float ControllerCheckTimer;
