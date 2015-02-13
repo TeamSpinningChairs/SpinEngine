@@ -22,7 +22,8 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 ZilchDefineType(FactoryAccess, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
-
+	ZilchBindMethodAs(ZCreateSprite, "CreateSprite");
+	ZilchBindMethodAs(ZCreateGameObject, "CreateGameObject");
 }
 
 //We actually set this in Engine.cpp (during engine init), but we need to initialize here.
@@ -82,6 +83,12 @@ int FactoryAccess::GetGameObjectCount()
 GraphicsManager *FactoryAccess::GetGraphicsManager()
 {
   return factory_.m_pGraphicsManager;
+}
+
+IEntity* FactoryAccess::ZCreateGameObject(Zilch::String name = "GameObject", Zilch::String spritename = "DefaultTile.png",
+	Vector3D pos = Vector3D(), Vector4D color = Vector4D(255, 255, 255, 255), bool isUI = false)
+{	
+	return CreateGameObject(name.c_str(), spritename.c_str(), pos, D3DXCOLOR(color.x, color.y, color.z, color.w), isUI);
 }
 
 IEntity *FactoryAccess::CreateGameObject(std::string name, std::string spritename, Vector3D pos, D3DCOLOR color, bool is_UI)

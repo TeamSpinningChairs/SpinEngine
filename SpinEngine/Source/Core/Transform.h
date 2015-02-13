@@ -31,8 +31,11 @@ public:
   void Serialize (DynamicElement* props, Serializer::DataNode* data) {}
   void Release() override;
   
-
+  void UpdateTransformations();
   //Getters
+  Vector3D& GetWorldPosition();
+  Vector3D& GetWorldRotation();
+  Vector3D& GetWorldScale();
   Vector3D& GetPosition();
   Vector3D& GetRotation();
   Vector3D& GetScale();
@@ -59,9 +62,15 @@ public:
   void SetScaleZ(float z);
   void SetScale(float x, float y, float z);
 
+  void UpdatePosition(Transform* trans);
+  void UpdateScale(Transform* trans);
+  void UpdateRotation(Transform* trans);
 
+  Vector3D localPosition = Vector3D();
+  Vector3D localScale = Vector3D(1, 1, 1);
+  Vector3D localRotation = Vector3D();
 private:
-  Vector3D position;
-  Vector3D scale;
-  Vector3D rotation;
+  Vector3D position = Vector3D();
+  Vector3D scale = Vector3D(1, 1, 1);
+  Vector3D rotation = Vector3D();
 };

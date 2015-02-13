@@ -42,18 +42,19 @@
                  "gid":18,
                  "height":0,
                  "id":36,
-                 "name":"Core",
+                 "name":"Core1",
                  "properties":
                     {
-                     "OnCollideDestroy":"",
-                     "OnCollideTurnOnWall":""
+                     "DataFile":"ZilchTestLevel",
+                     "RigidBody":"",
+                     "TileMapCollision":""
                     },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":8704,
-                 "y":23040
+                 "x":63072,
+                 "y":2640
                 }, 
                 {
                  "gid":9,
@@ -115,7 +116,8 @@
                     {
                      "AABB":"",
                      "DataFile":"ZilchTestLevel",
-                     "RigidBody":""
+                     "RigidBody":"",
+                     "TileMapCollision":""
                     },
                  "rotation":0,
                  "type":"",
@@ -123,6 +125,22 @@
                  "width":0,
                  "x":64764,
                  "y":2902.6666666667
+                }, 
+                {
+                 "gid":18,
+                 "height":0,
+                 "id":80,
+                 "name":"CoreChild",
+                 "properties":
+                    {
+                     "DataFile":"ZilchTestLevel"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":64256,
+                 "y":2305
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -143,7 +161,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":75,
+ "nextobjectid":81,
  "orientation":"orthogonal",
  "properties":
     {

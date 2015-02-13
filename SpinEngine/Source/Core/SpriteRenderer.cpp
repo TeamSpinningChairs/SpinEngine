@@ -26,16 +26,18 @@ const float HALF_PI = PI / 2.0f;
 ZilchDefineType(SpriteRenderer, SpinningZilch)
 {
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
-	ZilchBindMethodAs(ZChangeState, "ChangeState");
+	ZilchBindMethodAs(ZChangeState, "ChangeSprite");
 	ZilchBindMethodOverload(AddSprite, void, Sprite*);
 	ZilchBindMethod(GetPosition);
+	ZilchBindMethodOverload(SetColor, void, Vector4D);
+	ZilchBindMethod(Zilch_GetSpriteColor);
 
 }
 
 SpriteRenderer::SpriteRenderer(IEntity* Owner, IDirect3DDevice9* device, D3DCOLOR m_color, 
   std::string initStateName) : IComponent(CT_SpriteRenderer, Owner), spriteDrawingDevice(device),
   color(m_color), currentStateName(initStateName), m_spriteStates(SpriteCollection(0)), isStationary(false),
-  myPos(const_cast<Vector3D&>((*reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))).GetPosition()))
+  myPos(const_cast<Vector3D&>((*reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))).GetWorldPosition()))
 {
   Owner->SpriteRenderer = this;
   reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetScale().x *= 1.02f;
@@ -301,15 +303,15 @@ void SpriteRenderer::UpdateTileSprite()
     //And then rotate appropriately
     if (!rightNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = -HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = -90;
     }
     else if (!leftNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (!bottomNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
     }
     else //no top neighbor
     {
@@ -330,17 +332,17 @@ void SpriteRenderer::UpdateTileSprite()
       m_spriteStates[currentStateName]->SetFrame(15);
       //Flip on a 50/50 chance=
       if (rand() % 2 == 0)
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
       else
         reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 0;
     }
     else if (rightNeighbor && topNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 180;
     }
     else if (rightNeighbor && bottomNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (bottomNeighbor && topNeighbor)
     {
@@ -348,9 +350,9 @@ void SpriteRenderer::UpdateTileSprite()
       m_spriteStates[currentStateName]->SetFrame(15);
       //rotate 90 degrees and then flip on a 50/50 chance
       if (rand() % 2 == 0)
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI + HALF_PI;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
       else
-        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = HALF_PI;
+        reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
     }
     else if (bottomNeighbor && leftNeighbor)
     {
@@ -358,9 +360,8 @@ void SpriteRenderer::UpdateTileSprite()
     }
     else if (leftNeighbor && topNeighbor)
     {
-      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI + HALF_PI;
+      reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
     }
-
     UpdateMatrices();
     return;
   }
@@ -372,15 +373,15 @@ void SpriteRenderer::UpdateTileSprite()
   m_spriteStates[currentStateName]->SetFrame((rand() % 2) + 13);
   if (rightNeighbor)
   {
-    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = HALF_PI;
+    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
   }
   else if (leftNeighbor)
   {
-    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI + HALF_PI;
+    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 270;
   }
   else if (topNeighbor)
   {
-    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = PI;
+    reinterpret_cast<Transform*>(Owner->GetComponent(CT_TransformComponent))->GetRotation().z = 90;
   }
   else //bottom neighbor
   {
@@ -414,18 +415,19 @@ void SpriteRenderer::UpdateSurroundingTileSprites()
 //we run it every frame.)
 void SpriteRenderer::UpdateMatrices()
 {
+  Owner->Transform->UpdateTransformations();
   D3DXMATRIX Scale, Rx, Ry, Rz, Translation;
   D3DXVECTOR2 scale2D, translate2D;
 
-  Vector3D rot = Owner->GetTransform()->GetRotation();
-  D3DXMatrixRotationX(&Rx, rot.x);
-  D3DXMatrixRotationY(&Ry, rot.y);
-  D3DXMatrixRotationZ(&Rz, rot.z);
+  Vector3D rot = Owner->GetTransform()->GetWorldRotation();
+  D3DXMatrixRotationX(&Rx, Math::DegToRad(rot.x));
+  D3DXMatrixRotationY(&Ry, Math::DegToRad(rot.y));
+  D3DXMatrixRotationZ(&Rz, Math::DegToRad(rot.z));
 
-  Vector3D scal = Owner->GetTransform()->GetScale();
+  Vector3D scal = Owner->GetTransform()->GetWorldScale();
   D3DXMatrixScaling(&Scale, scal.x, scal.y, scal.z);
 
-  Vector3D& tempTanslate = Owner->GetTransform()->GetPosition();
+  Vector3D& tempTanslate = Owner->GetTransform()->GetWorldPosition();
   D3DXMatrixTranslation(&Translation, tempTanslate.x, tempTanslate.y, tempTanslate.z);
 
   world = Scale * Rx * Ry * Rz * Translation;
@@ -434,6 +436,11 @@ void SpriteRenderer::UpdateMatrices()
 void SpriteRenderer::SetColor(const Vector4D vec)
 {
   color = D3DXCOLOR(vec.x, vec.y, vec.z, vec.w);
+}
+
+Vector4D SpriteRenderer::Zilch_GetSpriteColor() const
+{
+	return Vector4D(ExtractRed(color), ExtractBlue(color), ExtractGreen(color), ExtractAlpha(color));
 }
 
 void SpriteRenderer::SetColor(const D3DXCOLOR new_color)

@@ -32,7 +32,7 @@ public:
 
   Transform *pTrans;
   Primitive *bodyShape;
-  Vector2D position;       // Holds the position of the rigid body
+  Vector2D position = Vector2D();    // Holds the position of the rigid body
   Vector2D acceleration;
   Vector2D velocity;       // Holds the linear velocity of the rigid body
   Vector2D forceAccum;     // Accumlated force
@@ -66,7 +66,8 @@ public:
     // Sets the position
   void setPosition(const Vector2D &position);
   void setPosition(const float x, const float y);
-  Vector2D getPosition() const;
+
+  Vector2D* getPosition();
 
    // Set the acceleration
   void setAcceleration(const Vector2D &acc);
@@ -75,7 +76,8 @@ public:
 
   void setVelocity(const Vector2D &velocity);
   void setVelocity(const float x, const float y);
-  Vector2D getVelocity() const;
+  void setVelocity(Vector2D* velocity);
+  Vector2D* getVelocity();
   
   void setMass(const float mass); 
   float getMass() const;

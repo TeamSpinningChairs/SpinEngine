@@ -6,6 +6,7 @@ ZilchDefineType(ActionSequence, SpinningZilch)
 	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
 	ZilchBindConstructor();
 	ZilchBindDestructor();
+	ZilchBindMethod(Update);
 }
 
 ActionSequence::ActionSequence(void)

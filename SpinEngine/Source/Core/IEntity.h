@@ -64,8 +64,10 @@ public:
   char* GetTag();
   void SetName(std::string);
   //Setters
+  void ZAddGameComponent(int type, Component comp);
   void AddGameComponent(Component_Type type, Component comp);
   void AddZilchComponent(Zilch::Handle comp);
+  void AddZilchComponent(Zilch::Any comp);
   void RemoveGameComponent(Component_Type type);
   void SetVisible();
   void SetInVisible();
@@ -73,7 +75,7 @@ public:
 
   Zilch::String ZGetName();
   //Action Sequence
-  ActionSequence* Actions = new ActionSequence();
+  ActionSequence* Actions = nullptr;
 
   //Methods
   virtual bool Initialize();
@@ -86,14 +88,32 @@ public:
   ComponentPointer(RigidBody);
   ComponentPointer(Primitive);
 
+  void AddChild(IEntity*);
+  void AddChildAtWorldPosition(IEntity*);
+  IEntity* FindChildByName(Zilch::String);
+  void RemoveChild(IEntity*);
+  void RemoveChildByName(Zilch::String);
+
+  void Detach();
+  void AttachTo(IEntity* parent);
+  void AttachAtWorldPosition(IEntity* parent);
+  void DetachAtWorldPosition();
+
   bool IsCaptured;
 
+  
+  bool InheritRotation = true;
+  bool InheritPosition = true;
+  bool InheritScale = true;
+  bool Pivot = true;
+  IEntity* Parent = nullptr;
 protected:
   EntityId Entity_Id;
   Component Components[Component_Count];
   std::vector<Zilch::Handle> ZilchComponents;
 
-
+  
+  std::vector<IEntity*> Children = std::vector<IEntity*>();
   bool IsVisible;
   bool IsActive;
   char tag[sizeof_name_tag];
