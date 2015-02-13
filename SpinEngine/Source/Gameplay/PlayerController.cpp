@@ -106,7 +106,7 @@ lastFrameDT(1.0f / 60.0f), fuelRegenTimer(0), jumpButtonReleased(false)
     pool_[i].second = beamComp;
 
   }
-  int i = 5;
+
 }
 
 bool PlayerController::Initialize()
@@ -134,6 +134,12 @@ void PlayerController::Update(float dt)
 {
   lastFrameDT = dt; //used in jump code, which is triggered by the messaging system
   laserTimer += dt; //Tick up how long it's been since we last fired a laser
+
+  if (this->Active == false)
+  {
+    this->playerBody->velocity.x = 0;
+    return;
+  }
 
   //When player dies, stop for 2 seconds and then reload
   if (!playerIsAlive)
@@ -449,5 +455,9 @@ void PlayerController::OnCollision(GameObject otherObject)
       toLaunch->Launch(parent->GetTransform()->GetPosition(), 0.0f, Vector2D(*laserSpeed,0.f));
     else
       toLaunch->Launch(parent->GetTransform()->GetPosition(), PI, Vector2D(-(*laserSpeed),0.f)); //0 is default rotation, PI is rotated 180 deg (one radian)
-
   }
+
+void PlayerController::UpdateControllerNumber(int newnumber)
+{
+  this->controller->SetControllerNum(newnumber);
+}

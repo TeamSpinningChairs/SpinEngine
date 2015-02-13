@@ -242,6 +242,8 @@ void DynamicHand::Update(float dt)
 				// come up with a way to capture the player
         CapturedObj = Target;
 
+        (reinterpret_cast<SpriteRend>(this->Owner->GetComponent(CT_SpriteRenderer)))->ChangeState("Closed");
+
 				currentState = HAND_RETURNING;
 				Owner->GetTransform()->GetRotation().z = angle;
         StraightenLink();
@@ -254,6 +256,7 @@ void DynamicHand::Update(float dt)
 
       if (CapturedObj)
       {
+        (reinterpret_cast<SpriteRend>(this->Owner->GetComponent(CT_SpriteRenderer)))->ChangeState("Closed");
         currentState = HAND_RETURNING;
         Owner->GetTransform()->GetRotation().z = angle;
         StraightenLink();
@@ -595,6 +598,7 @@ void DynamicHand::CheckforTile(void)
 
 	if (TileCheck)
 	{
+    //reinterpret_cast<SpriteRend>(this->Owner->GetComponent(CT_SpriteRenderer)))->ChangeState("Closed");
 		currentState = HAND_RETURNING;
 		Owner->GetTransform()->GetRotation().z = angle;
 		HitObject = true;

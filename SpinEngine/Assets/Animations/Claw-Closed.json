@@ -1,5 +1,5 @@
 {
-  "statename": "idle"
+  "statename": "Closed"
   "texturepath": "Assets\Textures\Claw-Closed.png"
   "texturename": "Claw-Closed.png"
   "start_i": 0
