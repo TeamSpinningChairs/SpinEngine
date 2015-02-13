@@ -43,6 +43,9 @@ Level =
             },
 			Rotator = 
 			{
+				bool Active = true,
+				Vec3 Speed = [0, 0, 5],
+				bool UsesDT = false,
 			},
         },
 	Cog = 

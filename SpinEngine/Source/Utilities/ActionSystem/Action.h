@@ -29,8 +29,7 @@ class Action
 		//DO NOT CALL THIS DEFAULT CONSTRUCTOR.
 		Action();
 		Action(float time);
-		template<typename T>
-		Action(T function); //Void Function Pointer
+		Action(Zilch::Delegate* function);
 		Action(float* startVal, float endVal, float time, Ease::Eases ease);
 		Action(int* startVal, int endVal, float time, Ease::Eases ease);
 		Action(Vector2D* startVal, Vector2D endVal, float time, Ease::Eases ease);
@@ -40,8 +39,7 @@ class Action
 		
 		//These functions reset the values in the action so that it can be used multiple times.
 		void SetValues(float time);
-		template<typename T>
-		void SetValues(T function); //Void Function Pointer
+		void SetValues(Zilch::Delegate* function);
 		void SetValues(float startVal, float* currentVal, float endVal, float time, Ease::Eases ease);
 		void SetValues(int startVal, int* currentVal, int endVal, float time, Ease::Eases ease);
 		void SetValues(Vector2D* startVal, Vector2D* currentVal, Vector2D* endVal, float time, Ease::Eases ease);
@@ -86,13 +84,10 @@ class Action
 		static void Property(ActionSequence* seq, Zilch::Property startVal, Vector4D endVal, float time, int ease);*/
 
 		static void Delay(ActionSequence* seq, float delay);
-		template<typename T>
-		static void Call(ActionSequence* seq, T function);
 		static void Call(ActionSequence* seq, Zilch::Any);
 
 		static void Delay(ActionGroup* grp, float delay);
-		template<typename T>
-		static void Call(ActionGroup* grp, T function);
+		static void Call(ActionGroup* grp, Zilch::Any);
 
 		static ActionGroup* Group(ActionSequence* seq);
 
@@ -156,8 +151,7 @@ class ActionProperty
 		ZilchDeclareBaseType(ActionProperty, Zilch::TypeCopyMode::ReferenceType);
 		ActionProperty(ActionGroup* grp);
 		ActionProperty(float time);
-		template<typename T>
-		ActionProperty(T function); //Void Function Pointer
+		ActionProperty(Zilch::Delegate* function);
 		ActionProperty(float* startVal, float endVal, float time, Ease::Eases ease);
 		ActionProperty(int* startVal, int endVal, float time, Ease::Eases ease);
 		ActionProperty(Vector2D* startVal, Vector2D* endVal, float time, Ease::Eases ease);

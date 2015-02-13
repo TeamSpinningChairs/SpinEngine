@@ -29,6 +29,8 @@ ZilchDefineType(SpriteRenderer, SpinningZilch)
 	ZilchBindMethodAs(ZChangeState, "ChangeSprite");
 	ZilchBindMethodOverload(AddSprite, void, Sprite*);
 	ZilchBindMethod(GetPosition);
+	ZilchBindMethodOverload(SetColor, void, Vector4D);
+	ZilchBindMethod(Zilch_GetSpriteColor);
 
 }
 
@@ -434,6 +436,11 @@ void SpriteRenderer::UpdateMatrices()
 void SpriteRenderer::SetColor(const Vector4D vec)
 {
   color = D3DXCOLOR(vec.x, vec.y, vec.z, vec.w);
+}
+
+Vector4D SpriteRenderer::Zilch_GetSpriteColor() const
+{
+	return Vector4D(ExtractRed(color), ExtractBlue(color), ExtractGreen(color), ExtractAlpha(color));
 }
 
 void SpriteRenderer::SetColor(const D3DXCOLOR new_color)

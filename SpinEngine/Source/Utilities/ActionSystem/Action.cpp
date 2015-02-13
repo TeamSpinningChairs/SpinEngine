@@ -16,7 +16,8 @@ ZilchDefineType(Action, SpinningZilch)
 	ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Vector3D* startVal, Vector3D endVal, float time, int ease);
 	ZilchBindStaticMethodOverload(Property, void, ActionSequence* seq, Vector4D* startVal, Vector4D endVal, float time, int ease);
 	ZilchBindStaticMethodOverload(Delay, void, ActionSequence* seq, float time);
-	ZilchBindStaticMethodOverload(Call, void, ActionSequence* seq, Zilch::Any);
+	ZilchBindStaticMethodOverload(Call, void, ActionSequence* seq, Zilch::Any function);
+	ZilchBindStaticMethodOverload(Call, void, ActionGroup* grp, Zilch::Any function);
 
 	ZilchBindStaticMethodOverload(Property, void, ActionGroup* seq, Vector2D* startVal, Vector2D endVal, float time, int ease);
 	ZilchBindStaticMethodOverload(Property, void, ActionGroup* seq, Vector3D* startVal, Vector3D endVal, float time, int ease);
@@ -44,8 +45,7 @@ Action::Action()
 	TimePassed = 0;
 }
 //Calls
-template<typename T>
-Action::Action(T function)
+Action::Action(Zilch::Delegate* function)
 {
 	SetValues(function);
 }
@@ -98,10 +98,11 @@ void Action::SetValues(float time)
 	Started = true;
 	Completed = false;
 }
-template<typename T>
-void Action::SetValues(T function)
+
+
+
+void Action::SetValues(Zilch::Delegate* function)
 {
-	Update = &Action::UpdateDelay;
 	Time = 0;
 	TimePassed = 0;
 	StartVal = Vector4D(0, 0, 0, 0);
@@ -110,8 +111,10 @@ void Action::SetValues(T function)
 	Active = true;
 	Started = true;
 	Completed = true;
+	Zilch::Call call(*function, ZILCH->GetDependencies());
+	call.Invoke(ZILCH->Report);
+	delete function;
 	//No need for a "UpdateCall" function.
-	//function();
 }
 
 void Action::SetValues(float startVal, float* currentVal, float endVal, float time, Ease::Eases ease)
@@ -480,7 +483,7 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 	Zilch::Handle sequence = call.GetHandle(Call::Return);
 	ActionSequence* act = (ActionSequence*)sequence.Dereference();
 
-	if (sequence.Dereference() == nullptr)
+	if (act == nullptr)
 	{
 
 		Zilch::Call call2(property->Set, state);
@@ -492,9 +495,7 @@ ActionSequence* Action::Sequence(Zilch::Any seq)
 		act->Clear();
 	}
 
-
-
-	return act;
+	return ((IEntity*) property->Get.ThisHandle.Dereference())->Actions;
 }
 
 ActionSequence* Action::Sequence(IEntity* seq)
@@ -511,11 +512,6 @@ ActionSequence* Action::Sequence(IEntity* seq)
 		seq->Actions->Clear();
 	}
 	return seq->Actions;
-
-	
-
-	
-	return nullptr;
 }
 
 Action::~Action()
@@ -535,29 +531,20 @@ void Action::Delay(ActionGroup* grp, float delay)
 	grp->AddProperty(new ActionProperty(delay));
 }
 
-template<typename T>
-void Action::Call(ActionSequence* seq, T function)
-{
-	seq->AddProperty(new ActionProperty(func));
-}
-
-template<typename T>
-void Action::Call(ActionGroup* grp, T function)
-{
-	grp->AddProperty(new ActionProperty(func));
-}
-
 void Action::Call(ActionSequence* seq, Zilch::Any func)
 {
 	Delegate* type = (Delegate*)func.GetData();
-	//Zilch::Handle handle = Zilch::Handle(ZILCH->GetDependencies(), (BoundType*)func.StoredType, func.GetData());
-	
-	
-	Zilch::Call call(*type, ZILCH->GetDependencies());
-	call.Invoke(ZILCH->Report);
+	type = new Zilch::Delegate(*type);
 
+	return seq->AddProperty(new ActionProperty(type));
+}
 
-	return;
+void Action::Call(ActionGroup* grp, Zilch::Any func)
+{
+	Delegate* type = (Delegate*)func.GetData();
+	type = new Zilch::Delegate(*type);
+
+	return grp->AddProperty(new ActionProperty(type));
 }
 
 void Action::Property(ActionSequence* seq, float* startVal, float endVal, float time, int ease)
@@ -715,12 +702,11 @@ ActionProperty::ActionProperty(float time)
 	SetValues = &ActionProperty::ValueSetterDelay;
 }
 
-template<typename T>
-ActionProperty::ActionProperty(T function)
+ActionProperty::ActionProperty(Zilch::Delegate* function)
 {
 	StartValue = function;
 	EndValue = Vector4D(0, 0, 0, 0);
-	
+
 	SetValues = &ActionProperty::ValueSetterCall;
 }
 
@@ -788,7 +774,7 @@ void ActionProperty::ValueSetterDelay(Action* action)
 }
 void ActionProperty::ValueSetterCall(Action* action)
 {
-	action->SetValues(StartValue);
+	action->SetValues((Zilch::Delegate*)StartValue);
 }
 void ActionProperty::ValueSetterFloat(Action* action)
 {

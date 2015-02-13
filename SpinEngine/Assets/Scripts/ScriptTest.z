@@ -78,7 +78,9 @@ class CameraFollow : ZilchComponent
 	function Initialize()
 	{
 		var seq = Action.Sequence(@this.Owner.Actions);
+		Action.Delay(seq, 3);
 		Action.Call(seq, this.FunctionTest);
+		
         this.Cam = ZInterface.GraphicsManager.GetMainCamera();
         if (this.IsOwner)
         {
@@ -196,7 +198,7 @@ class SpriteChanger : ZilchComponent
 	
 	function Initialize()
 	{
-		var obj = Utility.CreateGameObject("Bullet", this.Idle, this.Owner.Transform.Translation, Vector4D(), false);
+		var obj = Utility.CreateGameObject("Bullet", this.Idle, this.Owner.Transform.Translation, Vector4D(255,255,0,255), false);
 		var sprite = ZInterface.Factory.CreateSprite(this.Idle);
 		sprite.SetStateName("playeridle");
 		this.Owner.Sprite.AddSprite(sprite);
@@ -235,7 +237,7 @@ class SpriteChanger : ZilchComponent
 class Rotator : ZilchComponent
 {
 	var Active:Boolean = true;
-	var Speed:Real = 5;
+	var Speed:Real3 = Real3(0,0,0);
 	var UsesDT:Boolean = false;
 	
 	constructor() : base()
@@ -253,12 +255,14 @@ class Rotator : ZilchComponent
 		{
 			return;
 		}
-		var rot:Real = this.Speed;
+		var rot = this.Speed + ZInterface.VecToReal(this.Owner.Transform.Rotation);
+		
 		if (this.UsesDT)
 		{
 			//rot *= ZInterface.Physics.DT;
 		}
-		this.Owner.Transform.Rotation.Z += rot;
+		
+		this.Owner.Transform.Rotation = Vector3D(rot);
 		
 	}
 }

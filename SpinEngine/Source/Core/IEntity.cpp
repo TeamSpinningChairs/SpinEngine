@@ -132,6 +132,36 @@ void IEntity::RemoveChildByName(Zilch::String name)
 
 	}
 }
+void IEntity::Detach()
+{
+	if (Parent == nullptr)
+	{
+		return;
+	}
+	Parent->RemoveChild(this);
+}
+
+void IEntity::DetachAtWorldPosition()
+{
+	Detach();
+	Transform->SetPosition(Transform->GetWorldPosition());
+}
+
+void IEntity::AttachTo(IEntity* parent)
+{
+	parent->AddChild(this);
+}
+
+void IEntity::AttachAtWorldPosition(IEntity* parent)
+{
+	parent->AddChildAtWorldPosition(this);
+}
+
+void IEntity::AddChildAtWorldPosition(IEntity* child)
+{
+	AddChild(child);
+	child->Transform->GetPosition() -= Transform->GetWorldPosition();
+}
 
 Zilch::String IEntity::ZGetName()
 {
@@ -257,7 +287,10 @@ void IEntity::CleanupComponents()
 	 i.Delete();
   }
   ZilchComponents.clear();
-
+  if (Actions != nullptr)
+  {
+	  delete Actions;
+  }
   for (int i = 0; i < Component_Count; i++)
   {
     if (Components[i])
@@ -327,7 +360,10 @@ void IEntity::Update(float dt)
   //    EntityComponents[(Component_Type)i]->Update(dt);
   //  }
   //}
-
+	if (Actions != nullptr)
+	{
+		Actions->Update(dt);
+	}
   if (ZilchComponents.size())
   {
     Zilch::Array<Zilch::Type*> args;

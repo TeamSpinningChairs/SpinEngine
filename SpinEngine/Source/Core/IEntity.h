@@ -67,6 +67,7 @@ public:
   void ZAddGameComponent(int type, Component comp);
   void AddGameComponent(Component_Type type, Component comp);
   void AddZilchComponent(Zilch::Handle comp);
+  void AddZilchComponent(Zilch::Any comp);
   void RemoveGameComponent(Component_Type type);
   void SetVisible();
   void SetInVisible();
@@ -88,9 +89,15 @@ public:
   ComponentPointer(Primitive);
 
   void AddChild(IEntity*);
+  void AddChildAtWorldPosition(IEntity*);
   IEntity* FindChildByName(Zilch::String);
   void RemoveChild(IEntity*);
   void RemoveChildByName(Zilch::String);
+
+  void Detach();
+  void AttachTo(IEntity* parent);
+  void AttachAtWorldPosition(IEntity* parent);
+  void DetachAtWorldPosition();
 
   bool IsCaptured;
 

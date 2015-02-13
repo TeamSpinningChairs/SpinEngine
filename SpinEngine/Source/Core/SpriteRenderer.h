@@ -72,6 +72,7 @@ public:
   void Release();
   Sprite* GetCurrentSprite(void); 
   D3DCOLOR& GetSpriteColor();
+  Vector4D Zilch_GetSpriteColor()const;
   void SetColor(const Vector4D vec = Vector4D(1.0f,1.0f,1.0f,1.0f) );
   void SetColor(const D3DXCOLOR new_color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f) );
 
