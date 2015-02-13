@@ -199,8 +199,12 @@
   #########################################################
   "particle emitters": {
     {
-      "name": "test_for_josh"
-      "path": "Assets\Particle Emitters\test_for_josh.json"
+      "name": "Sandstorm_Better"
+      "path": "Assets\Particle Emitters\Sandstorm_Better.json"
+    }
+    {
+      "name": "Small_Storm"
+      "path": "Assets\Particle Emitters\Small_Storm.json"
     }
   }
 }

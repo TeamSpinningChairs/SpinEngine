@@ -13,12 +13,15 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 /****************************************************************************/
 #pragma once
 
-#include "Precompiled.h" //map, vector, string
+#include <vector>
+#include <string>
+#include <stack>
+#include <list>
+#include <map>
 
 class DynamicElement
 {
 public:
-	ZilchDeclareBaseType(DynamicElement, Zilch::TypeCopyMode::ReferenceType);
 	enum Type
 	{
 		TYPE_NULL,
@@ -144,26 +147,24 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	Type GetType(void) const;
 
-  //I was gonna move this to have implementation in the .cpp, buuuuut something broke and I probably
-  //should have assumed you put it in here for a reason. So, hello if you read this.
   std::string QueryChildName(DynamicElement *child)
-  {
-#define QUERYCHILDNAME
-    if (type != TYPE_OBJECT)
-      return std::string("");
-    if (!data.val_membersPtr)
-      return std::string("");
-    if (data.val_membersPtr->empty()) //@me, otherwise wouldn't recognize unnameds
+	{
+    #define QUERYCHILDNAME
+		if(type != TYPE_OBJECT)
+			return std::string("");
+		if(!data.val_membersPtr)
+			return std::string("");
+    if(data.val_membersPtr->empty()) //@me, otherwise wouldn't recognize unnameds
       return std::string("");
 
-    for (auto i : *(data.val_membersPtr))
-    {
-      if (i.second == child)
-      {
-        return i.first;
-      }
-    }
-  }
+		for(auto i : *(data.val_membersPtr))
+		{
+			if(i.second == child)
+			{
+				return i.first;
+			}
+		}
+	}
 	union
 		{
 			float val_float;

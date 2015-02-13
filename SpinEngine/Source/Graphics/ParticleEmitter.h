@@ -34,6 +34,7 @@ public:
     unsigned int particle_count = MAX_PARTICLE_COUNT, std::string t_name = NULL,
     D3DXCOLOR color = d3dColors::White, D3DXCOLOR end_color = d3dColors::White);
 
+  ParticleEmitter();
   ParticleEmitter(GameObject owner, ParticleEmitter &rhs);
 
   ~ParticleEmitter();
