@@ -9,6 +9,10 @@ Level =
         ActionTest = 
         {
         },
+        ZilchTest = 
+        {
+            int Butts = 42,
+        },
     },
     Cog = 
         {
@@ -18,54 +22,41 @@ Level =
             },
             CameraFollow = 
             {
-				bool Active = true,
-				bool IsOwner:Boolean = true,
-				string TargetName:String = "Player1",
-				float Zoom = 23,
-				float CameraSpeed = 0.014,
             },
             ZilchController = 
             {
-				int KeyboardLeft = 35,
             },
 			TileMapCollision = 
-			{
-			},
-			SpriteChanger = 
-			{
-			},
-			Collider = 
 			{
 			},
         },
     Cog = 
         {
+            LinkId = 
+            {
+                uint Id = 2,
+            },
             Named = 
             {
-                string Name = "Core1",
+                string Name = "MovingPlatform1",
             },
-			Rotator = 
-			{
-				bool Active = true,
-				Vec3 Speed = [0, 0, 5],
-				bool UsesDT = false,
-			},
-        },
-	Cog = 
-        {
-            Named = 
+            Transform = 
             {
-                string Name = "CoreChild",
+                Vec3 Translation = [0, 0, 0],
+                Vec3 Scale = [9, 9, 9],
+                Quat Rotation = [0, 0, 0, 1],
             },
-			Parent = 
-			{
-				string ParentName = "Core1",
-				bool InheritPosition = true,
-				bool InheritRotation = false,
-				bool InheritScale = true,
-				bool Pivot = true,
-				Vec3 Position = [0, 3, 0],
-			},
+            Sprite = 
+            {
+                bool Visible = true,
+                string SpriteSource = "DigiPenLogo.png",
+                bool AnimationActive = false,
+                string Shader = "Default",
+                Vec4 Color = [1, 1, 1, 1],
+            },
+            NewZilch = 
+            {
+            },
         },
     Cog = 
         {

@@ -13,8 +13,6 @@ public:
 	void Serialize (DynamicElement* props, Serializer::DataNode* data) {}
 	void Update(float dt);
 
-	void TestCall(void);
-
 	void Release();
 	
 	

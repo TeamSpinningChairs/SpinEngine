@@ -26,17 +26,9 @@ bool ActionTest::Initialize()
 	ActionGroup* grp = Action::Group(seq);
 	Action::Property(grp, &val, endval2, 2, Ease::CubicInOut);
 	Action::Property(grp, &val2, Vector3D(2, 1, 1), 2, Ease::CubicInOut);
-
 	Action::Property(seq, &val, endval3, 1, Ease::QntInOut);
-	
-	//Action::Call<void(ActionTest::*)(void)>(seq, &ActionTest::TestCall);
 
 	return true;
-}
-
-void ActionTest::TestCall(void)
-{
-
 }
 
 void ActionTest::Update(float dt)

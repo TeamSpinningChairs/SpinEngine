@@ -41,11 +41,6 @@
 #include <d3d9types.h>
 #include <dxerr.h>
 
-#define ExtractAlpha(x) ((x>>24)&255)
-#define ExtractRed(x) ((x>>16)&255)
-#define ExtractGreen(x) ((x>>12)&255)
-#define ExtractBlue(x) (x&255)
-
 //Standard Library:
 #include <string>
 #include <vector>

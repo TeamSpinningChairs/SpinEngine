@@ -59,7 +59,7 @@ void LaserBeam::Release()
 
 }
 
-//Set us active, initialize any variables correctlyGetTransform()->GetPosition()
+//Set us active, initialize any variables correctly
 //Theta is our intended rotation in radians
 void LaserBeam::Launch(Vector3D pos, float theta, Vector2D velocity)
 {

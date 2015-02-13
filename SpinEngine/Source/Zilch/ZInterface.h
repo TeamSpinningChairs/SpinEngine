@@ -60,9 +60,9 @@ using namespace std;
 
 		static int DT;
 		
-		static Real2 VecToReal(Vector2D* vec);
-		static Real3 VecToReal(Vector3D* vec);
-		static Real4 VecToReal(Vector4D* vec);
+		static Real2* VecToReal(Vector2D* vec);
+		static Real3* VecToReal(Vector3D* vec);
+		static Real4* VecToReal(Vector4D* vec);
 
 		static Vector2D RealToVec(Real2* real);
 		static Vector3D RealToVec(Real3* real);

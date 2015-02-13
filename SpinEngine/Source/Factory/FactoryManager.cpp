@@ -640,7 +640,7 @@ void FactoryManager::CreateGameObject(DynamicElement *object)
       AABB *coll = new AABB(newObject);
       coll->SetHalfSize(1, 1);
       RigidBody *body = new RigidBody(newObject, reinterpret_cast<Primitive*>(coll));
-      //body->SetStatic();
+      body->SetStatic();
       newObject->AddGameComponent(CT_Body, body);
     }
 

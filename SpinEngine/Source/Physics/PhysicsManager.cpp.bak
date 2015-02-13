@@ -1,35 +1,15 @@
-/****************************************************************************/
-/*!
-\author Judy Cheng
-\par    email: j.cheng\@digipen.edu (Optional)
-\par    Course: GAM 200
-\date   xx/xx/xx (Optional)
-\brief
-
-The physic manager that handles all of the physics events.
-
-
-Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
-
-*/
-/****************************************************************************/
 #include "Precompiled.h"
 #include "PhysicsManager.h"
 #include "Settings.h"
 
 PhysicsManager *physics = nullptr;
 
-ZilchDefineType(PhysicsManager, SpinningZilch)
-{
-	type->HandleManager = ZilchManagerId(Zilch::PointerManager);
-}
-
 
 PhysicsManager::PhysicsManager() : ISystem("Physics", SystemType::ST_Physics)
 {
   float *temp = NULL;
-  GlobalSettings->GetFloatValue("___ PHYSICS SETTINGS ___", temp, false);
-  GlobalSettings->GetFloatValue("Gravity", GRAVITY, true);
+  GlobalSettings->GetFloatValue("PHYSICS SETTINGS", temp, false);
+  GlobalSettings->GetFloatValue("Gravity", &GRAVITY.y, true);
 }
 PhysicsManager::~PhysicsManager()
 {
@@ -51,16 +31,11 @@ void PhysicsManager::Shutdown()
   bodies.clear();
 }
 
-void PhysicsManager::ColliderCheck()
+void PhysicsManager::Step(float dt)
 {
   //  COLLIDER LIST
   for (unsigned int i = 0; i < colliders.size(); ++i)
   {
-      if (colliders[i] == NULL)
-      {
-          continue;
-      }
-
     Primitive *a = colliders[i];
 
     for (unsigned int j = i + 1; j < colliders.size(); ++j)
@@ -72,8 +47,8 @@ void PhysicsManager::ColliderCheck()
         continue;
       }
 
-      Vector3D posA = a->GetOwner()->GetTransform()->GetPosition();
-      Vector3D posB = b->GetOwner()->GetTransform()->GetPosition();
+      Vector3 posA = a->GetOwner()->GetTransform()->GetPosition();
+      Vector3 posB = b->GetOwner()->GetTransform()->GetPosition();
 
       if (a->Id == Primitive::pCircle && b->Id == Primitive::pCircle)
       {      
@@ -86,7 +61,7 @@ void PhysicsManager::ColliderCheck()
       {       
         if (CollisionDetectorBroad::AABBAndAABB(reinterpret_cast<AABB *>(a), posA, reinterpret_cast<AABB *>(b), posB))
         {
-          //printf("AABB");
+          printf("AABB");
           //We get to this point twice for one collision, right? If so, only need this one call.
           reinterpret_cast<RigidBody*>((a->GetOwner())->GetComponent(CT_Body))->Trigger(b->GetOwner());
           reinterpret_cast<RigidBody*>((b->GetOwner())->GetComponent(CT_Body))->Trigger(a->GetOwner());
@@ -109,38 +84,35 @@ void PhysicsManager::ColliderCheck()
       }
     }
   }
-}
 
-void PhysicsManager::RigidBodyCheck()
-{
-  // Go through the bodies
+  // RIGID BODY LIST
+   // Clear any old information in the vector
+  contacts.clear();
+
+    // Go through the bodies
   for (unsigned int i = 0; i < bodies.size(); ++i)
   {
-      if (bodies[i] == NULL)
-      {
-          continue;
-      }
 
     RigidBody *a = bodies[i];
 
-    // Loop through the next body
+      // Loop through the next body
     for (unsigned int j = i + 1; j < bodies.size(); ++j)
     {
       RigidBody *b = bodies[j];
 
-      // Check if these object are static
+        // Check if these object are static
       if (a->isStatic == true && b->isStatic == true)
       {
         continue;
       }
-
-      // Set manifold data
+      
+        // Set manifold data
       Manifold m(a,b);
 
-      // Solve
+        // Solve
       m.Solve();
 
-      //Check if there's any contact count
+        //Check if there's any contact count
       if (m.contactCount)
       {
         // Append new element to the end
@@ -148,16 +120,6 @@ void PhysicsManager::RigidBodyCheck()
       }
     }
   }
-}
-void PhysicsManager::Step(float dt)
-{
-
-  ColliderCheck();
-
-   // Clear any old information in the vector
-  contacts.clear();
-
-  RigidBodyCheck();
 
   // Integrate forces
   for (unsigned int i = 0; i < bodies.size(); ++i)
@@ -196,7 +158,8 @@ void PhysicsManager::Step(float dt)
   for (unsigned int i = 0; i < bodies.size(); ++i)
   {
     RigidBody *b = bodies[i];
-    b->forceAccum.Clear();
+    b->forceAccum.x = 0.0f;
+    b->forceAccum.y = 0.0f;
   }
 
   for (unsigned int i = 0; i < bodies.size(); ++i)
@@ -205,6 +168,7 @@ void PhysicsManager::Step(float dt)
   }
 }
 
+
 void PhysicsManager::IntegrateForces(RigidBody *body, float dt)
 {
   // Skip if static
@@ -212,17 +176,9 @@ void PhysicsManager::IntegrateForces(RigidBody *body, float dt)
   {
     return;
   }
-
-  if (body->useGravity)
-  {
-    // Symplectic Euler w/ gravity
-    body->velocity += ((body->forceAccum * body->invMass + Vector2D(0,*physics->GRAVITY)) * (dt / 2.0f));
-  }
-  else
-  {
-    // Without gravity
-    body->velocity += ((body->forceAccum * body->invMass) * (dt / 2.0f));
-  }
+ 
+  // Symplectic Euler
+  body->velocity += ( (body->forceAccum * body->invMass + physics->GRAVITY) * (dt/2.0f));
 }
 
 void PhysicsManager::IntegrateVelocity(RigidBody *body, float dt)
@@ -232,6 +188,7 @@ void PhysicsManager::IntegrateVelocity(RigidBody *body, float dt)
   {
     return;
   }
+
   body->position += body->velocity * dt;
   body->orientation += body->angularVelocity * dt;
   body->SetOrientation(body->orientation);

@@ -208,7 +208,7 @@ void DynamicHand::Update(float dt)
 
     if (HandBody)
     {
-      *(HandBody->getPosition()) += Vector2D(WallOwner->GetTransform()->GetPosition().x, WallOwner->GetTransform()->GetPosition().y);
+      HandBody->getPosition() += Vector2D(WallOwner->GetTransform()->GetPosition().x, WallOwner->GetTransform()->GetPosition().y);
     }
     return;
 	}
@@ -299,7 +299,7 @@ void DynamicHand::Update(float dt)
 
         if (HandBody)
         {
-          *(HandBody->getPosition()) += Vector2D(Direction.x * (.85 * 5 * dt), Direction.y * (.85 * 5 * dt));
+          HandBody->getPosition() += Vector2D(Direction.x * (.85 * 5 * dt), Direction.y * (.85 * 5 * dt));
         }
       }
 
@@ -318,7 +318,7 @@ void DynamicHand::Update(float dt)
 
         if (HandBody)
         {
-          *(HandBody->getPosition()) += Vector2D(Direction.x * (9 * dt), Direction.y * (9 * dt));
+          HandBody->getPosition() += Vector2D(Direction.x * (9 * dt), Direction.y * (9 * dt));
         }
       }
     }
@@ -428,7 +428,7 @@ void DynamicHand::DynamicHandMovement()
 
   if (HandBody != NULL)
   {
-    *HandBody->getPosition() = Vector2D(newPosition.x, newPosition.y);
+    HandBody->getPosition() = Vector2D(newPosition.x, newPosition.y);
   }
 }
 

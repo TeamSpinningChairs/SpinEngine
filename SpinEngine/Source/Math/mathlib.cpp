@@ -44,7 +44,7 @@ ZilchDefineType(Vector3D, SpinningZilch)
 	ZilchBindDestructor();
 	ZilchBindFieldGetSetAs(x, "X");
 	ZilchBindFieldGetSetAs(y, "Y");
-	ZilchBindFieldGetSetAs(z, "Z");
+	ZilchBindFieldGetSetAs(y, "Z");
 }
 
 ZilchDefineType(Vector4D, SpinningZilch)

@@ -46,15 +46,12 @@
 		//ZilchBindStaticFieldGetAs(ObjectSys, "ObjectSystem");
 		//ZilchBindStaticFieldGetAs(WindowSys, "WindowSystem");
 		//ZilchBindStaticFieldGetAs(Physics, "Physics");
-		ZilchBindStaticFieldGetAs(Factory, "Factory");
+		//ZilchBindStaticFieldGet(ResourceSystem);
 		ZilchBindStaticMethod(TogglePaused);
 		ZilchBindStaticMethod(IsPaused);
 		ZilchBindStaticMethod(SetPaused);
 		ZilchBindStaticMethod(SetSceneShader);
 		ZilchBindStaticMethod(FindObjectByName);
-		ZilchBindStaticMethodOverload(VecToReal, Zilch::Real2, Vector2D*);
-		ZilchBindStaticMethodOverload(VecToReal, Zilch::Real3, Vector3D*);
-		ZilchBindStaticMethodOverload(VecToReal, Zilch::Real4, Vector4D*);
 		ZilchBindStaticFieldGetAs(Graphics, "GraphicsManager");
 		
 		
@@ -125,17 +122,17 @@
 		return; //CORE->SetPaused(state);
 	}
 	
-	Real2 ZInterface::VecToReal(Vector2D* vec)
+	Real2* ZInterface::VecToReal(Vector2D* vec)
 	{
-		return Real2(vec->x, vec->y);
+		return &Real2(vec->x, vec->y);
 	}
-	Real3 ZInterface::VecToReal(Vector3D* vec)
+	Real3* ZInterface::VecToReal(Vector3D* vec)
 	{
-		return Real3(vec->x, vec->y, vec->z);
+		return &Real3(vec->x, vec->y, vec->z);
 	}
-	Real4 ZInterface::VecToReal(Vector4D* vec)
+	Real4* ZInterface::VecToReal(Vector4D* vec)
 	{
-		return Real4(vec->x, vec->y, vec->z, vec->w);
+		return &Real4(vec->x, vec->y, vec->z, vec->w);
 	}
 
 	Vector2D ZInterface::RealToVec(Real2* real)
