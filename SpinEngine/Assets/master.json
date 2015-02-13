@@ -129,13 +129,54 @@
         {
           "path": "Assets\Animations\SCPrison.json"
         }
-		{
+        {
           "path": "Assets\Animations\Head_Hop.json"
         }
         {
           "path": "Assets\Animations\Head_Idle.json"
         }
-		
+        {
+          "path": "Assets\Animations\Player_Body.json"
+        }
+        {
+          "path": "Assets\Animations\Player_Chestplate.json"
+        }
+        {
+          "path": "Assets\Animations\Player_Core.json"
+        }
+        {
+          "path": "Assets\Animations\Player_Head.json"
+        }
+        {
+          "path": "Assets\Animations\Player_L_Arm.json"
+        }
+        {
+          "path": "Assets\Animations\Player_L_Bicep.json"
+        }
+        {
+          "path": "Assets\Animations\Player_L_Boot.json"
+        }
+        {
+          "path": "Assets\Animations\Player_L_Thigh.json"
+        }
+        {
+          "path": "Assets\Animations\Player_L_Toe.json"
+        }
+        {
+          "path": "Assets\Animations\Player_R_Arm.json"
+        }
+        {
+          "path": "Assets\Animations\Player_R_Bicep.json"
+        }
+        {
+          "path": "Assets\Animations\Player_R_Boot.json"
+        }
+        {
+          "path": "Assets\Animations\Player_R_Thigh.json"
+        }
+        {
+          "path": "Assets\Animations\Player_R_Toe.json"
+        }
     }
   #########################################################
   "levels": {

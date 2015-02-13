@@ -72,6 +72,7 @@ void Sound::PlayOnce(SoundInstance *instance)
 
 void Sound::PlayLoop(SoundInstance *instance)
 {
+  return;
   ErrorCheck(eventDescription->createInstance(&instance->eventInstance));
   instance->eventInstance->setPitch(instance->pitch_);
   instance->eventInstance->setVolume(instance->volume_);

@@ -1,0 +1,9 @@
+{
+	"statename": "idle"
+  "texturepath": "Assets\Textures\Player_Rig\R_Boot.png"
+  "texturename": "R_Boot.png"
+  "start_i": 0
+  "end_i": 0
+  "totalframes": 1
+  "timeperframe": 1.0
+}
