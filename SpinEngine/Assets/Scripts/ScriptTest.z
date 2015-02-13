@@ -267,6 +267,30 @@ class Rotator : ZilchComponent
 	}
 }
 
+class Collider : ZilchComponent
+{
+	constructor():base()
+	{
+	}
+	
+	function Initialize()
+	{
+	}
+	
+	function CollisionReaction(otherObject:IEntity)
+	{
+		Console.WriteLine("COLLIDING WITH: `otherObject.GetName()`");
+	}
+	
+	function Update(dt:Real)
+	{
+	}
+	
+	function Destroyed()
+	{
+	}
+}
+
 class Parent : ZilchComponent
 {
 	var ParentName:String = "Core";

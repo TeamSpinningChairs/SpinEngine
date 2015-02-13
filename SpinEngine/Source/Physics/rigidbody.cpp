@@ -284,6 +284,37 @@ void RigidBody::Trigger(IEntity *collObj)
 {
   if (triggerCallbacks.size() > 0)
     triggerCallbacks[0]->OnCollision(collObj);
+  
+  Zilch::Array<Zilch::Type*> args;
+  args.push_back(ZilchTypeId(IEntity*));
+
+  Handle colliderOther = collObj->GetZilchComponent("Collider");
+  Handle colliderMe = Owner->GetZilchComponent("Collider");
+  
+  if (colliderOther.Dereference() != nullptr)
+  {
+		Function* ZilchCollidedOther = colliderOther.Type->FindFunction("CollisionReaction", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
+		ErrorIf(ZilchCollidedOther == nullptr, "Failed to find function 'CollisionReaction' on Zilch type ", colliderOther.Type);
+		{
+			// Invoke the Create function, which assigns this object an owner.
+			Zilch::Call call(ZilchCollidedOther, ZILCH->GetDependencies());
+			call.SetHandle(Zilch::Call::This, colliderMe);
+			call.Invoke(ZILCH->Report);
+		}
+  }
+  if (colliderMe.Dereference() != nullptr)
+  {
+	  Function* ZilchCollidedMe = colliderMe.Type->FindFunction("CollisionReaction", args, ZilchTypeId(void), Zilch::FindMemberOptions::None);
+	  ErrorIf(ZilchCollidedMe == nullptr, "Failed to find function 'CollisionReaction' on Zilch type ", colliderMe.Type);
+	  {
+		  // Invoke the Create function, which assigns this object an owner.
+		  Zilch::Call call(ZilchCollidedMe, ZILCH->GetDependencies());
+		  call.SetHandle(Zilch::Call::This, colliderOther);
+		  call.Invoke(ZILCH->Report);
+	  }
+  }
+	
+	
   //I forget what I did here, but it looks like only the first callback to be registered is used
   /*for (auto it : triggerCallbacks)
   {

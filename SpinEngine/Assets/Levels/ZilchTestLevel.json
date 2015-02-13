@@ -45,7 +45,9 @@
                  "name":"Core1",
                  "properties":
                     {
-                     "DataFile":"ZilchTestLevel"
+                     "DataFile":"ZilchTestLevel",
+                     "RigidBody":"",
+                     "TileMapCollision":""
                     },
                  "rotation":0,
                  "type":"",

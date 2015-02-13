@@ -34,6 +34,9 @@ Level =
 			SpriteChanger = 
 			{
 			},
+			Collider = 
+			{
+			},
         },
     Cog = 
         {
