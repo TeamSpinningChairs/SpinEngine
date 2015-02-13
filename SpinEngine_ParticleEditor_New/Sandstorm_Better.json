@@ -1,37 +1,52 @@
 {
-	"current_PE_lifespan": 0.0
-	"PE_lifespan": 0.0
-	"scale": 3.0
-	"end_scale": 7.0
-	"start_delay": 0.0
-	"particle_lifetime": 1.25
-	"lifetime_invariant": 0.2
-	"angle_1": 260.0
-	"angle_2": 280.0
-	"speed_1": 1.0
-	"speed_2": 0.0
-	"acceleration_1": 9.0
-	"acceleration_2": 10.0
-	"spin": 2.45
-	"spin_variance": 0.0
-	"gravity": 0.0
-	"my_color_r": 255.0
-	"my_color_g": 255.0
-	"my_color_b": 255.0
-	"my_color_a": 25.0
-	"my_color_end_r": 255.0
-	"my_color_end_g": 255.0
-	"my_color_end_b": 255.0
-	"my_color_end_a": 0.0
+	"current_PE_lifespan": 0.000000
+	"PE_lifespan": 0.000000
+
+	"scale": 3.000000
+	"end_scale": 7.000000
+
+	"start_delay": 10.000000
+
+	"particle_lifetime": 1.250000
+	"lifetime_invariant": 0.200000
+
+	"angle_1": 260.000000
+	"angle_2": 280.000000
+
+	"speed_1": 1.000000
+	"speed_2": 0.000000
+
+	"acceleration_1": 9.000000
+	"acceleration_2": 10.000000
+
+	"spin": 2.450000
+	"spin_variance": 0.000000
+
+	"gravity": 0.000000
+
+	"my_color_r": 255.000000
+	"my_color_g": 255.000000
+	"my_color_b": 255.000000
+	"my_color_a": 25.000000
+	"my_color_end_r": 255.000000
+	"my_color_end_g": 255.000000
+	"my_color_end_b": 255.000000
+	"my_color_end_a": 0.000000
 	"blend_colors": true
+
 	"particle_count": 20
-	"x_diff_from_owner": 0
-	"y_diff_from_owner": 0
+
+	"x_diff_from_owner": 0.000000
+	"y_diff_from_owner": 0.000000
+
 	"emit_type": 3
 	"blend_type": 1
 	"source_factor": 5
-	"width": 1.0
-	"height": 1.0
-	"radius": 1.0
+
+	"width": 1.000000
+	"height": 1.000000
+	"radius": 1.000000
+
 	"texture_name": "DustParticle.png"
+
 }

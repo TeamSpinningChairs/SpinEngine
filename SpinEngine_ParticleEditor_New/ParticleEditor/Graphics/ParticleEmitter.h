@@ -17,7 +17,7 @@ Copyright: All content @ 2014 DigiPen (USA) Corporation, all rights reserved.
 #include"Particle.h"
 
 #define MAX_PARTICLE_COUNT 2000
-#define PE_LOOPING 0
+#define PE_LOOPING 0.0f
 
 //Forward Declarations
 class ParticleEmitter;

@@ -74,7 +74,7 @@ bool Engine::Initialize()
   TwWindowSize(m_Graphics->GetWindow()->GetWindowWidth(), m_Graphics->GetWindow()->GetWindowHeight());
   TwDefine(" mybar size='540 420' ");
   TwDefine(" mybar valueswidth=fit ");
-  TwDefine(" mybar resizable=true "); // mybar cannot be resized
+  TwDefine(" mybar resizable=true ");
 #endif
   // }
   //Create the global settings accessor

@@ -145,6 +145,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
   TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar in a DirectX9 application.' ");
   // Change TweakBar color and use dark text
   TwDefine(" TweakBar color='128 224 160' text=dark ");
+  TwDefine(" mybar size='640 420' ");
+  TwDefine(" mybar valueswidth=fit ");
+  TwDefine(" mybar resizable=true "); // mybar cannot be resized
 
   TwAddVarCB(bar, "file name", TW_TYPE_STDSTRING, SetFileNameCB, GetFileNamegCB, &save_load_file_name, "file name");
   TwAddButton(bar, "Serialize", SaveParticleFile, NULL, " label='Serialize File' ");
