@@ -52,6 +52,10 @@ void PlayerControllerListener::Initialize()
   PlayerTransform = reinterpret_cast<Transform *>(player->GetComponent(CT_TransformComponent));
 }
 
+void PlayerControllerListener::SetControllerNum(int number)
+{
+  this->controllerNum = number;
+}
 
 void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
 {
@@ -142,11 +146,13 @@ void PlayerControllerListener::OnMessageRecieved(Message * SentMessage)
       
       SpriteRend HeadSprite = reinterpret_cast<SpriteRend>(newObject->GetComponent(CT_SpriteRenderer));
 
+      //newObject->GetTransform()->GetScale() *= 2;
+
       HeadSprite->AddSprite(GlobalFactory->CreateSprite("Head_Hop.png"));
 
       //Box collider and rigidbody
       AABB *box = new AABB(newObject);
-      box->SetHalfSize(0.2f, 0.9f);
+      box->SetHalfSize(newObject->GetTransform()->GetScale().x / 2, newObject->GetTransform()->GetScale().y / 2);
       newObject->AddGameComponent(CT_BoxCollider, box);
       
       RigidBody *body = new RigidBody(newObject, reinterpret_cast<Primitive*>(box));

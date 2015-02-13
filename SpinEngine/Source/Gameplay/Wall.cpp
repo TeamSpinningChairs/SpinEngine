@@ -145,9 +145,7 @@ bool WallComp::Initialize()
 		SpriteRend Handrend = reinterpret_cast<SpriteRend>(hand->GetComponent(CT_SpriteRenderer));
     //Handrend->GetSpriteColor() = d3dColors::Red;
 
-		Handrend->AddSprite("Claw-Closed.png", 0, 0, 1, 1 / 30.0f, "Closed", false);
-
-		//hand->GetComponent(CT_SpriteRenderer)
+		Handrend->AddSprite(GlobalFactory->CreateSprite("Claw-Closed.png"));
 
 		DynamicHand * DHand = new DynamicHand(hand, this->Owner);
     DHand->Initialize();

@@ -86,6 +86,7 @@ public:
   void KBFireLaser(bool isFacingRight);
   void ControllerFireLaser(float &theta);
   void ReturnLaser(LaserBeam *);
+  void UpdateControllerNumber(int);
 
   bool Active;
 

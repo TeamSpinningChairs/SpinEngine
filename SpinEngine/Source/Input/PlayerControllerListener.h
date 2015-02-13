@@ -24,6 +24,8 @@ public:
 
   void Initialize();
 
+  void SetControllerNum(int newnum);
+
 private:
   IEntity *const player;
   RigidBody *PlayerBody;

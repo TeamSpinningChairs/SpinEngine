@@ -12,7 +12,7 @@
 #include "FactoryAccess.h"
 #include "SpriteRenderer.h"
 
-class HeadController : public IComponent //, public CollisionDelegate
+class HeadController : public IComponent, public CollisionDelegate
 {
 public:
 
@@ -33,4 +33,6 @@ private:
   RigidBody * HeadBody;
   int ControllerNumber;
   GameObject parent;
+
+  void OnCollision(GameObject) override;
 };

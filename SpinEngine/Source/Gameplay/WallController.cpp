@@ -65,7 +65,7 @@ bool WallController::Initialize()
     SpriteRend Handrend = reinterpret_cast<SpriteRend>(hand->GetComponent(CT_SpriteRenderer));
     //Handrend->GetSpriteColor() = d3dColors::Red;
 
-    Handrend->AddSprite("Claw-Closed.png", 0, 0, 1, 1 / 30.0f, "Closed", false);
+    Handrend->AddSprite(GlobalFactory->CreateSprite("Claw-Closed.png"));
 
     DynamicHand * DHand = new DynamicHand(hand, this->Owner);
 
@@ -76,21 +76,6 @@ bool WallController::Initialize()
     Dynamic_Hands[i] = DHand;
 
     hand->AddGameComponent(CT_TileMapDetector, TileCheck);
-
-    /*
-    AABB *box = new AABB(hand);
-    box->SetHalfSize(1.0f, 1.0f);
-    hand->AddGameComponent(CT_BoxCollider, box);
-    box->Initialize();
-
-    RigidBody *body = new RigidBody(hand, reinterpret_cast<Primitive*>(box));
-    body->set(5.0f);
-    body->restitution = 0.0f;
-    body->useGravity = false;
-    body->Initialize();
-    hand->AddGameComponent(CT_Body, body);
-    body->SetActive(false);
-    */
 
     DHand->Initialize();
 

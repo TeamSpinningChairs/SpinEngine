@@ -2,9 +2,10 @@
 #include "HeadController.h"
 #include "Engine.h"
 #include "MenuController.h"
+#include "PlayerController.h"
 
 HeadController::HeadController(GameObject Parent, int ControllerNum) : parent(Parent),
-IComponent(Component_Type::CT_HEAD_CONTROLLER, Parent)
+IComponent(Component_Type::CT_HEAD_CONTROLLER, Parent), CollisionDelegate(Parent)
 {
   ControllerNumber = ControllerNum;
   HeadBody = NULL;
@@ -22,6 +23,12 @@ bool HeadController::Initialize()
   HeadBody =  reinterpret_cast<RigidBody *>(parent->GetComponent(CT_Body));
   HeadSprite = reinterpret_cast<SpriteRend>(parent->GetComponent(CT_SpriteRenderer));
   HeadCollision = reinterpret_cast<TileMapCollision *>(parent->GetComponent(CT_TileMapCollider));
+  
+  if (HeadBody)
+  {
+    InitializeCollisionCallback();
+  }
+
   return true;
 }
 
@@ -163,3 +170,14 @@ void HeadController::Release()
 
 }
 
+void HeadController::OnCollision(GameObject otherObject)
+{
+  PlayerController* PlayerCheck = reinterpret_cast<PlayerController *>(otherObject->GetComponent(CT_Player_Controller));
+
+  if (PlayerCheck != NULL)
+  {
+    PlayerCheck->Active = true;
+    PlayerCheck->UpdateControllerNumber(this->ControllerNumber);
+    GlobalFactory->RemoveGameObject(Owner->GetEntityId()); 
+  }
+}
